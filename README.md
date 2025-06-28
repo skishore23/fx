@@ -126,10 +126,6 @@ Simply paste a Salesforce quote URL in a channel where the bot is present. The b
 4. Execute the appropriate actions in Salesforce
 5. Report back with results in the thread
 
-Example:
-> Need to recall so I can bump GenWatt Diesel 1000 kW from 2 → 3.
-> https://yourorg--dev.lightning.force.com/lightning/r/SBQQ_Quote__c/a088x000000Wsv0AAC/view
-
 ## Architecture
 
 The system follows functional programming principles and is built with:
