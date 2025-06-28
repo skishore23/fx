@@ -1,0 +1,53 @@
+/* Mermaid Diagram Styles */
+.mermaid {
+  background-color: var(--vp-c-bg-soft);
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon,
+.mermaid .node path {
+  fill: var(--vp-c-brand);
+  stroke: var(--vp-c-brand-dark);
+}
+
+.mermaid .edgeLabel {
+  background-color: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
+}
+
+.mermaid .messageText {
+  fill: var(--vp-c-text-1);
+}
+
+.mermaid .actor {
+  fill: var(--vp-c-brand-light);
+  stroke: var(--vp-c-brand);
+}
+
+/* Dark mode adjustments */
+.dark .mermaid {
+  background-color: var(--vp-c-bg-soft);
+}
+
+.dark .mermaid .node rect,
+.dark .mermaid .node circle,
+.dark .mermaid .node ellipse,
+.dark .mermaid .node polygon,
+.dark .mermaid .node path {
+  fill: var(--vp-c-brand-dark);
+  stroke: var(--vp-c-brand-lighter);
+}
+
+.dark .mermaid .edgeLabel {
+  background-color: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
+}
+
+.dark .mermaid .messageText {
+  fill: var(--vp-c-text-1);
+} 

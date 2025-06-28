@@ -1,0 +1,47 @@
+{
+  "name": "q2c-cli",
+  "version": "1.0.0",
+  "description": "Salesforce Q2C CLI with JWT authentication",
+  "main": "dist/cli.js",
+  "bin": {
+    "q2c": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "q2c": "node dist/cli.js",
+    "test": "ts-node src/q2c/test.ts",
+    "start:bot": "ts-node src/q2c/slackBot.ts",
+    "seed": "ts-node src/q2c/seedData.ts",
+    "mock": "ts-node src/q2c/mockSlack.ts",
+    "cli": "ts-node src/q2c/run.ts",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/inquirer": "^9.0.8",
+    "@types/jsforce": "^1.11.5",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/lodash": "^4.17.16",
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "@slack/bolt": "^4.3.0",
+    "chalk": "^4.1.2",
+    "commander": "^11.0.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "fp-ts": "^2.16.10",
+    "inquirer": "^12.6.1",
+    "jsforce": "^3.8.1",
+    "jsonwebtoken": "^9.0.2",
+    "openai": "^4.98.0",
+    "zod": "^3.0.0"
+  }
+}
