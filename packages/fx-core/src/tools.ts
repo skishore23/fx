@@ -5,7 +5,7 @@
 
 import { z } from 'zod';
 import { Step, BaseContext } from './types';
-import { ToolRegistry, registerTool, callTool } from './registry';
+import { registerTool, callTool } from './registry';
 import { addMemory } from './memory';
 
 // ---------- Tool Types ----------
@@ -454,7 +454,7 @@ export function createCommandTool<T extends BaseContext = BaseContext>(): ToolBu
   });
 
   const toolBuilder = tool('execute_command', schema, async (params, state) => {
-    const { command, workingDirectory } = params as { command: string; workingDirectory?: string };
+    const { command } = params as { command: string; workingDirectory?: string };
     // This would be implemented with actual command execution logic
     const result = { ...state, commandOutput: `Output of: ${command}` };
     

@@ -5,8 +5,7 @@
  */
 
 import { BaseContext, Step } from './types';
-import { sequence, parallel, when, fromFunction } from './composition';
-import { z } from 'zod';
+import { parallel, fromFunction } from './composition';
 
 // ---------- Router Types ----------
 

@@ -133,7 +133,7 @@ export const mergeStrategies = {
   selective: <T extends BaseContext>(
     fields: (keyof T)[]
   ) => (results: T[], originalState: T): T => {
-    let mergedState = { ...originalState };
+    const mergedState = { ...originalState };
     
     for (const result of results) {
       for (const field of fields) {

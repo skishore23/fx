@@ -73,7 +73,7 @@ export const composeAll = <T extends BaseContext>(...steps: Step<T>[]): Step<T> 
 export const liftM = <M, A, B>(
   monad: Monad<M>,
   f: (a: A) => B
-): Kleisli<M, A, B> => {
+): Kleisli<M, A> => {
   return (a: A) => monad.of(f(a));
 };
 
@@ -83,9 +83,9 @@ export const liftM = <M, A, B>(
 export const composeK = <M>(
   monad: Monad<M>
 ) => <A, B, C>(
-  f: Kleisli<M, B, C>,
-  g: Kleisli<M, A, B>
-): Kleisli<M, A, C> => {
+  f: Kleisli<M, B>,
+  g: Kleisli<M, A>
+): Kleisli<M, A> => {
   return (a: A) => monad.chain(g(a), f);
 };
 

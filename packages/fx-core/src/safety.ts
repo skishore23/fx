@@ -6,7 +6,7 @@
 
 import { BaseContext, Step } from './types';
 import { ToolSpec, ExecutionContext, ResourceQuotas, ApprovalSystem } from './tool-metadata';
-import { sequence, parallel, when, validate, fromFunction } from './composition';
+import { sequence, parallel, fromFunction } from './composition';
 
 // ---------- Safety Types ----------
 
@@ -708,7 +708,7 @@ export class SafetyManager {
    */
   private createApprovalSystem(): ApprovalSystem {
     return {
-      ok: async (toolName: string, args: unknown): Promise<boolean> => {
+      ok: async (toolName: string, _args: unknown): Promise<boolean> => {
         // In a real implementation, this would check with an approval service
         // For now, we'll auto-approve based on risk level
         const tool = this.getToolByName(toolName);
@@ -727,7 +727,7 @@ export class SafetyManager {
   /**
    * Get tool by name (placeholder - would come from registry)
    */
-  private getToolByName(name: string): ToolSpec<unknown, unknown> | null {
+  private getToolByName(_name: string): ToolSpec<unknown, unknown> | null {
     // This would be implemented with the actual tool registry
     return null;
   }

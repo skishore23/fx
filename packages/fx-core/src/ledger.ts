@@ -1,6 +1,5 @@
 import crypto from "crypto";
 import { Event } from './types';
-import { getConfig } from './config';
 
 /**
  * Optional and simple event logging for the Fx framework

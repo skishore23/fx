@@ -3,7 +3,7 @@
  * Clean, predictable types without complex generics or recursion
  */
 
-import { z } from 'zod';
+// No imports needed for basic types
 
 // ---------- Core Types ----------
 
@@ -100,22 +100,22 @@ export interface Functor<F> {
 
 export interface Monad<M> extends Functor<M> {
   readonly of: <A>(a: A) => M;
-  readonly chain: <A, B>(ma: M, f: (a: A) => M) => M;
+  readonly chain: <A>(ma: M, f: (a: A) => M) => M;
 }
 
 // ---------- Kleisli Arrow Type ----------
 
-export type Kleisli<M, A, B> = (a: A) => M;
+export type Kleisli<M, A> = (a: A) => M;
 
 // ---------- Natural Transformation Type ----------
 
-export type NaturalTransformation<F, G> = <A>(fa: F) => G;
+export type NaturalTransformation<F, G> = (fa: F) => G;
 
 // ---------- Applicative Interface ----------
 
 export interface Applicative<F> extends Functor<F> {
   readonly of: <A>(a: A) => F;
-  readonly ap: <A, B>(fab: F, fa: F) => F;
+  readonly ap: (fab: F, fa: F) => F;
 }
 
 // ---------- Profunctor Interface ----------
@@ -155,7 +155,7 @@ export const Maybe: Monad<Maybe<unknown>> = {
 
   of: <A>(a: A): Maybe<unknown> => ({ tag: 'Just', value: a }),
 
-  chain: <A, B>(ma: Maybe<unknown>, f: (a: A) => Maybe<unknown>): Maybe<unknown> => {
+  chain: <A>(ma: Maybe<unknown>, f: (a: A) => Maybe<unknown>): Maybe<unknown> => {
     if (ma.tag === 'Just') {
       return f(ma.value as A);
     }

@@ -85,8 +85,8 @@ export interface PostCondition<O> {
  */
 export const fileExists = (pathExtractor: (input: unknown) => string): PreCondition<unknown> => ({
   name: 'file_exists',
-  check: async (state, input) => {
-    const path = pathExtractor(input);
+  check: async (_state, input) => {
+    pathExtractor(input);
     // This would check actual file system
     return true; // Placeholder
   },
@@ -98,8 +98,8 @@ export const fileExists = (pathExtractor: (input: unknown) => string): PreCondit
  */
 export const directoryWritable = (pathExtractor: (input: unknown) => string): PreCondition<unknown> => ({
   name: 'directory_writable',
-  check: async (state, input) => {
-    const path = pathExtractor(input);
+  check: async (_state, input) => {
+    pathExtractor(input);
     // This would check actual directory permissions
     return true; // Placeholder
   },
@@ -111,7 +111,7 @@ export const directoryWritable = (pathExtractor: (input: unknown) => string): Pr
  */
 export const networkAvailable = (): PreCondition<unknown> => ({
   name: 'network_available',
-  check: async (state, input) => {
+  check: async (_state, _input) => {
     // This would check network connectivity
     return true; // Placeholder
   },
@@ -123,7 +123,7 @@ export const networkAvailable = (): PreCondition<unknown> => ({
  */
 export const withinQuota = (quotaType: keyof ResourceQuotas): PreCondition<unknown> => ({
   name: `within_quota_${quotaType}`,
-  check: async (state, input) => {
+  check: async (_state, _input) => {
     // This would check current resource usage
     return true; // Placeholder
   },
@@ -303,7 +303,7 @@ export function createReadFileSpec(): ToolSpec<{ filePath: string }, { content: 
     .withTimeBudget(5000)
     .withPreCondition(fileExists(input => (input as { filePath: string }).filePath))
     .withPostCondition(outputNotEmpty())
-    .withExecution(async (input, ctx) => {
+    .withExecution(async (input, _ctx) => {
       // Placeholder implementation
       return { content: `Content of ${input.filePath}`, size: 100 };
     })
@@ -332,7 +332,7 @@ export function createWriteFileSpec(): ToolSpec<{ filePath: string; content: str
     .withIdempotencyKey(input => `write:${input.filePath}:${Buffer.from(input.content).toString('base64')}`)
     .withPreCondition(directoryWritable(input => (input as { filePath: string }).filePath.split('/').slice(0, -1).join('/')))
     .withPostCondition(outputValid(output => output.success))
-    .withExecution(async (input, ctx) => {
+    .withExecution(async (input, _ctx) => {
       // Placeholder implementation
       return { success: true, size: input.content.length };
     })
@@ -361,7 +361,7 @@ export function createHttpRequestSpec(): ToolSpec<{ url: string; method?: string
     .withTimeBudget(30000)
     .withPreCondition(networkAvailable())
     .withPostCondition(outputValid(output => output.status >= 200 && output.status < 600))
-    .withExecution(async (input, ctx) => {
+    .withExecution(async (input, _ctx) => {
       // Placeholder implementation
       return { status: 200, data: `Response from ${input.url}` };
     })
@@ -389,7 +389,7 @@ export function createCommandSpec(): ToolSpec<{ command: string; workingDirector
     .withTimeBudget(60000)
     .withPreCondition(withinQuota('maxConcurrency'))
     .withPostCondition(outputValid(output => typeof output.exitCode === 'number'))
-    .withExecution(async (input, ctx) => {
+    .withExecution(async (input, _ctx) => {
       // Placeholder implementation
       return { exitCode: 0, output: `Output of: ${input.command}` };
     })

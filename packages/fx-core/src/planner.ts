@@ -8,7 +8,7 @@ import { BaseContext, Step } from './types';
 import { ToolSpec, ExecutionContext } from './tool-metadata';
 import { argSpec } from './arg-parser';
 import { splitMultiToolSentence } from './arg-parser';
-import { sequence, parallel, when, fromFunction, loopWhile } from './composition';
+import { sequence, parallel, fromFunction } from './composition';
 
 // ---------- Planning Types ----------
 
@@ -231,7 +231,7 @@ function calculateRiskLevel(steps: PlanStep[]): 'low' | 'medium' | 'high' | 'cri
 /**
  * Infer what a step provides based on tool type
  */
-function inferProvides(tool: ToolSpec<unknown, unknown>, args: unknown): string[] {
+function inferProvides(tool: ToolSpec<unknown, unknown>, _args: unknown): string[] {
   const provides: string[] = [];
   
   switch (tool.name) {

@@ -93,7 +93,7 @@ class LLMProviderImpl implements LLMProvider {
 /**
  * Create OpenAI provider
  */
-export function createOpenAIProvider(config: { apiKey: string; baseURL?: string }): LLMProvider {
+export function createOpenAIProvider(_config: { apiKey: string; baseURL?: string }): LLMProvider {
   return new LLMProviderImpl(
     'openai',
     async (messages: ChatMessage[], options?: LLMOptions) => {

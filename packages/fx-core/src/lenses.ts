@@ -3,7 +3,7 @@
  * Simplified implementation with clean types
  */
 
-import { Step, BaseContext } from './types';
+import { BaseContext } from './types';
 import { getValueAtPath, setValueAtPath } from './utils';
 
 // ---------- Unified State Operations ----------

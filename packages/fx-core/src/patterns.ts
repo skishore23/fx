@@ -4,9 +4,8 @@
  */
 
 import { Step, BaseContext } from './types';
-import { sequence, loopWhile, setValue } from './composition';
-import { addMemory, getMemory } from './memory';
-import { llmTemplateStep, llmParseStep, llmTemplateParseStep, promptTemplate } from './llm';
+import { sequence, loopWhile } from './composition';
+import { llmTemplateStep, llmTemplateParseStep, promptTemplate } from './llm';
 import { LLMProvider, PromptTemplate, ResponseParser } from './llm';
 import { createReasoningTemplate, createObservationTemplate, createReActActionParser } from './llm';
 
@@ -53,7 +52,7 @@ export interface ChainOfThoughtState extends BaseContext {
  */
 export function createReActPattern<T extends ReActState>(
   provider: LLMProvider,
-  tools: string[] = []
+  _tools: string[] = []
 ): AgentPattern<T> {
   const reasoningTemplate = createReasoningTemplate();
   const observationTemplate = createObservationTemplate();
