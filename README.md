@@ -1,20 +1,22 @@
-# f(x) -  Build reliable agents
+# f(x)
 
-f(x) is an agent framework where context is immutable. Every step is a pure function `Context → Context`, making AI agents predictable, testable, and debuggable.
+**Build reliable AI agents.**
 
-## The Core Insight
+f(x) is a functional agent framework where every step is a pure function `Context → Context`. This makes your agents predictable, testable, and debuggable.
+
+## Core insight
 
 **Context = a Value, Steps = Transformations**
 
-f(x) makes this practical by treating Context as an explicit state value where every step is a pure function `Context → Context`. This makes context **testable and replayable**: you can diff context before/after each step, assert contracts, and audit the exact payload the LLM saw at any moment.
+f(x) treats context as an explicit state value where every step is a pure function `Context → Context`. This makes context **testable and replayable** - you can diff context before/after each step, assert contracts, and audit the exact payload the LLM saw at any moment.
 
-f(x) gives you the tools to actually engineer context effectively.
+f(x) gives you the tools to engineer context effectively.
 
-## Why This Matters
+## The problem
 
-Most AI agent failures stem from poor context. f(x) makes context **explicit, testable, and auditable**
+Most AI agent failures stem from poor context. f(x) makes context **explicit, testable, and auditable**.
 
-## Quick Start
+## Quick start
 
 ```bash
 npm install @fx/core
@@ -51,17 +53,17 @@ console.log(result.response); // "Based on: Analyzing: Hello world"
 console.log(result.confidence); // 0.95
 ```
 
-**What just happened?**
+**What happened:**
 - Each step received the complete context
 - You can see exactly what data each step processed
-- The context is immutable - no hidden state changes
+- Context is immutable - no hidden state changes
 - You can test each step independently
 
-## What f(x) Actually Provides
+## What f(x) provides
 
 f(x) is a functional agent framework with these core capabilities:
 
-### 1. **Pure Function Composition**
+### 1. **Pure function composition**
 Every step is a pure function `Context → Context` that can be composed.
 
 ```typescript
@@ -85,8 +87,8 @@ const conditional = when(
 );
 ```
 
-### 2. **Functional Error Handling**
-Use `Either` monad for predictable error handling.
+### 2. **Functional error handling**
+Use the `Either` monad for predictable error handling.
 
 ```typescript
 const safeOperation = step('safeOperation', (context) => {
@@ -99,7 +101,7 @@ const safeOperation = step('safeOperation', (context) => {
 });
 ```
 
-### 3. **State Management**
+### 3. **State management**
 Immutable state transformations with lenses.
 
 ```typescript
@@ -114,7 +116,7 @@ const addMemory = step('addMemory', (context) =>
 );
 ```
 
-### 4. **Built-in Patterns**
+### 4. **Built-in patterns**
 Common AI agent patterns ready to use.
 
 ```typescript
@@ -127,7 +129,7 @@ const reactAgent = createReActPattern('reasoning-agent');
 const cotAgent = createChainOfThoughtPattern('thinking-agent');
 ```
 
-### 5. **Observability & Logging**
+### 5. **Observability & logging**
 Track what your agent is doing.
 
 ```typescript
@@ -145,7 +147,7 @@ const logStep = step('logStep', (context) => {
 
 ## Why f(x) Works
 
-### 1. **Test What the LLM Actually Sees**
+### 1. **Test what the LLM actually sees**
 Every step receives explicit context. Test the exact data your AI processes.
 
 ```typescript
@@ -166,7 +168,7 @@ test('analyze step processes context correctly', () => {
 });
 ```
 
-### 2. **Debug with Complete Visibility**
+### 2. **Debug with complete visibility**
 See exactly what context caused a failure. No more guessing.
 
 ```typescript
@@ -180,7 +182,7 @@ const debugAgent = createAgent('debug-agent', plan, {
 // "Step 'generate' failed with context: { analysis: '...', userInput: '...' }"
 ```
 
-### 3. **Audit AI Decisions**
+### 3. **Audit AI decisions**
 Track what data influenced each decision. Perfect for compliance and debugging.
 
 ```typescript
@@ -193,7 +195,7 @@ console.log(auditTrail);
 // ]
 ```
 
-### 4. **Replay Any Scenario**
+### 4. **Replay any scenario**
 Reproduce the exact context that led to any outcome.
 
 ```typescript
@@ -205,9 +207,9 @@ const result = agent.replayFrom(checkpoint);
 // Identical execution, guaranteed
 ```
 
-## Real-World Example: Code Review Agent
+## Real-world example: Code review agent
 
-Here's a practical agent that demonstrates explicit context engineering:
+Here's a practical agent that demonstrates explicit context:
 
 ```typescript
 import { step, sequence, createAgent } from '@fx/core';
@@ -272,7 +274,7 @@ console.log(result.issues.length); // 3
 
 - **[Installation & Setup](./docs/getting-started/installation.md)** - Get up and running in 5 minutes
 - **[Quick Start Guide](./docs/getting-started/quick-start.md)** - Build your first agent
-- **[Context Engineering](./docs/getting-started/concepts.md)** - Understanding Context as a Value
+- **[Context as a Value](./docs/getting-started/concepts.md)** - Understanding Context as a Value
 - **[Testing AI Agents](./docs/guides/testing-agents.md)** - Test individual steps and scenarios
 - **[Debugging & Observability](./docs/guides/debugging.md)** - Debug with complete context visibility
 - **[API Reference](./docs/api/core.md)** - Complete function reference
@@ -283,7 +285,7 @@ console.log(result.issues.length); // 3
 - **[Research Agent](./examples/research-agent/)** - Advanced research and analysis
 
 
-## With f(x) you get:
+## With f(x) you get
 
 - **Explicit context** - See exactly what your AI processes
 - **Testable steps** - Test individual transformations  
@@ -293,7 +295,7 @@ console.log(result.issues.length); // 3
 - **Functional composition** - Build agents with pure functions
 - **Error handling** - Use Either monad for predictable failures
 
-f(x) is a functional framework that makes context explicit and controllable - giving you the tools to build reliable AI agents.
+f(x) is a functional framework that makes context explicit and controllable, giving you the tools to build reliable AI agents.
 
 ## Installation
 
@@ -309,7 +311,7 @@ npm install @fx/core openai
 
 We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
 
-### Development Setup
+### Development setup
 
 ```bash
 git clone https://github.com/skishore23/fx.git
