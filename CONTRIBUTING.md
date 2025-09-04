@@ -15,7 +15,7 @@ Thank you for your interest in contributing to the Fx Framework! This document p
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/your-username/fx.git
+   git clone https://github.com/skishore23/fx.git
    cd fx
    ```
 
@@ -88,8 +88,6 @@ npm run test:coverage
 The core framework package should:
 - Provide functional programming primitives
 - Implement category theory constructs
-- Maintain backward compatibility
-- Follow semantic versioning
 
 ### Adding New Features
 
