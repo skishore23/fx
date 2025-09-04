@@ -117,14 +117,14 @@ const readFileStep = step('readFile', async (state) => {
   const result = safeReadFile(state.filePath);
   return Either.fold(
     result,
-    (error) => compose(
-      updateState({ error: error.message }),
-      addState('observation', `Error: ${error.message}`)
-    )(state),
-    (content) => compose(
-      updateState({ fileContent: content }),
-      addState('action', 'File read successfully')
-    )(state)
+    (error) => sequence([
+      step('updateError', (s) => updateState({ error: error.message })(s)),
+      step('logError', (s) => addState('observation', `Error: ${error.message}`)(s))
+    ])(state),
+    (content) => sequence([
+      step('updateContent', (s) => updateState({ fileContent: content })(s)),
+      step('logSuccess', (s) => addState('action', 'File read successfully')(s))
+    ])(state)
   );
 });
 ```
@@ -147,7 +147,7 @@ All operations use "state" terminology since we work with `AgentState`:
 
 1. **Use `sequence` for agent workflows** - Chain steps that need to happen in order
 2. **Use `parallel` for independent operations** - Speed up your agent by running things concurrently
-3. **Use `when` for conditional logic** - Make your agents smart and adaptive
+3. **Use `when` for conditional logic** - Make your agents adaptive
 4. **Handle errors functionally** - Use `Either` instead of try/catch blocks
 5. **Keep state immutable** - Never mutate state directly, always return new state
 

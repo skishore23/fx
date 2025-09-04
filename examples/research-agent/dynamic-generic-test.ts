@@ -4,6 +4,7 @@
  */
 
 import { createToolRegistry } from './research-agent';
+import { ObservabilityManager } from '../../packages/fx-core/src';
 
 async function testDynamicGenericResearch() {
   console.log('🚀 Testing Completely Dynamic Research Agent...\n');
@@ -41,7 +42,10 @@ async function testDynamicGenericResearch() {
     // Chain of Thought properties
     problem: 'Research sustainable energy solutions',
     thoughts: [],
-    conclusion: undefined
+    conclusion: undefined,
+    // Observability features
+    observability: new ObservabilityManager(),
+    decisionHistory: []
   };
   
   try {
@@ -90,7 +94,10 @@ async function testDynamicGenericResearch() {
     // Chain of Thought properties
     problem: 'Research blockchain technology in healthcare',
     thoughts: [],
-    conclusion: undefined
+    conclusion: undefined,
+    // Observability features
+    observability: new ObservabilityManager(),
+    decisionHistory: []
   };
   
   try {
@@ -169,7 +176,10 @@ async function testDynamicGenericResearch() {
     // Chain of Thought properties
     problem: 'Research quantum computing applications',
     thoughts: [],
-    conclusion: undefined
+    conclusion: undefined,
+    // Observability features
+    observability: new ObservabilityManager(),
+    decisionHistory: []
   };
   
   try {

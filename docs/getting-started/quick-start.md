@@ -1,21 +1,22 @@
 # Quick Start Guide
 
-Build your first AI agent with Fx in 10 minutes.
+Build your first agent with Fx in 10 minutes.
 
 ## What You'll Build
 
-A simple agent that can read files and answer questions about them. This is the foundation for more complex agents.
+A simple agent that uses tool calling to read files and answer questions about them. This demonstrates the core capabilities of the Fx framework.
 
-## Step 1: Basic Agent Structure
+## Step 1: Agent with Tool Calling
 
 ```typescript
 import { 
+  createAgentExecutor,
+  createPlan,
+  createAgent,
   step, 
   sequence, 
   updateState, 
-  addState,
-  createOpenAIProvider,
-  llmTemplateStep 
+  addState
 } from '@fx/core';
 
 // Define your agent's state
@@ -24,13 +25,12 @@ interface AgentState {
   fileContent?: string;
   response?: string;
   memory: any[];
+  toolResults?: any[];
+  executionTime?: number;
 }
 
-// Create the LLM provider
-const llmProvider = createOpenAIProvider({
-  apiKey: process.env.OPENAI_API_KEY!,
-  model: 'gpt-4'
-});
+// Create an agent executor with tool calling
+const executor = createAgentExecutor();
 
 // Step 1: Process user input
 const processInput = step('processInput', (state: AgentState) => {
@@ -39,67 +39,71 @@ const processInput = step('processInput', (state: AgentState) => {
   })(state);
 });
 
-// Step 2: Read file if requested
-const readFile = step('readFile', async (state: AgentState) => {
-  if (state.userInput.includes('read file')) {
-    // In a real implementation, you'd read the actual file
-    const content = "This is sample file content.";
-    return compose(
-      updateState({ fileContent: content }),
-      addState('action', 'File read successfully')
-    )(state);
-  }
-  return state;
+// Step 2: Execute tools
+const executeTools = step('executeTools', async (state: AgentState) => {
+  const { state: newState, result } = await executor.runTurn(state, state.userInput);
+  
+  return {
+    ...newState,
+    toolResults: result.results,
+    executionTime: result.executionTimeMs,
+    response: result.success ? 'Tools executed successfully' : `Error: ${result.error}`
+  };
 });
 
-// Step 3: Generate response
-const generateResponse = llmTemplateStep(
-  'generateResponse',
-  llmProvider,
-  `You are a helpful assistant. 
-   
-   User input: {{userInput}}
-   File content: {{fileContent}}
-   
-   Respond to the user's request.`,
-  (state: AgentState) => ({
-    userInput: state.userInput,
-    fileContent: state.fileContent || 'No file content available'
-  })
-);
-
-// Step 4: Update conversation
-const updateConversation = step('updateConversation', (state: AgentState) => {
-  return addState('observation', `Generated response: ${state.response}`)(state);
+// Step 3: Log the action
+const logAction = step('logAction', (state: AgentState) => {
+  return addState('action', `Processed: ${state.userInput} (${state.executionTime}ms)`)(state);
 });
 
 // Create the agent workflow
-const agent = sequence([
+const agentWorkflow = sequence([
   processInput,
-  readFile,
-  generateResponse,
-  updateConversation
+  executeTools,
+  logAction
 ]);
 ```
 
-## Step 2: Run Your Agent
+## Step 2: Create and Run Your Agent
 
 ```typescript
+// Create the agent
+const agent = createAgent('file-agent', createPlan('file-workflow', agentWorkflow));
+
 // Run the agent
 async function runAgent() {
   const initialState: AgentState = {
-    userInput: "read file and tell me what it contains",
+    userInput: "read config.json and write summary to output.txt",
     memory: []
   };
 
-  const result = await agent(initialState);
+  const result = await agent.start(initialState);
   
   console.log('Response:', result.response);
+  console.log('Tool results:', result.toolResults);
+  console.log('Execution time:', result.executionTime, 'ms');
   console.log('Memory entries:', result.memory.length);
 }
 
 runAgent();
 ```
+
+## What Happens Automatically
+
+The `createAgentExecutor()` provides tool calling that automatically:
+
+1. **Routes Input**: Uses pattern matching to identify which tools to use
+2. **Parses Arguments**: Handles complex inputs like file paths with spaces
+3. **Plans Execution**: For multi-step operations, creates a dependency graph
+4. **Applies Safety**: Enforces resource quotas and safety policies
+5. **Tracks Decisions**: Records all tool selections for observability
+
+For example, when you say "read config.json and write to output.txt", the executor:
+- Identifies `read_file` and `write_file` tools
+- Parses the file paths correctly
+- Plans the execution order (read first, then write)
+- Applies appropriate safety policies
+- Tracks the decision for future improvement
 
 ## Step 3: Add Error Handling
 
@@ -117,14 +121,14 @@ const readFileWithErrorHandling = step('readFile', async (state: AgentState) => 
 
   return Either.fold(
     result,
-    (error) => compose(
-      updateState({ error: error.message }),
-      addState('observation', `Error: ${error.message}`)
-    )(state),
-    (content) => compose(
-      updateState({ fileContent: content }),
-      addState('action', 'File read successfully')
-    )(state)
+    (error) => sequence([
+      step('updateError', (s) => updateState({ error: error.message })(s)),
+      step('logError', (s) => addState('observation', `Error: ${error.message}`)(s))
+    ])(state),
+    (content) => sequence([
+      step('updateContent', (s) => updateState({ fileContent: content })(s)),
+      step('logSuccess', (s) => addState('action', 'File read successfully')(s))
+    ])(state)
   );
 });
 ```
@@ -232,17 +236,17 @@ const conditionalStep = when(
 
 ### State Composition
 ```typescript
-import { compose, composeMany } from '@fx/core';
+import { sequence, step, updateState, addState } from '@fx/core';
 
-const updateUser = composeMany(
-  updateState({ lastActive: Date.now() }),
-  addState('action', 'User updated'),
-  updateState({ version: '1.0.0' })
-);
+const updateUser = sequence([
+  step('updateLastActive', (s) => updateState({ lastActive: Date.now() })(s)),
+  step('addAction', (s) => addState('action', 'User updated')(s)),
+  step('updateVersion', (s) => updateState({ version: '1.0.0' })(s))
+]);
 ```
 
 ## Need Help?
 
-- Check the [Composition Guide](../api/composition.md) for advanced patterns
+- Check the [Composition Guide](../api/composition.md) for more patterns
 - Look at [examples](../examples/) for real-world implementations
 - Read the [API Reference](../api/core.md) for all available functions

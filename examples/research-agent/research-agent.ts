@@ -48,6 +48,11 @@ import {
   
   // Ledger System
   enableLogging,
+  
+  // New Observability Features
+  ObservabilityManager,
+  appendDecision,
+  getDecisionHistory,
   disableLogging,
   logEvent,
   getEvents
@@ -93,6 +98,11 @@ interface ResearchState extends BaseContext {
   analysisResults: AnalysisResult[];
   finalReport?: string;
   verbose: boolean;
+  // Observability features
+  observability: ObservabilityManager;
+  lastDecisionId?: string;
+  decisionHistory: string[];
+  observabilityReport?: any;
   // Interactive loop properties
   userInput?: string;
   shouldExit?: boolean;
@@ -1460,7 +1470,10 @@ export async function runResearchAgent(verbose = false) {
     // Chain of Thought properties
     problem: '',
     thoughts: [],
-    conclusion: undefined
+    conclusion: undefined,
+    // Observability features
+    observability: new ObservabilityManager(),
+    decisionHistory: []
   };
   
   try {
@@ -1473,6 +1486,13 @@ export async function runResearchAgent(verbose = false) {
       events.forEach((event, index) => {
         console.log(`  ${index + 1}. [${event.name}] ${event.timestamp}`);
       });
+      
+      // Show observability report
+      console.log('\n🔍 Observability Report:');
+      const report = initialState.observability.getReport();
+      console.log(`  Recent decisions: ${report.recentDecisions.length}`);
+      console.log(`  Tool accuracy:`, report.confusionMatrix.toolAccuracy);
+      console.log(`  Performance metrics:`, report.confusionMatrix.performanceMetrics);
     }
   } catch (error) {
     console.error('❌ Fatal Error:', (error as Error).message);

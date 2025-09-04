@@ -1,6 +1,6 @@
 # Creating an Agent with Fx Framework
 
-This guide walks you through creating a complete agent using the Fx Framework, from basic setup to advanced patterns and tool integration.
+This guide walks you through creating a complete agent using the Fx Framework, from basic setup to patterns and tool integration.
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@ This guide walks you through creating a complete agent using the Fx Framework, f
 7. [Step 5: Define Prompts](#step-5-define-prompts)
 8. [Step 6: Build Workflow](#step-6-build-workflow)
 9. [Step 7: Create Agent](#step-7-create-agent)
-10. [Advanced Patterns](#advanced-patterns)
+10. [Patterns](#patterns)
 11. [Best Practices](#best-practices)
 
 ## Overview
@@ -22,7 +22,7 @@ The Fx Framework provides a functional, category theory-based approach to buildi
 
 - **Functional Composition**: Agents are built by composing pure functions
 - **State Management**: Immutable state transformations using lenses
-- **Pattern Matching**: Intelligent tool selection based on user input
+- **Pattern Matching**: Tool selection based on user input
 - **Error Handling**: Functional error handling with `Either` monad
 - **Ledger System**: Built-in audit trail and durability
 
@@ -224,29 +224,31 @@ const SearchSchema = z.object({
 Create your tools using the `createValidatedTool` function:
 
 ```typescript
-import { createValidatedTool, createToolStep, Either } from '@fx/core';
+import { createValidatedTool, Either, step, sequence, updateState, addState } from '@fx/core';
 
 const createToolRegistry = (llmProvider: any) => {
   return createFxToolRegistry([
     // File reading tool
     createValidatedTool('read_file', 'Read contents of a file', ReadFileSchema,
       async (input: { filePath: string }, state: MyAgentState) => {
-        const toolStep = createToolStep(
-          'read_file',
-          async () => {
-            try {
-              const content = await safeReadFile(input.filePath);
-              return Either.right(content);
-            } catch (error) {
-              return Either.left(error as Error);
-            }
-          },
-          (result) => ({
-            filePath: input.filePath,
-            content: result,
-            wordCount: result.split(' ').length
-          })
-        );
+        const toolStep = step('read_file', async (state: MyAgentState) => {
+          try {
+            const content = await safeReadFile(input.filePath);
+            return sequence([
+              step('updateResult', (s) => updateState({
+                filePath: input.filePath,
+                content: content,
+                wordCount: content.split(' ').length
+              })(s)),
+              step('logAction', (s) => addState('action', 'File read successfully')(s))
+            ])(state);
+          } catch (error) {
+            return sequence([
+              step('updateError', (s) => updateState({ error: (error as Error).message })(s)),
+              step('logError', (s) => addState('observation', `Error reading file: ${(error as Error).message}`)(s))
+            ])(state);
+          }
+        });
         return await toolStep(state) as MyAgentState;
       }
     ),
@@ -254,27 +256,29 @@ const createToolRegistry = (llmProvider: any) => {
     // API call tool
     createValidatedTool('api_call', 'Make an API call', ApiCallSchema,
       async (input: { endpoint: string; method: string; headers?: Record<string, string>; body?: any }, state: MyAgentState) => {
-        const toolStep = createToolStep(
-          'api_call',
-          async () => {
-            try {
-              const response = await fetch(input.endpoint, {
-                method: input.method,
-                headers: input.headers,
-                body: input.body ? JSON.stringify(input.body) : undefined
-              });
-              const data = await response.json();
-              return Either.right(data);
-            } catch (error) {
-              return Either.left(error as Error);
-            }
-          },
-          (result) => ({
-            endpoint: input.endpoint,
-            response: result,
-            timestamp: new Date().toISOString()
-          })
-        );
+        const toolStep = step('api_call', async (state: MyAgentState) => {
+          try {
+            const response = await fetch(input.endpoint, {
+              method: input.method,
+              headers: input.headers,
+              body: input.body ? JSON.stringify(input.body) : undefined
+            });
+            const data = await response.json();
+            return sequence([
+              step('updateResult', (s) => updateState({
+                endpoint: input.endpoint,
+                response: data,
+                timestamp: new Date().toISOString()
+              })(s)),
+              step('logAction', (s) => addState('action', 'API call completed successfully')(s))
+            ])(state);
+          } catch (error) {
+            return sequence([
+              step('updateError', (s) => updateState({ error: (error as Error).message })(s)),
+              step('logError', (s) => addState('observation', `Error making API call: ${(error as Error).message}`)(s))
+            ])(state);
+          }
+        });
         return await toolStep(state) as MyAgentState;
       }
     ),
@@ -282,33 +286,36 @@ const createToolRegistry = (llmProvider: any) => {
     // Search tool
     createValidatedTool('search', 'Search for information', SearchSchema,
       async (input: { query: string; maxResults?: number; filters?: Record<string, string> }, state: MyAgentState) => {
-        const toolStep = createToolStep(
-          'search',
-          async () => {
-            try {
-              // Use LLM to generate search results
-              const searchPrompt = `Search for: ${input.query}
-              Max results: ${input.maxResults || 5}
-              Filters: ${JSON.stringify(input.filters || {})}
-              
-              Return a JSON array of search results.`;
-              
-              const result = await llmTemplateStep(llmProvider, promptTemplate('system', searchPrompt, []))({
-                ...state,
-                query: input.query
-              });
-              
-              return Either.right(result);
-            } catch (error) {
-              return Either.left(error as Error);
-            }
-          },
-          (result) => ({
-            query: input.query,
-            results: JSON.parse((result as any).systemResponse || '[]'),
-            resultCount: JSON.parse((result as any).systemResponse || '[]').length
-          })
-        );
+        const toolStep = step('search', async (state: MyAgentState) => {
+          try {
+            // Use LLM to generate search results
+            const searchPrompt = `Search for: ${input.query}
+            Max results: ${input.maxResults || 5}
+            Filters: ${JSON.stringify(input.filters || {})}
+            
+            Return a JSON array of search results.`;
+            
+            const result = await llmTemplateStep(llmProvider, promptTemplate('system', searchPrompt, []))({
+              ...state,
+              query: input.query
+            });
+            
+            const results = JSON.parse((result as any).systemResponse || '[]');
+            return sequence([
+              step('updateResult', (s) => updateState({
+                query: input.query,
+                results: results,
+                resultCount: results.length
+              })(s)),
+              step('logAction', (s) => addState('action', 'Search completed successfully')(s))
+            ])(state);
+          } catch (error) {
+            return sequence([
+              step('updateError', (s) => updateState({ error: (error as Error).message })(s)),
+              step('logError', (s) => addState('observation', `Error during search: ${(error as Error).message}`)(s))
+            ])(state);
+          }
+        });
         return await toolStep(state) as MyAgentState;
       }
     )
@@ -448,7 +455,7 @@ createPattern(
 ```
 
 #### 3. Contextual Match (`patterns.contextual`)
-More sophisticated matching with required/optional keywords:
+More detailed matching with required/optional keywords:
 
 ```typescript
 createPattern(
@@ -770,7 +777,7 @@ export const runMyAgent = async (verbose: boolean = true) => {
 };
 ```
 
-## Advanced Patterns
+## Patterns
 
 ### Using Chain of Thought
 
@@ -1148,4 +1155,4 @@ const newState = push('arrayField', newItem)(state);
 6. **Handle tool failures gracefully**
 7. **Keep tools focused** and single-purpose
 
-This guide provides everything you need to create sophisticated agents using the Fx Framework. The key is to start simple and gradually add complexity as you become more familiar with the patterns and composition techniques.
+This guide provides everything you need to create agents using the Fx Framework. The key is to start simple and gradually add complexity as you become more familiar with the patterns and composition techniques.

@@ -181,7 +181,140 @@ export { configure, getConfig } from './config';
 export { enableLogging, disableLogging, logEvent, getEvents } from './ledger';
 
 // ---------- Tool Registry ----------
-export { ToolRegistry, registerTool, callTool } from './registry';
+export { registerTool, callTool } from './registry';
+
+// ---------- Router System ----------
+export {
+  router,
+  patternGate,
+  createRouter,
+  validateRouterOut,
+  getTopCandidate
+} from './router';
+
+export type { Tool, RouterSignal, RouterCandidate, RouterOut, ToolRouter } from './router';
+
+// ---------- Argument Parser ----------
+export {
+  token,
+  quoted,
+  filePath,
+  number,
+  boolean,
+  word,
+  firstOf,
+  optional,
+  many,
+  separatedBy,
+  readFileArgs,
+  writeFileArgs,
+  searchArgs,
+  apiCallArgs,
+  commandArgs,
+  argSpec,
+  validateArgs,
+  splitMultiToolSentence
+} from './arg-parser';
+
+export type { Parser, ParseResult, ParserWithRemaining } from './arg-parser';
+
+// ---------- Tool Metadata ----------
+export {
+  createToolSpec,
+  createReadFileSpec,
+  createWriteFileSpec,
+  createHttpRequestSpec,
+  createCommandSpec,
+  ToolRegistry,
+  defaultToolRegistry
+} from './tool-metadata';
+
+export type { 
+  Capability, 
+  Risk, 
+  ExecutionContext, 
+  ApprovalSystem, 
+  ResourceQuotas,
+  ToolSpec, 
+  PreCondition, 
+  PostCondition
+} from './tool-metadata';
+
+// ---------- Planner ----------
+export {
+  planFromUtterance,
+  validatePlan,
+  executePlan,
+  getPlanSummary,
+  planRequiresApproval,
+  getEstimatedExecutionTime,
+  getPlanDependencyGraph
+} from './planner';
+
+export type { PlanStep, PlanningError } from './planner';
+
+// ---------- Policies ----------
+export {
+  withPolicies,
+  timeoutPolicy,
+  retryPolicy,
+  approvalPolicy,
+  circuitBreakerPolicy,
+  sandboxPolicy,
+  comprehensivePolicy,
+  getDefaultPolicyForRisk,
+  mergePolicies
+} from './policies';
+
+export type { Policy, CircuitBreakerConfig, PolicyContext } from './policies';
+
+// ---------- Safety ----------
+export {
+  AllowlistChecker,
+  IdempotencyManager,
+  ResourceQuotaManager,
+  SandboxManager,
+  SafetyManager,
+  createDefaultSafetyConfig,
+  createStrictSafetyConfig
+} from './safety';
+
+export type { 
+  AllowlistConfig, 
+  IdempotencyConfig, 
+  SafetyConfig, 
+  SafetyViolation,
+  SandboxContext
+} from './safety';
+
+// ---------- Observability ----------
+export {
+  DecisionRecorder,
+  ConfusionTracker,
+  ReplaySystem,
+  ObservabilityManager,
+  appendDecision,
+  getDecisionHistory,
+  defaultObservabilityManager
+} from './observability';
+
+export type { 
+  DecisionRecord, 
+  ConfusionMatrix, 
+  PerformanceMetrics, 
+  ReplayContext 
+} from './observability';
+
+// ---------- Agent Executor ----------
+export {
+  AgentExecutor,
+  createAgentExecutor,
+  createStrictAgentExecutor,
+  agentExecutorStep,
+  createAgentWorkflow
+} from './agent-executor';
+
+export type { AgentExecutorConfig, ExecutionResult } from './agent-executor';
 
 // ---------- High-Level API ----------
 

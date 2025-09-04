@@ -46,7 +46,12 @@ import {
   enableLogging,
   disableLogging,
   logEvent,
-  getEvents
+  getEvents,
+  
+  // Observability System
+  ObservabilityManager,
+  appendDecision,
+  getDecisionHistory
 } from '@fx/core';
 import { z } from 'zod';
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
@@ -91,6 +96,10 @@ interface AgentState extends BaseContext {
   skipProcessing?: boolean;
   error?: string;
   stack?: string;
+  // Observability
+  observability?: ObservabilityManager;
+  lastDecisionId?: string;
+  decisionHistory?: string[];
   // Tool results
   fileContent?: string;
   filePath?: string;
@@ -522,6 +531,25 @@ const selectTools = step('selectTools', (state: AgentState) => {
     selectionMethod: toolsToUse.length > 0 ? 'pattern_matching' : 'scoring_fallback'
   });
   
+  // Record decision for observability
+  if (state.observability) {
+    const decisionId = state.observability.recordDecision({
+      input: lastMessage,
+      patternsMatched: toolsToUse.length > 0 ? toolsToUse : [],
+      routerCandidates: scores.map(s => ({ tool: s.tool as any, score: s.score, reason: 'scoring' })),
+      chosen: toolsToUse as any[],
+      args: { tools: toolsToUse },
+      outcome: 'ok',
+      latMs: 0
+    });
+    
+    return updateState({ 
+      toolsToUse,
+      lastDecisionId: decisionId,
+      decisionHistory: [...(state.decisionHistory || []), decisionId]
+    })(state);
+  }
+  
   return updateState({ toolsToUse })(state);
 });
 
@@ -628,6 +656,8 @@ const handleToolCalls = step('handleToolCalls', async (state: AgentState) => {
     return state;
   }
   
+  const startTime = Date.now();
+  
   // Log tool execution for ledger
   logEvent('workflow:tools_executed', {
     tools: toolsToUse,
@@ -657,7 +687,27 @@ const handleToolCalls = step('handleToolCalls', async (state: AgentState) => {
   }
   
   const composedToolExecution = sequence(toolExecutionSteps);
-  return await composedToolExecution(state);
+  const result = await composedToolExecution(state);
+  
+  // Record execution result for observability
+  if (state.observability && state.lastDecisionId) {
+    const executionTime = Date.now() - startTime;
+    const success = !result.error;
+    
+    // Update the decision record with execution results
+    state.observability.recordDecision({
+      input: state.conversation?.[state.conversation.length - 1]?.content || '',
+      patternsMatched: toolsToUse,
+      routerCandidates: [],
+      chosen: toolsToUse as any[],
+      args: { tools: toolsToUse },
+      outcome: success ? 'ok' : 'fail',
+      latMs: executionTime,
+      error: result.error
+    });
+  }
+  
+  return result;
 });
 
 const updateConversation = step('updateConversation', (state: AgentState) => {
@@ -835,7 +885,9 @@ export async function runCodingAgent(verbose = false) {
     plan: [],
     currentStep: 0,
     maxIterations: 10,
-    iterationCount: 0
+    iterationCount: 0,
+    observability: new ObservabilityManager(),
+    decisionHistory: []
   };
   
   try {
@@ -848,6 +900,18 @@ export async function runCodingAgent(verbose = false) {
       events.forEach((event, index) => {
         console.log(`  ${index + 1}. [${event.name}] ${event.timestamp}`);
       });
+      
+      // Show observability report
+      if (initialState.observability) {
+        const report = initialState.observability.getReport();
+        console.log('\n🔍 Observability Report:');
+        console.log(`  Recent decisions: ${report.recentDecisions.length}`);
+        console.log(`  Tool accuracy:`, Object.fromEntries(report.confusionMatrix.toolAccuracy));
+        console.log(`  Performance metrics:`);
+        console.log(`    Avg latency: ${report.confusionMatrix.performanceMetrics.avgLatencyMs.toFixed(2)}ms`);
+        console.log(`    Success rate: ${(report.confusionMatrix.performanceMetrics.successRate * 100).toFixed(1)}%`);
+        console.log(`    Error rate: ${(report.confusionMatrix.performanceMetrics.errorRate * 100).toFixed(1)}%`);
+      }
     }
   } catch (error) {
     console.error('❌ Fatal Error:', (error as Error).message);

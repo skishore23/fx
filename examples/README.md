@@ -1,6 +1,6 @@
 # Fx Framework Examples
 
-This directory contains sophisticated examples demonstrating how to use the Fx Framework for building functional, composable AI agents and workflows.
+This directory contains examples demonstrating how to use the Fx Framework for building functional, composable agents and workflows.
 
 ## 📁 Directory Structure
 
@@ -56,10 +56,10 @@ examples/
   - LLM integration with OpenAI
   - Interactive human-in-the-loop workflow
 - **Concepts**: Tool system, LLM integration, error handling, Kleisli composition
-- **Difficulty**: Advanced
+- **Difficulty**: Complex
 
 **Key Features:**
-- ✅ **Tool System**: Comprehensive tool registry with validation
+- ✅ **Tool System**: Tool registry with validation
 - ✅ **LLM Integration**: OpenAI GPT-4 integration
 - ✅ **Interactive Workflow**: Human-in-the-loop agent
 - ✅ **Error Handling**: Functional error handling with Either monad
@@ -69,21 +69,21 @@ examples/
 ## 🔬 Research Agent
 
 ### [Research Agent](./research-agent/)
-- **Purpose**: Sophisticated deep research agent with web scraping
+- **Purpose**: Deep research agent with web scraping
 - **Features**:
   - Multi-phase research process
   - Web scraping with Firecrawl
   - AI-powered content analysis
-  - Comprehensive report generation
+  - Report generation
   - Citation management
 - **Concepts**: Web scraping, content analysis, report generation, multi-phase workflows
-- **Difficulty**: Advanced
+- **Difficulty**: Complex
 
 **Key Features:**
 - ✅ **Web Scraping**: Firecrawl integration for content extraction
 - ✅ **Multi-Phase Research**: Planning → Gathering → Analysis → Synthesis
 - ✅ **AI Analysis**: OpenAI-powered content analysis
-- ✅ **Report Generation**: Comprehensive research reports
+- ✅ **Report Generation**: Research reports
 - ✅ **Citation Management**: Automatic citation generation
 - ✅ **Configurable Depth**: Shallow, medium, or deep research modes
 
@@ -108,7 +108,7 @@ Both agents demonstrate:
 ### Best Practices
 - Fail-fast error handling
 - Type safety with TypeScript
-- Comprehensive error handling
+- Error handling
 - Proper state management
 - Functional composition patterns
 
@@ -119,7 +119,7 @@ Both agents demonstrate:
 2. Explore the tool system and LLM integration
 3. Understand error handling with Either monad
 
-### For Advanced Users
+### For Experienced Users
 1. Study the [Research Agent](./research-agent/) for complex multi-phase workflows
 2. Examine web scraping and content analysis patterns
 3. Learn report generation and citation management
@@ -154,7 +154,7 @@ We welcome contributions! Here's how to add a new example:
 
 1. **Create a new directory** for your example
 2. **Follow the established patterns** from existing agents
-3. **Include comprehensive documentation**
+3. **Include documentation**
 4. **Add tests** for your example
 5. **Update this README** with your example
 
@@ -198,13 +198,13 @@ export async function runYourAgent(options: YourOptions) {
 
 ## 🎉 What Makes These Examples Special
 
-These examples showcase **production-ready AI agents** that demonstrate:
+These examples showcase AI agents that demonstrate:
 
 - **Mathematical Correctness**: Proper category theory and functional programming
 - **Real-World Applications**: Actual tools and integrations
 - **Scalable Architecture**: Clean, composable, and maintainable code
 - **Type Safety**: Full TypeScript support with strict typing
-- **Error Handling**: Robust error handling with functional patterns
+- **Error Handling**: Error handling with functional patterns
 - **Audit Trails**: Complete logging and event sourcing
 
 Happy coding with Fx! 🚀

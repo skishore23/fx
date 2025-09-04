@@ -3,6 +3,7 @@
  */
 
 import { runCoreWorkflow } from './research-agent';
+import { ObservabilityManager } from '../../packages/fx-core/src';
 
 async function testResearchAgent() {
   console.log('🧪 Testing Research Agent...\n');
@@ -24,7 +25,14 @@ async function testResearchAgent() {
     plan: [],
     currentStep: 0,
     maxIterations: 10,
-    iterationCount: 0
+    iterationCount: 0,
+    // Chain of Thought properties
+    problem: 'Scrape and analyze example website',
+    thoughts: [],
+    conclusion: undefined,
+    // Observability features
+    observability: new ObservabilityManager(),
+    decisionHistory: []
   };
   
   try {
@@ -69,7 +77,14 @@ async function testResearchAgent() {
     plan: [],
     currentStep: 0,
     maxIterations: 10,
-    iterationCount: 0
+    iterationCount: 0,
+    // Chain of Thought properties
+    problem: 'Generate comprehensive report about AI trends',
+    thoughts: [],
+    conclusion: undefined,
+    // Observability features
+    observability: new ObservabilityManager(),
+    decisionHistory: []
   };
   
   try {

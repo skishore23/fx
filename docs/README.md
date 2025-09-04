@@ -1,6 +1,6 @@
 # Fx Framework Documentation
 
-Build production-ready AI agents with functional programming. Fx gives you the tools to create agents that actually work in the real world.
+Build AI agents with functional programming. Fx gives you the tools to create agents that work in the real world.
 
 ## 📚 Documentation Structure
 
@@ -19,10 +19,10 @@ Build production-ready AI agents with functional programming. Fx gives you the t
 
 ### Examples
 - [Basic Examples](./examples/basic/) - Simple use cases
-- [Advanced Examples](./examples/advanced/) - Complex workflows
+- [Examples](./examples/) - Complex workflows
 - [Integration Examples](./examples/integrations/) - Real-world applications
 
-### Advanced Topics
+### Topics
 - [Category Theory](./advanced/category-theory.md) - Mathematical foundations
 - [Performance](./advanced/performance.md) - Optimization techniques
 - [Testing](./advanced/testing.md) - Testing strategies

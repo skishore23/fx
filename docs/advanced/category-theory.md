@@ -1,6 +1,6 @@
 # Category Theory in Fx
 
-Understanding the mathematical foundations that make Fx powerful and predictable.
+Understanding the mathematical foundations that make Fx predictable.
 
 ## Introduction
 
@@ -129,7 +129,7 @@ const workflow = sequence(identity, process, identity);
 // Equivalent to just process
 ```
 
-## Advanced Patterns
+## Patterns
 
 ### Natural Transformations
 
@@ -258,7 +258,7 @@ const workflow = sequence(validate, process, save);
 // class Workflow extends BaseWorkflow { ... }
 ```
 
-### 3. Leverage Type Safety
+### 3. Use Type Safety
 
 ```typescript
 // ✅ Type-safe composition
@@ -277,6 +277,6 @@ const workflow: Step<UserState> = sequence(
 
 ## Conclusion
 
-Category theory provides the mathematical foundation that makes Fx predictable, composable, and maintainable. By understanding these concepts, you can build more robust and reliable applications.
+Category theory provides the mathematical foundation that makes Fx predictable, composable, and maintainable. By understanding these concepts, you can build reliable applications.
 
 The key insight is that complex systems can be built from simple, well-understood components that compose naturally. This is the power of category theory in practice.

@@ -9,6 +9,7 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@fx/core": "file:../../packages/fx-core",
     "@mendable/firecrawl-js": "^4.3.1",
     "openai": "^4.0.0",
     "zod": "^3.22.0",

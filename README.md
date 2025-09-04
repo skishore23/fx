@@ -1,10 +1,6 @@
 # Fx Framework
 
-Build production-ready AI agents with functional programming and category theory.
-
-[![CI](https://github.com/fx-framework/fx/workflows/CI/badge.svg)](https://github.com/fx-framework/fx/actions)
-[![npm version](https://badge.fury.io/js/%40fx%2Fcore.svg)](https://badge.fury.io/js/%40fx%2Fcore)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Build AI agents with functional programming and category theory.
 
 ## Why Fx?
 
@@ -13,7 +9,8 @@ Building AI agents that actually work in production is hard. Fx makes it easier 
 - **Functional Programming**: Pure functions, immutable state, and composable operations
 - **Category Theory**: Mathematical foundations for reliable composition
 - **Type Safety**: Full TypeScript support with comprehensive error handling
-- **Production Ready**: Built-in logging, error handling, and state management
+- **Intelligent Tool Calling**: Pattern-based routing with learned fallbacks
+- **Built-in Safety**: Safety controls, observability, and state management
 - **Developer Experience**: Clean API that feels natural to use
 
 ## Quick Start
@@ -50,10 +47,10 @@ Every operation is a pure function that transforms state. No mutations, no side 
 
 ```typescript
 // State transformations are composable
-const updateUser = compose(
+const updateUser = sequence([
   updateState({ lastActive: Date.now() }),
   addState('action', 'User updated')
-);
+]);
 ```
 
 ### 2. **Category Theory Principles**
@@ -68,7 +65,7 @@ const parallelWork = parallel([
 ], mergeStrategies.default);
 ```
 
-### 3. **Production-Ready Error Handling**
+### 3. **Error Handling**
 No try/catch blocks. Use `Either` for functional error handling.
 
 ```typescript
@@ -91,81 +88,71 @@ enableLogging();
 
 ## Real-World Example
 
-Here's a coding agent that can read files, search code, and generate responses:
+Here's an agent that uses intelligent tool calling to read files, search code, and generate responses:
 
 ```typescript
 import { 
-  step, 
-  sequence, 
-  parallel, 
-  createValidatedTool,
-  createOpenAIProvider,
-  llmTemplateStep 
+  createAgentExecutor,
+  createPlan,
+  createAgent,
+  step,
+  sequence,
+  updateState,
+  addState
 } from '@fx/core';
 
-// Define tools with validation
-const readFileTool = createValidatedTool(
-  'read_file',
-  'Read a file from the filesystem',
-  z.object({ filePath: z.string() }),
-  async ({ filePath }, state) => {
-    const content = await fs.readFile(filePath, 'utf8');
-    return updateState({ fileContent: content })(state);
-  }
-);
+// Create an agent executor with intelligent tool calling
+const executor = createAgentExecutor();
 
-// Create LLM provider
-const llmProvider = createOpenAIProvider({
-  apiKey: process.env.OPENAI_API_KEY!,
-  model: 'gpt-4'
-});
-
-// Build the agent
+// Build the agent workflow
 const codingAgent = sequence([
   step('processInput', (state) => 
     updateState({ userInput: state.userInput.trim() })(state)
   ),
   
-  step('handleTools', async (state) => {
-    const toolCalls = parseToolCalls(state.response);
-    for (const toolCall of toolCalls) {
-      state = await toolRegistry.execute(toolCall.name, state, toolCall.input);
-    }
-    return state;
+  step('executeTools', async (state) => {
+    const { state: newState, result } = await executor.runTurn(state, state.userInput);
+    return {
+      ...newState,
+      toolResults: result.results,
+      executionTime: result.executionTimeMs
+    };
   }),
   
-  llmTemplateStep(
-    'generateResponse',
-    llmProvider,
-    'You are a coding assistant. User input: {{userInput}}',
-    (state) => ({ userInput: state.userInput })
-  ),
-  
   step('logAction', (state) => 
-    addState('action', `Generated response for: ${state.userInput}`)(state)
+    addState('action', `Processed: ${state.userInput}`)(state)
   )
 ]);
 
-// Run the agent
-const result = await codingAgent({ 
-  userInput: 'Read package.json and explain the dependencies',
+// Create and run the agent
+const agent = createAgent('coding-agent', createPlan('coding-workflow', codingAgent));
+const result = await agent.start({ 
+  userInput: 'read package.json and write summary to output.txt',
   memory: [] 
 });
 ```
+
+The agent automatically:
+- Routes user input to appropriate tools using pattern matching
+- Parses complex arguments like file paths with spaces
+- Plans multi-step operations with dependency resolution
+- Applies safety policies and resource quotas
+- Tracks all decisions for observability
 
 ## Documentation
 
 - **[Installation & Setup](./docs/getting-started/installation.md)** - Get up and running in 5 minutes
 - **[Quick Start Guide](./docs/getting-started/quick-start.md)** - Build your first agent
 - **[Core Concepts](./docs/getting-started/concepts.md)** - Understanding functional programming in Fx
+- **[Tool Calling & Routing](./docs/guides/tool-calling-and-routing.md)** - Intelligent tool selection and execution
 - **[Composition System](./docs/api/composition.md)** - How to build agent workflows
 - **[API Reference](./docs/api/core.md)** - Complete function reference
 
 ## Examples
 
+- **[Tool Calling Example](./examples/tool-calling-example.ts)** - Complete tool calling demonstration
 - **[Coding Agent](./examples/coding-agent/)** - Full-featured coding assistant
-- **[Basic Examples](./examples/basic/)** - Simple use cases
-- **[Advanced Examples](./examples/advanced/)** - Complex workflows
+- **[Research Agent](./examples/research-agent/)** - Advanced research and analysis
 
 ## Installation
 
@@ -184,19 +171,13 @@ We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md)
 ### Development Setup
 
 ```bash
-git clone https://github.com/fx-framework/fx.git
+git clone https://github.com/skishore23/fx.git
 cd fx
 npm install
 npm run build
 npm test
 ```
 
-## License
-
-MIT License - see [LICENSE](./LICENSE) for details.
-
 ## Support
 
 - 📖 [Documentation](./docs/)
-- 🐛 [Issues](https://github.com/fx-framework/fx/issues)
-- 💬 [Discussions](https://github.com/fx-framework/fx/discussions)

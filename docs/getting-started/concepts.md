@@ -286,4 +286,4 @@ const process = step('process', (state) => {
 
 - [API Reference](../api/core.md) - Complete API documentation
 - [Basic Examples](../examples/basic/) - Practical examples
-- [Advanced Topics](../advanced/) - Deep dive into advanced concepts
+- [Topics](../advanced/) - Deep dive into concepts
