@@ -1,64 +1,43 @@
-# f(x) Framework Documentation
+# Fx Framework Documentation
 
-## Overview
-f(x) is a functional framework for building robust, composable LLM-powered agents. It emphasizes:
-- Pure functions and immutable state
-- Composable operations
-- Type-safe tool registration
-- Comprehensive logging and debugging
-- Durable execution patterns
+Build production-ready AI agents with functional programming. Fx gives you the tools to create agents that actually work in the real world.
 
-## Table of Contents
+## 📚 Documentation Structure
 
-### 1. Getting Started
-- [Quick Start](./getting-started/quick-start.md)
-- [Installation](./getting-started/installation.md)
-- [Basic Concepts](./getting-started/concepts.md)
+### Getting Started
+- [Installation & Setup](./getting-started/installation.md) - Get up and running quickly
+- [Quick Start Guide](./getting-started/quick-start.md) - Your first Fx application
+- [Core Concepts](./getting-started/concepts.md) - Understanding functional programming in Fx
 
-### 2. Core API
-- [Agent Creation](./core/agent.md)
-- [State Management](./core/state.md)
-- [Tool Registration](./core/tools.md)
-- [Composition Functions](./core/composition.md)
-- [Prompt Management](./core/prompts.md)
+### Guides
+- [Creating an Agent](./guides/creating-an-agent.md) - Complete guide to building agents with Fx
+- [Tool Calling Approach](./guides/tool-calling-approach.md) - How tool selection and execution works
 
-### 3. Advanced Features
-- [Debugging & Logging](./advanced/debugging.md)
-- [Error Handling](./advanced/error-handling.md)
-- [Durable Execution](./advanced/durable-execution.md)
-- [Performance Optimization](./advanced/performance.md)
+### API Reference
+- [Composition System](./api/composition.md) - How to build agent workflows
+- [Core API](./api/core.md) - All available functions
 
-### 4. Patterns & Best Practices
-- [State Design](./patterns/state-design.md)
-- [Tool Organization](./patterns/tool-organization.md)
-- [Prompt Engineering](./patterns/prompt-engineering.md)
-- [Error Recovery](./patterns/error-recovery.md)
+### Examples
+- [Basic Examples](./examples/basic/) - Simple use cases
+- [Advanced Examples](./examples/advanced/) - Complex workflows
+- [Integration Examples](./examples/integrations/) - Real-world applications
 
-### 5. Examples
-- [Recursive Research Agent](./examples/recursive-research.md)
-- [Dynamic Tool Agent](./examples/dynamic-tool.md)
-- [Care Plan Agent](./examples/care-plan.md)
-- [Tree Planning Agent](./examples/tree-planning.md)
+### Advanced Topics
+- [Category Theory](./advanced/category-theory.md) - Mathematical foundations
+- [Performance](./advanced/performance.md) - Optimization techniques
+- [Testing](./advanced/testing.md) - Testing strategies
+- [Production](./advanced/production.md) - Deployment best practices
 
-### 6. API Reference
-- [Core Functions](./api/core.md)
-- [Tool Functions](./api/tools.md)
-- [State Functions](./api/state.md)
-- [Utility Functions](./api/utilities.md)
+## 🚀 Quick Navigation
 
-### 7. Contributing
-- [Development Setup](./contributing/setup.md)
-- [Code Style](./contributing/style.md)
-- [Testing](./contributing/testing.md)
-- [Documentation](./contributing/documentation.md)
+**New to Fx?** Start with [Installation & Setup](./getting-started/installation.md)
 
-## Quick Links
+**Want to build an agent?** Follow the [Creating an Agent Guide](./guides/creating-an-agent.md)
 
-- [GitHub Repository](https://github.com/yourusername/fx)
-- [API Documentation](./api/README.md)
-- [Examples](./examples/README.md)
-- [Contributing Guide](./contributing/README.md)
+**Need to understand composition?** Read the [Composition System](./api/composition.md)
 
-## License
+**Looking for examples?** Check out the [coding agent example](../../examples/coding-agent/)
 
-MIT License - see [LICENSE](../LICENSE) for details 
+## 🤝 Contributing to Documentation
+
+Found an issue or want to improve the docs? See our [Contributing Guide](../CONTRIBUTING.md) for details on how to help.

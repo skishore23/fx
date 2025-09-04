@@ -1,0 +1,27 @@
+{
+  "name": "@fx/examples",
+  "version": "1.0.0",
+  "description": "Examples for the Fx Framework",
+  "private": true,
+  "scripts": {
+    "hello": "ts-node basic/hello-world.ts",
+    "data-processing": "ts-node basic/data-processing.ts",
+    "state-management": "ts-node basic/state-management.ts",
+    "tool-system": "ts-node advanced/tool-system.ts",
+    "openai": "ts-node integrations/openai-example.ts",
+    "coding-agent": "cd coding-agent && npm run",
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@fx/core": "file:../packages/fx-core",
+    "zod": "^3.22.4",
+    "openai": "^4.98.0",
+    "dotenv": "^16.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.1"
+  }
+}

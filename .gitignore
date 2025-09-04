@@ -15,6 +15,14 @@ out/
 # TypeScript
 *.tsbuildinfo
 
+# Compiled JavaScript files (should not be in source)
+*.js
+*.js.map
+!packages/*/dist/**/*.js
+!packages/*/dist/**/*.js.map
+!dist/**/*.js
+!dist/**/*.js.map
+
 # VitePress
 docs/.vitepress/cache/
 docs/.vitepress/dist/

@@ -1,0 +1,103 @@
+{
+  "name": "@fx/core",
+  "version": "1.0.0",
+  "description": "Functional programming framework with category theory principles - Core library",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts"
+    },
+    "./config": {
+      "types": "./dist/config.d.ts"
+    },
+    "./ledger": {
+      "types": "./dist/ledger.d.ts"
+    },
+    "./lenses": {
+      "types": "./dist/lenses.d.ts"
+    },
+    "./resilience": {
+      "types": "./dist/resilience.d.ts"
+    },
+    "./registry": {
+      "types": "./dist/registry.d.ts"
+    },
+    "./composition": {
+      "types": "./dist/composition.d.ts"
+    },
+    "./json": {
+      "types": "./dist/json.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "functional-programming",
+    "category-theory",
+    "typescript",
+    "event-sourcing",
+    "immutable",
+    "composable",
+    "framework",
+    "fp-ts",
+    "lens",
+    "monad"
+  ],
+  "author": "Fx Framework Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fx-framework/fx.git",
+    "directory": "packages/fx-core"
+  },
+  "bugs": {
+    "url": "https://github.com/fx-framework/fx/issues"
+  },
+  "homepage": "https://github.com/fx-framework/fx#readme",
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
+  "peerDependencies": {
+    "openai": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.0.0",
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0",
+    "prettier": "^3.0.0",
+    "ts-jest": "^29.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

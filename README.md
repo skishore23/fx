@@ -1,140 +1,202 @@
-# Q2C Slack Bot
+# Fx Framework
 
-A Quote-to-Cash (Q2C) agent that processes quotes in Salesforce CPQ through Slack, built with functional programming principles.
+Build production-ready AI agents with functional programming and category theory.
 
-## Overview
+[![CI](https://github.com/fx-framework/fx/workflows/CI/badge.svg)](https://github.com/fx-framework/fx/actions)
+[![npm version](https://badge.fury.io/js/%40fx%2Fcore.svg)](https://badge.fury.io/js/%40fx%2Fcore)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-The Q2C Slack Bot enables sales teams to:
+## Why Fx?
 
-1. Process quotes directly from Slack messages
-2. Generate and validate quotes in Salesforce CPQ
-3. Approve, reject, and modify quotes based on business rules
-4. Send quotes via DocuSign
+Building AI agents that actually work in production is hard. Fx makes it easier by providing:
 
-The bot uses natural language processing to understand requests from Slack messages and takes appropriate actions in Salesforce.
+- **Functional Programming**: Pure functions, immutable state, and composable operations
+- **Category Theory**: Mathematical foundations for reliable composition
+- **Type Safety**: Full TypeScript support with comprehensive error handling
+- **Production Ready**: Built-in logging, error handling, and state management
+- **Developer Experience**: Clean API that feels natural to use
 
-## Features
-
-- **Slack Integration**: Process quote requests directly from Slack
-- **Rules Engine**: Validate quotes against business rules
-- **Reactive Agent**: Intelligent quote processing with proper validations
-- **Demo Data Creation**: Generate test scenarios in Salesforce
-
-## Setup
-
-### Prerequisites
-
-- Node.js 14+
-- Salesforce account with CPQ installed
-- Slack workspace with bot permissions
-
-### Environment Variables
-
-Create a `.env` file with the following variables:
-
-```
-# Salesforce Configuration
-SF_CLIENT_ID=<your_salesforce_client_id>
-SF_USERNAME=<your_salesforce_username>
-SF_LOGIN_URL=https://login.salesforce.com
-SF_PRIVATE_KEY_PATH=<path_to_server.key>
-
-# Slack Configuration
-SLACK_BOT_TOKEN=<your_slack_bot_token>
-SLACK_SIGNING_SECRET=<your_slack_signing_secret>
-SLACK_APP_TOKEN=<your_slack_app_token>
-
-# OpenAI Configuration
-OPENAI_API_KEY=<your_openai_api_key>
-```
-
-### Installation
-
-1. Clone the repository
-2. Install dependencies:
+## Quick Start
 
 ```bash
+npm install @fx/core
+```
+
+```typescript
+import { step, sequence, updateState, addState } from '@fx/core';
+
+// Create a simple agent workflow
+const agent = sequence([
+  step('processInput', (state) => 
+    updateState({ processed: true })(state)
+  ),
+  step('generateResponse', (state) => 
+    updateState({ response: 'Hello!' })(state)
+  ),
+  step('logAction', (state) => 
+    addState('action', 'Response generated')(state)
+  )
+]);
+
+// Run the agent
+const result = await agent({ input: 'Hello' });
+console.log(result.response); // "Hello!"
+```
+
+## What Makes Fx Different?
+
+### 1. **Functional by Design**
+Every operation is a pure function that transforms state. No mutations, no side effects.
+
+```typescript
+// State transformations are composable
+const updateUser = compose(
+  updateState({ lastActive: Date.now() }),
+  addState('action', 'User updated')
+);
+```
+
+### 2. **Category Theory Principles**
+Built on mathematical foundations that make composition predictable and reliable.
+
+```typescript
+// Parallel execution with proper result merging
+const parallelWork = parallel([
+  readFile,
+  searchCode,
+  listDirectory
+], mergeStrategies.default);
+```
+
+### 3. **Production-Ready Error Handling**
+No try/catch blocks. Use `Either` for functional error handling.
+
+```typescript
+const result = await safeReadFile(filePath);
+return Either.fold(
+  result,
+  (error) => updateState({ error: error.message })(state),
+  (content) => updateState({ content })(state)
+);
+```
+
+### 4. **Built-in Observability**
+Every action is logged automatically. Track your agent's behavior.
+
+```typescript
+enableLogging();
+// All agent lifecycle events are automatically logged
+// Custom events: logEvent('user_action', { action: 'login' });
+```
+
+## Real-World Example
+
+Here's a coding agent that can read files, search code, and generate responses:
+
+```typescript
+import { 
+  step, 
+  sequence, 
+  parallel, 
+  createValidatedTool,
+  createOpenAIProvider,
+  llmTemplateStep 
+} from '@fx/core';
+
+// Define tools with validation
+const readFileTool = createValidatedTool(
+  'read_file',
+  'Read a file from the filesystem',
+  z.object({ filePath: z.string() }),
+  async ({ filePath }, state) => {
+    const content = await fs.readFile(filePath, 'utf8');
+    return updateState({ fileContent: content })(state);
+  }
+);
+
+// Create LLM provider
+const llmProvider = createOpenAIProvider({
+  apiKey: process.env.OPENAI_API_KEY!,
+  model: 'gpt-4'
+});
+
+// Build the agent
+const codingAgent = sequence([
+  step('processInput', (state) => 
+    updateState({ userInput: state.userInput.trim() })(state)
+  ),
+  
+  step('handleTools', async (state) => {
+    const toolCalls = parseToolCalls(state.response);
+    for (const toolCall of toolCalls) {
+      state = await toolRegistry.execute(toolCall.name, state, toolCall.input);
+    }
+    return state;
+  }),
+  
+  llmTemplateStep(
+    'generateResponse',
+    llmProvider,
+    'You are a coding assistant. User input: {{userInput}}',
+    (state) => ({ userInput: state.userInput })
+  ),
+  
+  step('logAction', (state) => 
+    addState('action', `Generated response for: ${state.userInput}`)(state)
+  )
+]);
+
+// Run the agent
+const result = await codingAgent({ 
+  userInput: 'Read package.json and explain the dependencies',
+  memory: [] 
+});
+```
+
+## Documentation
+
+- **[Installation & Setup](./docs/getting-started/installation.md)** - Get up and running in 5 minutes
+- **[Quick Start Guide](./docs/getting-started/quick-start.md)** - Build your first agent
+- **[Core Concepts](./docs/getting-started/concepts.md)** - Understanding functional programming in Fx
+- **[Composition System](./docs/api/composition.md)** - How to build agent workflows
+- **[API Reference](./docs/api/core.md)** - Complete function reference
+
+## Examples
+
+- **[Coding Agent](./examples/coding-agent/)** - Full-featured coding assistant
+- **[Basic Examples](./examples/basic/)** - Simple use cases
+- **[Advanced Examples](./examples/advanced/)** - Complex workflows
+
+## Installation
+
+```bash
+# Core framework
+npm install @fx/core
+
+# With OpenAI integration
+npm install @fx/core openai
+```
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
+
+### Development Setup
+
+```bash
+git clone https://github.com/fx-framework/fx.git
+cd fx
 npm install
-```
-
-3. Build the project:
-
-```bash
 npm run build
+npm test
 ```
-
-## Usage
-
-### Testing Suite
-
-The easiest way to test the system is using the testing suite:
-
-```bash
-npm run test
-```
-
-This will provide an interactive menu to:
-- Start the Slack bot
-- Send mock messages to test the bot
-- Create demo data in Salesforce
-- Run the CLI interface
-
-### Running Components Individually
-
-You can also run individual components:
-
-**Start the Slack Bot:**
-```bash
-npm run start:bot
-```
-
-**Create Demo Data:**
-```bash
-npm run seed
-```
-
-**Send Mock Messages:**
-```bash
-npm run mock
-```
-
-**Run CLI Interface:**
-```bash
-npm run cli
-```
-
-## Slack Commands
-
-The bot supports the following commands:
-
-- `help`: Show available commands
-- `list`: List all quotes
-- `quote [ID]`: Process a specific quote
-- `validate [ID]`: Validate a quote against rules
-- `process`: Process all pending quotes
-- `status`: Check current processing status
-- `seed [index|all]`: Create demo data in Salesforce
-- `about`: Learn about the bot
-
-## Processing Quotes from Slack
-
-Simply paste a Salesforce quote URL in a channel where the bot is present. The bot will:
-
-1. Extract the quote ID from the URL
-2. Analyze your message text to determine the intended action
-3. Confirm the action with you
-4. Execute the appropriate actions in Salesforce
-5. Report back with results in the thread
-
-## Architecture
-
-The system follows functional programming principles and is built with:
-
-- TypeScript for type safety
-- Fx for functional composition and pure functions
-- Zod for runtime validation
-- Category theory concepts for handling side effects
 
 ## License
 
-MIT 
+MIT License - see [LICENSE](./LICENSE) for details.
+
+## Support
+
+- 📖 [Documentation](./docs/)
+- 🐛 [Issues](https://github.com/fx-framework/fx/issues)
+- 💬 [Discussions](https://github.com/fx-framework/fx/discussions)

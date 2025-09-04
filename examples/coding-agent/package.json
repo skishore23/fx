@@ -1,0 +1,24 @@
+{
+  "name": "@fx/coding-agent",
+  "version": "1.0.0",
+  "description": "A progressive coding agent built with the Fx Framework",
+  "private": true,
+  "scripts": {
+    "start": "ts-node agent-fx.ts",
+    "test": "ts-node test-agent-fx.ts",
+    "test:complex": "ts-node complex-test-suite.ts",
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@fx/core": "file:../../packages/fx-core",
+    "zod": "^3.22.4",
+    "openai": "^4.98.0",
+    "dotenv": "^16.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.1"
+  }
+}

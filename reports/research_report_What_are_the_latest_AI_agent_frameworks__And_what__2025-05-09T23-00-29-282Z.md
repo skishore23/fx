@@ -1,1 +1,0 @@
-No research was conducted.

@@ -1,0 +1,32 @@
+{
+  "name": "@fx/research-agent",
+  "version": "1.0.0",
+  "description": "Sophisticated Deep Research Agent using Fx Framework and Firecrawl",
+  "main": "research-agent.ts",
+  "scripts": {
+    "start": "ts-node research-agent.ts",
+    "test": "ts-node test-research-agent.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@mendable/firecrawl-js": "^4.3.1",
+    "openai": "^4.0.0",
+    "zod": "^3.22.0",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.0.0"
+  },
+  "keywords": [
+    "ai",
+    "research",
+    "agent",
+    "firecrawl",
+    "fx-framework",
+    "deep-research"
+  ],
+  "author": "Fx Framework",
+  "license": "MIT"
+}
