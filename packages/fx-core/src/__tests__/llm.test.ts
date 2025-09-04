@@ -222,7 +222,7 @@ describe('LLM Integration - Fixed Implementation', () => {
     it('should handle parsing errors', async () => {
       const parser = responseParser(
         { type: 'string' } as any,
-        (response: string) => {
+        (_response: string) => {
           throw new Error('Parse error');
         },
         'FALLBACK'

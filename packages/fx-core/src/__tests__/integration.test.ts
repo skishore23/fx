@@ -40,7 +40,7 @@ describe('Integration Tests - All Fixes Working Together', () => {
         updateState({ message: 'success' })(state)
       );
       
-      const failingStep = step('failing', (state: IntegrationState) => {
+      const failingStep = step('failing', (_state: IntegrationState) => {
         throw new Error('Step failed');
       });
       

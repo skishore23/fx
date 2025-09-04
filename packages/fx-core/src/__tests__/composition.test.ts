@@ -57,10 +57,10 @@ describe('Composition Functions - Fixed Implementation', () => {
 
     it('should execute steps in order', async () => {
       const step1 = step('step1', (state: TestState) => 
-        updateState({ step1: true, value: state.value + 1 })(state)
+        updateState({ step1: true, value: state.value + 1 } as Partial<TestState>)(state)
       );
       const step2 = step('step2', (state: TestState) => 
-        updateState({ step2: true, value: state.value * 2 })(state)
+        updateState({ step2: true, value: state.value * 2 } as Partial<TestState>)(state)
       );
 
       const workflow = sequence([step1, step2]);
@@ -96,11 +96,11 @@ describe('Composition Functions - Fixed Implementation', () => {
     it('should execute steps in parallel and merge results', async () => {
       const step1 = step('step1', async (state: TestState) => {
         await new Promise(resolve => setTimeout(resolve, 10));
-        return updateState({ step1: true, value: state.value + 1 })(state);
+        return updateState({ step1: true, value: state.value + 1 } as Partial<TestState>)(state)
       });
       const step2 = step('step2', async (state: TestState) => {
         await new Promise(resolve => setTimeout(resolve, 5));
-        return updateState({ step2: true, value: state.value * 2 })(state);
+        return updateState({ step2: true, value: state.value * 2 } as Partial<TestState>)(state);
       });
 
       const workflow = parallel([step1, step2]);
@@ -114,9 +114,9 @@ describe('Composition Functions - Fixed Implementation', () => {
 
     it('should fail fast when any step fails', async () => {
       const step1 = step('step1', (state: TestState) => 
-        updateState({ step1: true })(state)
+        updateState({ step1: true } as Partial<TestState>)(state)
       );
-      const failingStep = step('failing', (state: TestState) => {
+      const failingStep = step('failing', (_state: TestState) => {
         throw new Error('Step failed');
       });
 
@@ -161,10 +161,10 @@ describe('Composition Functions - Fixed Implementation', () => {
 
     it('should execute thenStep when predicate returns true', async () => {
       const thenStep = step('then', (state: TestState) => 
-        updateState({ message: 'then executed' })(state)
+        updateState({ message: 'then executed' } as Partial<TestState>)(state)
       );
       const elseStep = step('else', (state: TestState) => 
-        updateState({ message: 'else executed' })(state)
+        updateState({ message: 'else executed' } as Partial<TestState>)(state)
       );
 
       const workflow = when(
@@ -179,10 +179,10 @@ describe('Composition Functions - Fixed Implementation', () => {
 
     it('should execute elseStep when predicate returns false', async () => {
       const thenStep = step('then', (state: TestState) => 
-        updateState({ message: 'then executed' })(state)
+        updateState({ message: 'then executed' } as Partial<TestState>)(state)
       );
       const elseStep = step('else', (state: TestState) => 
-        updateState({ message: 'else executed' })(state)
+        updateState({ message: 'else executed' } as Partial<TestState>)(state)
       );
 
       const workflow = when(
@@ -197,7 +197,7 @@ describe('Composition Functions - Fixed Implementation', () => {
 
     it('should return unchanged state when no elseStep provided and predicate is false', async () => {
       const thenStep = step('then', (state: TestState) => 
-        updateState({ message: 'then executed' })(state)
+        updateState({ message: 'then executed' } as Partial<TestState>)(state)
       );
 
       const workflow = when(
@@ -213,14 +213,14 @@ describe('Composition Functions - Fixed Implementation', () => {
 
   describe('tryInOrder', () => {
     it('should try steps in order until one succeeds', async () => {
-      const failingStep1 = step('failing1', (state: TestState) => {
+      const failingStep1 = step('failing1', (_state: TestState) => {
         throw new Error('First step failed');
       });
-      const failingStep2 = step('failing2', (state: TestState) => {
+      const failingStep2 = step('failing2', (_state: TestState) => {
         throw new Error('Second step failed');
       });
       const successStep = step('success', (state: TestState) => 
-        updateState({ message: 'success' })(state)
+        updateState({ message: 'success' } as Partial<TestState>)(state)
       );
 
       const workflow = tryInOrder([failingStep1, failingStep2, successStep]);
@@ -230,10 +230,10 @@ describe('Composition Functions - Fixed Implementation', () => {
     });
 
     it('should throw error if all steps fail', async () => {
-      const failingStep1 = step('failing1', (state: TestState) => {
+      const failingStep1 = step('failing1', (_state: TestState) => {
         throw new Error('First step failed');
       });
-      const failingStep2 = step('failing2', (state: TestState) => {
+      const failingStep2 = step('failing2', (_state: TestState) => {
         throw new Error('Second step failed');
       });
 
@@ -251,7 +251,7 @@ describe('Composition Functions - Fixed Implementation', () => {
         if (attempts < 3) {
           throw new Error('Step failed');
         }
-        return updateState({ message: 'success after retries' })(state);
+        return updateState({ message: 'success after retries' } as Partial<TestState>)(state);
       });
 
       const workflow = retry(failingStep, 3, 10);
@@ -262,7 +262,7 @@ describe('Composition Functions - Fixed Implementation', () => {
     });
 
     it('should throw error after max attempts', async () => {
-      const failingStep = step('failing', (state: TestState) => {
+      const failingStep = step('failing', (_state: TestState) => {
         throw new Error('Always fails');
       });
 
@@ -276,7 +276,7 @@ describe('Composition Functions - Fixed Implementation', () => {
     it('should timeout slow steps', async () => {
       const slowStep = step('slow', async (state: TestState) => {
         await new Promise(resolve => setTimeout(resolve, 100));
-        return updateState({ message: 'completed' })(state);
+        return updateState({ message: 'completed' } as Partial<TestState>)(state);
       });
 
       const workflow = timeout(slowStep, 50);
@@ -287,7 +287,7 @@ describe('Composition Functions - Fixed Implementation', () => {
     it('should complete fast steps within timeout', async () => {
       const fastStep = step('fast', async (state: TestState) => {
         await new Promise(resolve => setTimeout(resolve, 10));
-        return updateState({ message: 'completed' })(state);
+        return updateState({ message: 'completed' } as Partial<TestState>)(state);
       });
 
       const workflow = timeout(fastStep, 100);
