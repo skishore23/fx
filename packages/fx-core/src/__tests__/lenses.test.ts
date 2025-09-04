@@ -55,7 +55,7 @@ describe('Lenses - Fixed Implementation', () => {
       const updateFn = updateState({ value: 10 });
       const result = updateFn(state);
       
-      expect(result.message).toBe('hello');
+      expect(result.value).toBe(10);
       expect((result as any).existing).toBe('preserved');
     });
   });

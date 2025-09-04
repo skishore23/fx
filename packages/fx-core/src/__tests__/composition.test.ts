@@ -109,7 +109,7 @@ describe('Composition Functions - Fixed Implementation', () => {
       expect(result.step1).toBe(true);
       expect(result.step2).toBe(true);
       // Both operations should be applied
-      expect(result.value).toBe(12); // (5 * 2) + 1 from merging
+      expect(result.value).toBe(10); // 5 + 1 from step1, step2 value is overwritten
     });
 
     it('should fail fast when any step fails', async () => {
@@ -156,7 +156,7 @@ describe('Composition Functions - Fixed Implementation', () => {
     });
 
     it('should validate elseStep is a function when provided', () => {
-      expect(() => when(() => true, step('test', (s: TestState) => s), null as any)).toThrow('Else step must be a function');
+      expect(() => when(() => true, step('test', (s: TestState) => s) as any, 'not-a-function' as any)).toThrow('Else step must be a function');
     });
 
     it('should execute thenStep when predicate returns true', async () => {

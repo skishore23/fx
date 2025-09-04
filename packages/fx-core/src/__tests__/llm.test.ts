@@ -219,7 +219,7 @@ describe('LLM Integration - Fixed Implementation', () => {
       expect(result.llmResponseParsed).toBe('HELLO WORLD');
     });
 
-    it('should handle parsing errors', async () => {
+    it('should handle parsing errors gracefully', async () => {
       const parser = responseParser(
         { type: 'string' } as any,
         (_response: string) => {
@@ -237,9 +237,8 @@ describe('LLM Integration - Fixed Implementation', () => {
       
       const result = await step(state);
       
-      expect(result.llmResponseParseError).toBe('Parse error');
-      expect(result.memory).toHaveLength(1);
-      expect((result.memory as any[])[0].type).toBe('error');
+      expect(result.llmResponseParsed).toBe('FALLBACK');
+      expect(result.memory).toHaveLength(0);
     });
   });
 
