@@ -25,7 +25,7 @@ const workflow = sequence([
 ]);
 ```
 
-### `parallel(steps, mergeStrategy?)`
+### `parallel(steps)`
 Run steps concurrently and merge results.
 
 ```typescript
@@ -33,7 +33,7 @@ const parallelWork = parallel([
   readFile,
   searchCode,
   listDirectory
-], mergeStrategies.default);
+]);
 ```
 
 ### `when(predicate, thenStep, elseStep?)`
@@ -47,354 +47,244 @@ const conditional = when(
 );
 ```
 
-### `loopWhile(predicate, body)`
-Repeat a step while condition is true.
-
-```typescript
-const retryLoop = loopWhile(
-  (state) => state.attempts < 3 && state.error,
-  retryStep
-);
-```
-
-## State Operations
+## State Management
 
 ### `updateState(updates)`
 Update multiple fields in state.
 
 ```typescript
-const updateUser = updateState({ 
-  name: 'John', 
-  lastActive: Date.now() 
-});
+const newState = updateState({
+  field1: 'value1',
+  field2: 'value2'
+})(state);
 ```
 
-### `addState(type, content, metadata?)`
-Add a memory entry to state.
+### `addState(key, value)`
+Add a value to an array field in state.
 
 ```typescript
-const logAction = addState('action', 'User logged in', { 
-  timestamp: Date.now() 
-});
+const newState = addState('memory', 'New entry')(state);
 ```
 
-### `get(path)`
-Get a value from state by path.
+## Patterns
+
+### `createReActPattern(name)`
+Create a ReAct pattern for reasoning and acting.
 
 ```typescript
-const getUserName = get('user.name');
+const reactPattern = createReActPattern('reasoning-agent');
+const result = await reactPattern(state);
 ```
 
-### `set(path, value)`
-Set a value in state by path.
+### `createChainOfThoughtPattern(name)`
+Create a Chain of Thought pattern for step-by-step reasoning.
 
 ```typescript
-const setUserName = set('user.name', 'John');
+const cotPattern = createChainOfThoughtPattern('thinking-agent');
+const result = await cotPattern(state);
 ```
 
-### `update(path, updater)`
-Update a value using a function.
+### `createPattern(predicate, action)`
+Create a custom pattern.
 
 ```typescript
-const incrementCounter = update('counter', (count) => count + 1);
-```
-
-### `push(path, item)`
-Add an item to an array.
-
-```typescript
-const addToHistory = push('history', newEntry);
-```
-
-### `remove(path, predicate)`
-Remove items from an array.
-
-```typescript
-const removeOldEntries = remove('history', (entry) => 
-  Date.now() - entry.timestamp > 86400000
+const customPattern = createPattern(
+  (state) => state.userInput?.includes('urgent'),
+  (state) => updateState({ priority: 'high' })(state)
 );
 ```
 
-## Composition
+## High-Level API
 
-### `sequence(steps)`
-Execute steps in sequence - the fundamental composition primitive.
+### `createPlan(name, steps)`
+Create a plan from a sequence of steps.
 
 ```typescript
-const workflow = sequence([
-  step('update', (state) => updateState({ processed: true })(state)),
-  step('log', (state) => addState('action', 'Processing complete')(state))
+const plan = createPlan('my-plan', [
+  step('init', (state) => state),
+  step('process', processInput),
+  step('respond', generateResponse)
 ]);
 ```
 
-### `parallel(steps, mergeStrategy?)`
-Execute steps in parallel with optional merge strategy.
+### `createAgent(name, plan)`
+Create an agent from a plan.
 
 ```typescript
-const parallelWork = parallel([
-  step('readFile', (state) => readFile(state.filePath)(state)),
-  step('searchCode', (state) => searchCode(state.query)(state))
-], mergeStrategies.collect);
+const agent = createAgent('my-agent', plan);
+const result = await agent.start(initialState);
 ```
 
-## LLM Integration
-
-### `createOpenAIProvider(config)`
-Create an OpenAI provider for LLM calls.
+### `Agent` class
+The agent class with methods for starting and monitoring.
 
 ```typescript
-const llmProvider = createOpenAIProvider({
-  apiKey: process.env.OPENAI_API_KEY!,
-  model: 'gpt-4'
-});
-```
-
-### `llmTemplateStep(name, provider, template, dataExtractor)`
-Create a step that calls an LLM with a template.
-
-```typescript
-const generateResponse = llmTemplateStep(
-  'generateResponse',
-  llmProvider,
-  'Respond to: {{userInput}}',
-  (state) => ({ userInput: state.userInput })
-);
-```
-
-### `llmStep(name, provider, messages)`
-Create a step that calls an LLM with custom messages.
-
-```typescript
-const customLLM = llmStep(
-  'customLLM',
-  llmProvider,
-  (state) => [
-    { role: 'system', content: 'You are a helpful assistant.' },
-    { role: 'user', content: state.userInput }
-  ]
-);
-```
-
-## Tool System
-
-### `createToolRegistry()`
-Create a registry for tools.
-
-```typescript
-const toolRegistry = createToolRegistry<AgentState>();
-```
-
-### `createTool(name, description, execute)`
-Create a simple tool.
-
-```typescript
-const readFileTool = createTool(
-  'read_file',
-  'Read a file from the filesystem',
-  async (state) => {
-    const content = await fs.readFile(state.filePath, 'utf8');
-    return updateState({ fileContent: content })(state);
-  }
-);
-```
-
-### `createValidatedTool(name, description, schema, execute)`
-Create a tool with input validation.
-
-```typescript
-import { z } from 'zod';
-
-const ReadFileSchema = z.object({
-  filePath: z.string()
-});
-
-const validatedTool = createValidatedTool(
-  'read_file',
-  'Read a file from the filesystem',
-  ReadFileSchema,
-  async (input, state) => {
-    const content = await fs.readFile(input.filePath, 'utf8');
-    return updateState({ fileContent: content })(state);
-  }
-);
+const agent = new Agent(plan);
+await agent.start(initialState);
+console.log(agent.getStatus()); // 'running' | 'completed' | 'error'
+console.log(agent.getState()); // current state
 ```
 
 ## Error Handling
 
 ### `Either`
-Functional error handling without try/catch.
+Functional error handling with `Either.left()` and `Either.right()`.
 
 ```typescript
 import { Either } from '@fx/core';
 
-const result = await someOperation();
-return Either.fold(
+const result = Either.right('success');
+const error = Either.left(new Error('Something went wrong'));
+
+// Handle results
+Either.fold(
   result,
-  (error) => updateState({ error: error.message })(state),
-  (data) => updateState({ data })(state)
+  (error) => console.error('Error:', error.message),
+  (value) => console.log('Success:', value)
 );
 ```
 
-### `safe(fn)`
-Wrap a function to return Either.
+## Types
+
+### `BaseContext`
+Base interface that all agent states must extend.
 
 ```typescript
-const safeReadFile = safe(async (filePath) => {
-  return await fs.readFile(filePath, 'utf8');
-});
+interface MyAgentState extends BaseContext {
+  userInput: string;
+  response?: string;
+  memory: Array<{ type: string; content: string; timestamp: string }>;
+}
 ```
 
-### `safeAsync(fn)`
-Wrap an async function to return Either.
+### `Step<T>`
+A step function that transforms state of type `T`.
 
 ```typescript
-const safeAsyncOperation = safeAsync(async (state) => {
-  const result = await someAsyncOperation(state);
-  return result;
-});
+type Step<T> = (state: T) => T | Promise<T>;
 ```
 
-## Agent Management
-
-### `createAgent(name, plan)`
-Create an interactive agent.
+### `Plan<T>`
+A plan containing a name and executable workflow.
 
 ```typescript
-const agent = createAgent('my-agent', sequence([
-  processInput,
-  generateResponse,
-  updateMemory
-]));
+interface Plan<T> {
+  name: string;
+  execute: Step<T>;
+}
 ```
 
-### `agent.start(initialState)`
-Start an interactive agent session.
+## Examples
 
+### Basic Agent
 ```typescript
-await agent.start({
-  userInput: '',
-  memory: []
-});
+import { 
+  step, sequence, createPlan, createAgent,
+  updateState, addState
+} from '@fx/core';
+
+const workflow = sequence([
+  step('processInput', (state) => 
+    updateState({ processed: true })(state)
+  ),
+  step('generateResponse', (state) => 
+    updateState({ response: 'Hello!' })(state)
+  ),
+  step('logAction', (state) => 
+    addState('action', 'Response generated')(state)
+  )
+]);
+
+const plan = createPlan('basic-agent', workflow);
+const agent = createAgent('basic-agent', plan);
+
+const result = await agent.start({ userInput: 'Hello' });
 ```
 
-## Ledger System
-
-### `enableLogging()`
-Enable automatic event logging.
-
+### Using Patterns
 ```typescript
-enableLogging();
-```
+import { 
+  createReActPattern, createChainOfThoughtPattern, createPattern
+} from '@fx/core';
 
-### `logEvent(type, data)`
-Log a custom event.
+// ReAct pattern
+const reactPattern = createReActPattern('reasoning-agent');
 
-```typescript
-logEvent('user_action', { action: 'login', userId: '123' });
-```
+// Chain of thought pattern
+const cotPattern = createChainOfThoughtPattern('thinking-agent');
 
-### `getEvents()`
-Get all logged events.
-
-```typescript
-const events = getEvents();
-console.log('Total events:', events.length);
-```
-
-## Merge Strategies
-
-### `mergeStrategies`
-Predefined strategies for parallel execution.
-
-```typescript
-// Default: merge all results
-mergeStrategies.default
-
-// Take first successful result
-mergeStrategies.first
-
-// Take last successful result
-mergeStrategies.last
-
-// Collect all results in array
-mergeStrategies.collect
-
-// Merge only specific fields
-mergeStrategies.selective(['field1', 'field2'])
-
-// Custom merge function
-mergeStrategies.custom((results, original) => {
-  // Your custom logic
-  return mergedState;
-})
-```
-
-## Utility Functions
-
-### `identity()`
-Return state unchanged (useful for composition).
-
-```typescript
-const noop = identity();
-```
-
-### `noop()`
-Alias for identity.
-
-```typescript
-const emptyStep = noop();
-```
-
-### `fail(message)`
-Create a step that always fails.
-
-```typescript
-const errorStep = fail('Something went wrong');
-```
-
-### `log(message?)`
-Create a step that logs state.
-
-```typescript
-const debugStep = log('Current state:');
-```
-
-### `validate(predicate, errorMessage?)`
-Create a step that validates state.
-
-```typescript
-const validateUser = validate(
-  (state) => state.user && state.user.id,
-  'User must be authenticated'
+// Custom pattern
+const urgentPattern = createPattern(
+  (state) => state.userInput?.includes('urgent'),
+  (state) => updateState({ priority: 'high' })(state)
 );
 ```
 
-### `tap(effect)`
-Create a step that performs side effects without changing state.
-
+### Parallel Processing
 ```typescript
-const logToFile = tap((state) => {
-  fs.appendFileSync('log.txt', JSON.stringify(state));
+import { parallel } from '@fx/core';
+
+const parallelWork = parallel([
+  step('analyze', (state) => updateState({ analysis: 'done' })(state)),
+  step('categorize', (state) => updateState({ category: 'text' })(state)),
+  step('summarize', (state) => updateState({ summary: 'done' })(state))
+]);
+```
+
+### Conditional Logic
+```typescript
+import { when } from '@fx/core';
+
+const conditionalStep = when(
+  (state) => state.userInput?.includes('admin'),
+  step('adminTask', (state) => updateState({ role: 'admin' })(state)),
+  step('userTask', (state) => updateState({ role: 'user' })(state))
+);
+```
+
+## Best Practices
+
+1. **Keep steps focused** - Each step should do one thing well
+2. **Use meaningful names** - Step names should describe what they do
+3. **Handle errors gracefully** - Use try/catch blocks appropriately
+4. **Keep state immutable** - Always return new state, never mutate
+5. **Compose from small pieces** - Build complex workflows from simple steps
+6. **Test individual steps** - Test each step in isolation
+7. **Use patterns for common behaviors** - ReAct, Chain of Thought, etc.
+
+## Common Patterns
+
+### State Updates
+```typescript
+// Update multiple fields
+const newState = updateState({
+  field1: 'value1',
+  field2: 'value2'
+})(state);
+
+// Add to memory
+const newState = addState('memory', 'New entry')(state);
+```
+
+### Error Handling
+```typescript
+const safeStep = step('safeStep', (state) => {
+  try {
+    // Your logic here
+    return updateState({ result: 'success' })(state);
+  } catch (error) {
+    return updateState({ error: error.message })(state);
+  }
 });
 ```
 
-### `delay(ms)`
-Create a step that delays execution.
-
+### Conditional Updates
 ```typescript
-const waitStep = delay(1000); // Wait 1 second
+const conditionalUpdate = when(
+  (state) => state.userInput?.includes('urgent'),
+  step('urgent', (state) => updateState({ priority: 'high' })(state)),
+  step('normal', (state) => updateState({ priority: 'normal' })(state))
+);
 ```
 
-### `retry(step, maxAttempts?, baseDelay?)`
-Create a step that retries on failure.
-
-```typescript
-const retryStep = retry(riskyOperation, 3, 100);
-```
-
-### `timeout(step, timeoutMs)`
-Create a step with a timeout.
-
-```typescript
-const timeoutStep = timeout(slowOperation, 5000);
-```
+This reference covers all the essential functions in the Fx Framework. Start with the basic composition functions and gradually explore the patterns and high-level APIs as you build more complex agents.

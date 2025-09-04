@@ -1,10 +1,10 @@
 # Composition System
 
-The composition system is the heart of Fx. It's how you build agents that actually work in production.
+The composition system is the heart of Fx. It's how you build agents that actually work.
 
-## Unified Composition
+## Core Composition
 
-Fx has a unified composition system where everything is async by default. This simplifies the API and makes it more predictable:
+Fx has a unified composition system where everything is async by default:
 
 ```typescript
 // Sequential execution
@@ -14,19 +14,12 @@ const workflow = sequence([
   step3
 ]);
 
-// Parallel execution with default merge strategy
+// Parallel execution
 const parallelWork = parallel([
   step1,
   step2,
   step3
 ]);
-
-// Parallel execution with custom merge strategy
-const parallelWithMerge = parallel([
-  step1,
-  step2,
-  step3
-], mergeStrategies.first); // or .last, .collect, .selective(['field1', 'field2'])
 
 // Conditional execution
 const conditional = when(
@@ -34,6 +27,8 @@ const conditional = when(
   someStep
 );
 ```
+
+## Basic Examples
 
 ```typescript
 // Sequence two steps
@@ -53,17 +48,12 @@ const multiStep = sequence([
 
 ## State Operations
 
-Every state operation is a pure function that takes state and returns new state. No mutations, no side effects:
+Every state operation is a pure function that takes state and returns new state:
 
-| Function | Type | Purpose | Use Case |
-|----------|------|---------|----------|
-| `updateState` | `Record<string,any> → (T→T)` | General state updates | Update multiple fields |
-| `addState` | `string × string → (T→T)` | Add memory entries | Log actions/observations |
-| `get` | `string → (T→unknown)` | Get field value | Extract data |
-| `set` | `string × any → (T→T)` | Set field value | Update single field |
-| `update` | `string × (any→any) → (T→T)` | Update field with function | Transform field value |
-| `push` | `string × any → (T→T)` | Add to array | Append to lists |
-| `remove` | `string × Predicate → (T→T)` | Remove from array | Filter arrays |
+| Function | Purpose | Use Case |
+|----------|---------|----------|
+| `updateState` | Update multiple fields | General state updates |
+| `addState` | Add memory entries | Log actions/observations |
 
 ## When to Use What
 
@@ -73,24 +63,6 @@ Every state operation is a pure function that takes state and returns new state.
 | `parallel` | Run independent operations | `readFile + searchCode + listDirectory` |
 | `when` | Conditional logic | `if (user.isAdmin) runAdminTask else runUserTask` |
 
-## Parallel Execution
-
-When you run operations in parallel, you need to decide how to combine the results:
-
-```typescript
-// Default: merge everything (most common)
-parallel([step1, step2, step3])
-
-// Take first result (useful for fallbacks)
-parallel([step1, step2, step3], mergeStrategies.first)
-
-// Collect all results (useful for aggregating data)
-parallel([step1, step2, step3], mergeStrategies.collect)
-
-// Only merge specific fields (useful for selective updates)
-parallel([step1, step2, step3], mergeStrategies.selective(['user', 'timestamp']))
-```
-
 ## Real-World Examples
 
 ### Building an Agent Workflow
@@ -98,7 +70,7 @@ parallel([step1, step2, step3], mergeStrategies.selective(['user', 'timestamp'])
 const codingAgent = sequence([
   processUserInput,      // Parse what the user wants
   runInference,          // Call the LLM
-  handleToolCalls,       // Execute tools (read files, run commands)
+  handleToolCalls,       // Execute tools
   updateConversation     // Save the response
 ]);
 ```
@@ -114,41 +86,33 @@ const updateUserSession = sequence([
 ### Error Handling in Steps
 ```typescript
 const readFileStep = step('readFile', async (state) => {
-  const result = safeReadFile(state.filePath);
-  return Either.fold(
-    result,
-    (error) => sequence([
-      step('updateError', (s) => updateState({ error: error.message })(s)),
-      step('logError', (s) => addState('observation', `Error: ${error.message}`)(s))
-    ])(state),
-    (content) => sequence([
-      step('updateContent', (s) => updateState({ fileContent: content })(s)),
-      step('logSuccess', (s) => addState('action', 'File read successfully')(s))
-    ])(state)
-  );
+  try {
+    // Your file reading logic here
+    const content = await readFile(state.filePath);
+    return updateState({ fileContent: content })(state);
+  } catch (error) {
+    return updateState({ error: error.message })(state);
+  }
 });
 ```
 
-## Naming Convention
+### Using Patterns
+```typescript
+import { createReActPattern, createChainOfThoughtPattern } from '@fx/core';
 
-All operations use "state" terminology since we work with `AgentState`:
-
-- **`updateState`**: Update multiple fields at once
-- **`addState`**: Add memory entries (actions/observations) 
-- **`get`**: Get a field value
-- **`set`**: Set a field value
-- **`update`**: Update a field with a function
-- **`push`**: Add to an array
-- **`remove`**: Remove from an array
-
-
+const patternWorkflow = sequence([
+  step('reason', createReActPattern('reasoning-agent')),
+  step('think', createChainOfThoughtPattern('thinking-agent')),
+  step('respond', generateResponse)
+]);
+```
 
 ## Best Practices
 
 1. **Use `sequence` for agent workflows** - Chain steps that need to happen in order
 2. **Use `parallel` for independent operations** - Speed up your agent by running things concurrently
 3. **Use `when` for conditional logic** - Make your agents adaptive
-4. **Handle errors functionally** - Use `Either` instead of try/catch blocks
+4. **Handle errors functionally** - Use try/catch blocks appropriately
 5. **Keep state immutable** - Never mutate state directly, always return new state
 
 ## Common Mistakes
@@ -158,12 +122,9 @@ All operations use "state" terminology since we work with `AgentState`:
 // Mutating state directly
 state.user.name = 'John';
 
-// Using try/catch in steps
-try {
-  const result = await someOperation();
-} catch (error) {
-  // Handle error
-}
+// Not handling errors
+const result = await someOperation();
+// What if it fails?
 ```
 
 **Do this instead:**
@@ -171,11 +132,11 @@ try {
 // Return new state
 return updateState({ user: { ...state.user, name: 'John' } })(state);
 
-// Use Either for error handling
-const result = await someOperation();
-return Either.fold(
-  result,
-  (error) => updateState({ error: error.message })(state),
-  (data) => updateState({ data })(state)
-);
+// Handle errors properly
+try {
+  const result = await someOperation();
+  return updateState({ data: result })(state);
+} catch (error) {
+  return updateState({ error: error.message })(state);
+}
 ```

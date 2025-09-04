@@ -307,9 +307,9 @@ function inferStep(
 // ---------- Main Planning Function ----------
 
 /**
- * Create a plan from an utterance and available tools
+ * Create a plan from a user message and available tools
  */
-export function planFromUtterance(
+export function createPlanFromMessage(
   msg: string, 
   availableTools: ToolSpec<unknown, unknown>[]
 ): Plan {

@@ -20,10 +20,10 @@ npm install @fx/core
 ```
 
 ```typescript
-import { step, sequence, updateState, addState } from '@fx/core';
+import { step, sequence, updateState, addState, createPlan, createAgent } from '@fx/core';
 
 // Create a simple agent workflow
-const agent = sequence([
+const plan = createPlan('simple-agent', [
   step('processInput', (state) => 
     updateState({ processed: true })(state)
   ),
@@ -35,8 +35,9 @@ const agent = sequence([
   )
 ]);
 
-// Run the agent
-const result = await agent({ input: 'Hello' });
+// Create and run the agent
+const agent = createAgent('my-agent', plan);
+const result = await agent.start({ input: 'Hello' });
 console.log(result.response); // "Hello!"
 ```
 
@@ -57,19 +58,20 @@ const updateUser = sequence([
 Built on mathematical foundations that make composition predictable and reliable.
 
 ```typescript
-// Parallel execution with proper result merging
+// Parallel execution
 const parallelWork = parallel([
-  readFile,
-  searchCode,
-  listDirectory
-], mergeStrategies.default);
+  step('readFile', readFile),
+  step('searchCode', searchCode),
+  step('listDirectory', listDirectory)
+]);
 ```
 
 ### 3. **Error Handling**
 No try/catch blocks. Use `Either` for functional error handling.
 
 ```typescript
-const result = await safeReadFile(filePath);
+// Error handling with Either
+const result = Either.right('file content');
 return Either.fold(
   result,
   (error) => updateState({ error: error.message })(state),
@@ -77,13 +79,17 @@ return Either.fold(
 );
 ```
 
-### 4. **Built-in Observability**
-Every action is logged automatically. Track your agent's behavior.
+### 4. **Essential Patterns**
+Built-in patterns for common AI agent behaviors.
 
 ```typescript
-enableLogging();
-// All agent lifecycle events are automatically logged
-// Custom events: logEvent('user_action', { action: 'login' });
+import { createReActPattern, createChainOfThoughtPattern } from '@fx/core';
+
+// ReAct pattern for reasoning and acting
+const reactAgent = createReActPattern('reasoning-agent');
+
+// Chain of thought pattern for step-by-step reasoning
+const cotAgent = createChainOfThoughtPattern('thinking-agent');
 ```
 
 ## Real-World Example
@@ -92,17 +98,14 @@ Here's an agent that uses intelligent tool calling to read files, search code, a
 
 ```typescript
 import { 
-  createAgentExecutor,
   createPlan,
   createAgent,
   step,
   sequence,
   updateState,
-  addState
+  addState,
+  createReActPattern
 } from '@fx/core';
-
-// Create an agent executor with intelligent tool calling
-const executor = createAgentExecutor();
 
 // Build the agent workflow
 const codingAgent = sequence([
@@ -110,13 +113,14 @@ const codingAgent = sequence([
     updateState({ userInput: state.userInput.trim() })(state)
   ),
   
-  step('executeTools', async (state) => {
-    const { state: newState, result } = await executor.runTurn(state, state.userInput);
-    return {
-      ...newState,
-      toolResults: result.results,
-      executionTime: result.executionTimeMs
-    };
+  step('analyzeTask', (state) => {
+    const analysis = `Task: ${state.userInput}`;
+    return updateState({ analysis })(state);
+  }),
+  
+  step('executeTask', (state) => {
+    const result = `Executed: ${state.analysis}`;
+    return updateState({ result })(state);
   }),
   
   step('logAction', (state) => 
@@ -125,19 +129,19 @@ const codingAgent = sequence([
 ]);
 
 // Create and run the agent
-const agent = createAgent('coding-agent', createPlan('coding-workflow', codingAgent));
+const plan = createPlan('coding-workflow', codingAgent);
+const agent = createAgent('coding-agent', plan);
 const result = await agent.start({ 
   userInput: 'read package.json and write summary to output.txt',
   memory: [] 
 });
 ```
 
-The agent automatically:
-- Routes user input to appropriate tools using pattern matching
-- Parses complex arguments like file paths with spaces
-- Plans multi-step operations with dependency resolution
-- Applies safety policies and resource quotas
-- Tracks all decisions for observability
+The agent demonstrates:
+- Functional composition with `sequence()` and `step()`
+- State management with `updateState()` and `addState()`
+- High-level agent creation with `createPlan()` and `createAgent()`
+- Clean separation of concerns
 
 ## Documentation
 
@@ -150,7 +154,6 @@ The agent automatically:
 
 ## Examples
 
-- **[Tool Calling Example](./examples/tool-calling-example.ts)** - Complete tool calling demonstration
 - **[Coding Agent](./examples/coding-agent/)** - Full-featured coding assistant
 - **[Research Agent](./examples/research-agent/)** - Advanced research and analysis
 

@@ -4,13 +4,12 @@ Build your first agent with Fx in 10 minutes.
 
 ## What You'll Build
 
-A simple agent that uses tool calling to read files and answer questions about them. This demonstrates the core capabilities of the Fx framework.
+A simple agent that processes input and generates responses. This demonstrates the core capabilities of the Fx framework.
 
-## Step 1: Agent with Tool Calling
+## Step 1: Basic Agent
 
 ```typescript
 import { 
-  createAgentExecutor,
   createPlan,
   createAgent,
   step, 
@@ -22,15 +21,10 @@ import {
 // Define your agent's state
 interface AgentState {
   userInput: string;
-  fileContent?: string;
   response?: string;
   memory: any[];
-  toolResults?: any[];
   executionTime?: number;
 }
-
-// Create an agent executor with tool calling
-const executor = createAgentExecutor();
 
 // Step 1: Process user input
 const processInput = step('processInput', (state: AgentState) => {
@@ -39,27 +33,21 @@ const processInput = step('processInput', (state: AgentState) => {
   })(state);
 });
 
-// Step 2: Execute tools
-const executeTools = step('executeTools', async (state: AgentState) => {
-  const { state: newState, result } = await executor.runTurn(state, state.userInput);
-  
-  return {
-    ...newState,
-    toolResults: result.results,
-    executionTime: result.executionTimeMs,
-    response: result.success ? 'Tools executed successfully' : `Error: ${result.error}`
-  };
+// Step 2: Generate response
+const generateResponse = step('generateResponse', (state: AgentState) => {
+  const response = `Processed: ${state.userInput}`;
+  return updateState({ response })(state);
 });
 
 // Step 3: Log the action
 const logAction = step('logAction', (state: AgentState) => {
-  return addState('action', `Processed: ${state.userInput} (${state.executionTime}ms)`)(state);
+  return addState('action', `Processed: ${state.userInput}`)(state);
 });
 
 // Create the agent workflow
 const agentWorkflow = sequence([
   processInput,
-  executeTools,
+  generateResponse,
   logAction
 ]);
 ```
@@ -68,143 +56,172 @@ const agentWorkflow = sequence([
 
 ```typescript
 // Create the agent
-const agent = createAgent('file-agent', createPlan('file-workflow', agentWorkflow));
+const plan = createPlan('simple-workflow', agentWorkflow);
+const agent = createAgent('simple-agent', plan);
 
 // Run the agent
 async function runAgent() {
   const initialState: AgentState = {
-    userInput: "read config.json and write summary to output.txt",
+    userInput: "Hello, world!",
     memory: []
   };
 
   const result = await agent.start(initialState);
   
   console.log('Response:', result.response);
-  console.log('Tool results:', result.toolResults);
-  console.log('Execution time:', result.executionTime, 'ms');
   console.log('Memory entries:', result.memory.length);
 }
 
 runAgent();
 ```
 
-## What Happens Automatically
-
-The `createAgentExecutor()` provides tool calling that automatically:
-
-1. **Routes Input**: Uses pattern matching to identify which tools to use
-2. **Parses Arguments**: Handles complex inputs like file paths with spaces
-3. **Plans Execution**: For multi-step operations, creates a dependency graph
-4. **Applies Safety**: Enforces resource quotas and safety policies
-5. **Tracks Decisions**: Records all tool selections for observability
-
-For example, when you say "read config.json and write to output.txt", the executor:
-- Identifies `read_file` and `write_file` tools
-- Parses the file paths correctly
-- Plans the execution order (read first, then write)
-- Applies appropriate safety policies
-- Tracks the decision for future improvement
-
 ## Step 3: Add Error Handling
 
 ```typescript
-import { Either, safe } from '@fx/core';
+import { Either } from '@fx/core';
 
-const readFileWithErrorHandling = step('readFile', async (state: AgentState) => {
-  const result = await safe(async () => {
-    // Simulate file reading that might fail
-    if (Math.random() > 0.5) {
-      throw new Error('File not found');
+const processWithErrorHandling = step('processWithErrorHandling', (state: AgentState) => {
+  try {
+    // Simulate processing that might fail
+    if (state.userInput.length < 3) {
+      throw new Error('Input too short');
     }
-    return "File content here";
-  });
-
-  return Either.fold(
-    result,
-    (error) => sequence([
-      step('updateError', (s) => updateState({ error: error.message })(s)),
-      step('logError', (s) => addState('observation', `Error: ${error.message}`)(s))
-    ])(state),
-    (content) => sequence([
-      step('updateContent', (s) => updateState({ fileContent: content })(s)),
-      step('logSuccess', (s) => addState('action', 'File read successfully')(s))
-    ])(state)
-  );
+    
+    const response = `Processed: ${state.userInput}`;
+    return updateState({ response })(state);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return updateState({ 
+      response: `Error: ${errorMessage}`,
+      error: errorMessage 
+    })(state);
+  }
 });
 ```
 
-## Step 4: Add Tools
+## Step 4: Use Patterns
 
 ```typescript
-import { createToolRegistry, createValidatedTool } from '@fx/core';
-import { z } from 'zod';
+import { createReActPattern, createChainOfThoughtPattern } from '@fx/core';
 
-// Define tool schemas
-const ReadFileSchema = z.object({
-  filePath: z.string()
-});
+// ReAct pattern for reasoning and acting
+const reactAgent = createReActPattern('reasoning-agent');
 
-// Create tool registry
-const toolRegistry = createToolRegistry<AgentState>();
+// Chain of thought pattern for step-by-step reasoning
+const cotAgent = createChainOfThoughtPattern('thinking-agent');
 
-// Register tools
-toolRegistry.register(
-  createValidatedTool(
-    'read_file',
-    'Read a file from the filesystem',
-    ReadFileSchema,
-    async (input, state) => {
-      // In a real implementation, you'd read the actual file
-      const content = `Content of ${input.filePath}`;
-      return updateState({ fileContent: content })(state);
-    }
-  )
+// Use patterns in your workflow
+const patternWorkflow = sequence([
+  step('reason', reactAgent),
+  step('think', cotAgent),
+  step('respond', generateResponse)
+]);
+```
+
+## Step 5: Parallel Processing
+
+```typescript
+import { parallel } from '@fx/core';
+
+const parallelWork = parallel([
+  step('analyze', (state) => updateState({ analysis: 'Analyzed' })(state)),
+  step('categorize', (state) => updateState({ category: 'Text' })(state)),
+  step('summarize', (state) => updateState({ summary: 'Summary' })(state))
+]);
+
+const parallelWorkflow = sequence([
+  processInput,
+  parallelWork,
+  generateResponse
+]);
+```
+
+## Step 6: Conditional Logic
+
+```typescript
+import { when } from '@fx/core';
+
+const conditionalStep = when(
+  (state) => state.userInput.includes('urgent'),
+  step('urgentTask', (state) => updateState({ priority: 'high' })(state)),
+  step('normalTask', (state) => updateState({ priority: 'normal' })(state))
 );
 
-// Use tools in your agent
-const handleToolCalls = step('handleToolCalls', async (state: AgentState) => {
-  // Parse tool calls from LLM response
-  const toolCalls = parseToolCalls(state.response);
-  
-  for (const toolCall of toolCalls) {
-    const result = await toolRegistry.execute(toolCall.name, state, toolCall.input);
-    state = result;
-  }
-  
-  return state;
-});
+const conditionalWorkflow = sequence([
+  processInput,
+  conditionalStep,
+  generateResponse
+]);
 ```
 
-## Step 5: Make It Interactive
+## Complete Example
 
 ```typescript
-import { createAgent } from '@fx/core';
+import { 
+  createPlan,
+  createAgent,
+  step, 
+  sequence, 
+  parallel,
+  when,
+  updateState, 
+  addState,
+  createReActPattern
+} from '@fx/core';
 
-// Create an interactive agent
-const interactiveAgent = createAgent('file-reader', sequence([
-  processInput,
-  readFileWithErrorHandling,
-  generateResponse,
-  handleToolCalls,
-  updateConversation
-]));
-
-// Run interactively
-async function runInteractiveAgent() {
-  const initialState: AgentState = {
-    userInput: '',
-    memory: []
-  };
-
-  await interactiveAgent.start(initialState);
+interface AgentState {
+  userInput: string;
+  response?: string;
+  priority?: string;
+  memory: any[];
 }
 
-runInteractiveAgent();
+const completeWorkflow = sequence([
+  step('processInput', (state) => 
+    updateState({ userInput: state.userInput.trim() })(state)
+  ),
+  
+  when(
+    (state) => state.userInput.includes('urgent'),
+    step('urgentTask', (state) => updateState({ priority: 'high' })(state)),
+    step('normalTask', (state) => updateState({ priority: 'normal' })(state))
+  ),
+  
+  parallel([
+    step('analyze', (state) => updateState({ analysis: 'Analyzed' })(state)),
+    step('categorize', (state) => updateState({ category: 'Text' })(state))
+  ]),
+  
+  step('generateResponse', (state) => {
+    const response = `[${state.priority}] Processed: ${state.userInput}`;
+    return updateState({ response })(state);
+  }),
+  
+  step('logAction', (state) => 
+    addState('action', `Processed: ${state.userInput}`)(state)
+  )
+]);
+
+// Create and run the agent
+const plan = createPlan('complete-workflow', completeWorkflow);
+const agent = createAgent('complete-agent', plan);
+
+async function runCompleteAgent() {
+  const result = await agent.start({
+    userInput: "urgent: process this data",
+    memory: []
+  });
+  
+  console.log('Response:', result.response);
+  console.log('Priority:', result.priority);
+}
+
+runCompleteAgent();
 ```
 
 ## What's Next?
 
-- **Add more tools**: File writing, code search, command execution
+- **Add more steps**: File reading, data processing, API calls
 - **Improve error handling**: Better error recovery and user feedback
 - **Add memory**: Persistent conversation history
 - **Add validation**: Input validation and sanitization
@@ -212,37 +229,25 @@ runInteractiveAgent();
 
 ## Common Patterns
 
-### Parallel Operations
-```typescript
-import { parallel, mergeStrategies } from '@fx/core';
-
-const parallelWork = parallel([
-  readFile,
-  searchCode,
-  listDirectory
-], mergeStrategies.default);
-```
-
-### Conditional Logic
-```typescript
-import { when } from '@fx/core';
-
-const conditionalStep = when(
-  (state) => state.userInput.includes('admin'),
-  adminTask,
-  userTask
-);
-```
-
 ### State Composition
 ```typescript
-import { sequence, step, updateState, addState } from '@fx/core';
-
 const updateUser = sequence([
   step('updateLastActive', (s) => updateState({ lastActive: Date.now() })(s)),
   step('addAction', (s) => addState('action', 'User updated')(s)),
   step('updateVersion', (s) => updateState({ version: '1.0.0' })(s))
 ]);
+```
+
+### Error Handling
+```typescript
+const safeOperation = step('safeOperation', (state) => {
+  try {
+    // Your operation here
+    return updateState({ result: 'success' })(state);
+  } catch (error) {
+    return updateState({ error: error.message })(state);
+  }
+});
 ```
 
 ## Need Help?

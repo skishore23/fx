@@ -4,13 +4,12 @@
   "description": "Examples for the Fx Framework",
   "private": true,
   "scripts": {
-    "tool-calling": "ts-node tool-calling-example.ts",
     "coding-agent": "cd coding-agent && npm start",
     "coding-agent:test": "cd coding-agent && npm test",
     "coding-agent:complex": "cd coding-agent && npm run test:complex",
     "research-agent": "cd research-agent && npm start",
     "research-agent:test": "cd research-agent && npm test",
-    "all": "npm run tool-calling && npm run coding-agent && npm run research-agent",
+    "all": "npm run coding-agent && npm run research-agent",
     "build": "tsc",
     "clean": "rm -rf dist"
   },
