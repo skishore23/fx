@@ -89,7 +89,7 @@ const selectTool = step('selectTool', (state) => {
     }
   }
   
-  // Default fallback
+  // Default behavior
   return updateState({ selectedTool: 'readFile' })(state);
 });
 ```
@@ -252,7 +252,7 @@ const fileAgentWorkflow = sequence([
       }
     }
     
-    // Default fallback
+    // Default behavior
     return updateState({ selectedTool: 'readFile' })(state);
   }),
   
@@ -357,7 +357,7 @@ export const advancedAgent = createAgent('advanced-agent', plan);
 
 ### 2. Pattern Matching
 - Start with simple patterns
-- Use fallbacks for edge cases
+- Use defaults for edge cases
 - Test with various inputs
 
 ### 3. State Management

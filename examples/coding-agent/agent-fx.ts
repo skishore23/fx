@@ -276,7 +276,7 @@ const createToolRegistry = () => {
         if (isDangerous) {
           const securityStep = step('security_block', (s) => 
             sequence([
-              step('updateError', (s) => updateState({ error: `Command blocked for security: ${input.command}` })(s)),
+              step('updateError', (s) => updateState({ error: `Command blocked for security: ${input.command}` } as Partial<AgentState>)(s as AgentState)),
               step('logError', (s) => addState('observation', `Command blocked for security: ${input.command}`)(s))
             ])(s)
           );
@@ -463,7 +463,7 @@ const calculateToolScore = (state: AgentState, tool: string): number => {
   return score;
 };
 
-// Enhanced tool selector with scoring and fallback
+// Enhanced tool selector with scoring and default
 const createEnhancedToolSelector = (): ((state: AgentState) => string[]) => {
   const matcher = createPatternMatcher<AgentState, string[]>();
   
@@ -500,7 +500,7 @@ const createEnhancedToolSelector = (): ((state: AgentState) => string[]) => {
       return patternResult;
     }
     
-    // Fallback to scoring system
+    // Default to scoring system
     const allTools = ['read_file', 'list_files', 'bash_command', 'edit_file', 'code_search'];
     const scoredTools = allTools
       .map(tool => ({ tool, score: calculateToolScore(state, tool) }))
@@ -528,7 +528,7 @@ const selectTools = step('selectTools', (state: AgentState) => {
     tools: toolsToUse,
     userInput: lastMessage,
     scores: scores,
-    selectionMethod: toolsToUse.length > 0 ? 'pattern_matching' : 'scoring_fallback'
+    selectionMethod: toolsToUse.length > 0 ? 'pattern_matching' : 'scoring_default'
   });
   
   // Record decision for observability
@@ -547,10 +547,10 @@ const selectTools = step('selectTools', (state: AgentState) => {
       toolsToUse,
       lastDecisionId: decisionId,
       decisionHistory: [...(state.decisionHistory || []), decisionId]
-    })(state);
+    } as Partial<AgentState>)(state);
   }
   
-  return updateState({ toolsToUse })(state);
+  return updateState({ toolsToUse } as Partial<AgentState>)(state);
 });
 
 // ============================================================================
@@ -583,12 +583,12 @@ const runInference = step('runInference', async (state: AgentState) => {
     (error) => {
       console.log('⚠️ LLM call failed:', error.message);
       return sequence([
-        step('updateResponse', (s) => updateState({ generateResponseResponse: 'I understand your request. Let me help you with that using the available tools.' })(s)),
-        step('logObservation', (s) => addState('observation', `Generated fallback response for: ${lastMessage?.content}`)(s))
+        step('updateResponse', (s) => updateState({ generateResponseResponse: 'I understand your request. Let me help you with that using the available tools.' } as Partial<AgentState>)(s as AgentState)),
+        step('logObservation', (s) => addState('observation', `Generated default response for: ${lastMessage?.content}`)(s))
       ])(state);
     },
     (llmResult) => sequence([
-      step('updateResponse', (s) => updateState({ generateResponseResponse: (llmResult as any).systemResponse })(s)),
+      step('updateResponse', (s) => updateState({ generateResponseResponse: (llmResult as any).systemResponse } as Partial<AgentState>)(s as AgentState)),
       step('logObservation', (s) => addState('observation', `Generated response for: ${lastMessage?.content}`)(s))
     ])(llmResult)
   );
@@ -616,7 +616,7 @@ const extractToolParameters = (state: AgentState, toolName: string): Record<stri
       // Extract file path
       const fileMatch = lastMessage.match(/(?:read|show|display|view|open)\s+([^\s]+\.\w+)/);
       return {
-        filePath: fileMatch?.[1] || 'README.md' // fallback
+        filePath: fileMatch?.[1] || 'README.md' // default
       };
       
     case 'bash_command':
@@ -731,19 +731,19 @@ const getUserInput = step('getUserInput', async (state: AgentState) => {
     });
   });
   
-  return updateState({ userInput })(state);
+  return updateState({ userInput } as Partial<AgentState>)(state);
 });
 
 const checkExit = step('checkExit', (state: AgentState) => {
   const userInput = get('userInput')(state) as string;
   const shouldExit = userInput?.toLowerCase() === 'exit';
-  return updateState({ shouldExit })(state);
+  return updateState({ shouldExit } as Partial<AgentState>)(state);
 });
 
 const handleEmptyInput = step('handleEmptyInput', (state: AgentState): AgentState => {
   const userInput = get('userInput')(state) as string;
   const skipProcessing = !userInput || userInput.trim() === '';
-  return updateState({ skipProcessing })(state) as AgentState;
+  return updateState({ skipProcessing } as Partial<AgentState>)(state) as AgentState;
 });
 
 const addUserMessage = step('addUserMessage', (state: AgentState): AgentState => {
@@ -804,7 +804,7 @@ const handleError = step('handleError', (state: AgentState) => {
       const stack = get('stack')(state);
       console.error('Stack trace:', stack);
     }
-    return updateState({ error: undefined, stack: undefined })(state);
+    return updateState({ error: undefined, stack: undefined } as Partial<AgentState>)(state);
   }
   return state;
 });

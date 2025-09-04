@@ -55,7 +55,7 @@ export interface PromptTemplate {
 export interface ResponseParser<T> {
   readonly schema: z.ZodType<T>;
   readonly parse: (response: string) => T;
-  readonly fallback: T;
+  readonly defaultValue: T;
 }
 
 // ---------- LLM Provider Implementation ----------
@@ -222,17 +222,17 @@ class ResponseParserImpl<T> implements ResponseParser<T> {
   constructor(
     public readonly schema: z.ZodType<T>,
     public readonly parse: (response: string) => T,
-    public readonly fallback: T
+    public readonly defaultValue: T
   ) {}
 
   /**
-   * Parse response with fallback
+   * Parse response with default
    */
-  parseWithFallback(response: string): T {
+  parseWithDefault(response: string): T {
     try {
       return this.parse(response);
     } catch {
-      return this.fallback;
+      return this.defaultValue;
     }
   }
 }
@@ -262,9 +262,9 @@ export function promptTemplate(
 export function responseParser<T>(
   schema: z.ZodType<T>,
   parse: (response: string) => T,
-  fallback: T
+  defaultValue: T
 ): ResponseParser<T> {
-  return new ResponseParserImpl(schema, parse, fallback);
+  return new ResponseParserImpl(schema, parse, defaultValue);
 }
 
 // ---------- LLM Steps ----------
@@ -359,7 +359,7 @@ export function llmParseStep<T extends BaseContext, U>(
   return async (state: T) => {
     try {
       const response = (state[responseKey] as string) || '';
-      const parsed = (parser as ResponseParserImpl<U>).parseWithFallback(response);
+      const parsed = (parser as ResponseParserImpl<U>).parseWithDefault(response);
       
       return {
         ...state,

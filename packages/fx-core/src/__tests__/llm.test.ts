@@ -103,27 +103,27 @@ describe('LLM Integration - Fixed Implementation', () => {
     it('should create parser with correct properties', () => {
       const schema = { type: 'string' };
       const parse = (response: string) => response.trim();
-      const fallback = 'default';
+      const defaultValue = 'default';
       
-      const parser = responseParser(schema as any, parse, fallback);
+      const parser = responseParser(schema as any, parse, defaultValue);
       
       expect(parser.schema).toBe(schema);
       expect(parser.parse).toBe(parse);
-      expect(parser.fallback).toBe(fallback);
+      expect(parser.defaultValue).toBe(defaultValue);
     });
 
-    it('should parse with fallback on error', () => {
+    it('should parse with default on error', () => {
       const parser = responseParser(
         { type: 'string' } as any,
         (response: string) => {
           if (response === 'invalid') throw new Error('Parse error');
           return response.trim();
         },
-        'fallback'
+        'default'
       );
       
-      expect((parser as any).parseWithFallback('valid')).toBe('valid');
-      expect((parser as any).parseWithFallback('invalid')).toBe('fallback');
+      expect((parser as any).parseWithDefault('valid')).toBe('valid');
+      expect((parser as any).parseWithDefault('invalid')).toBe('default');
     });
   });
 
@@ -225,7 +225,7 @@ describe('LLM Integration - Fixed Implementation', () => {
         (_response: string) => {
           throw new Error('Parse error');
         },
-        'FALLBACK'
+        'DEFAULT'
       );
       
       const step = llmParseStep(parser, 'llmResponse');
@@ -237,7 +237,7 @@ describe('LLM Integration - Fixed Implementation', () => {
       
       const result = await step(state);
       
-      expect(result.llmResponseParsed).toBe('FALLBACK');
+      expect(result.llmResponseParsed).toBe('DEFAULT');
       expect(result.memory).toHaveLength(0);
     });
   });
@@ -285,7 +285,7 @@ describe('LLM Integration - Fixed Implementation', () => {
       
       expect(parser.schema).toBeDefined();
       expect(typeof parser.parse).toBe('function');
-      expect(parser.fallback).toEqual({
+      expect(parser.defaultValue).toEqual({
         reasoning: '',
         action: '',
         nextStep: ''

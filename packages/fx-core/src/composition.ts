@@ -79,7 +79,7 @@ export const sequence = <T extends BaseContext>(steps: Step<T>[]): Step<T> => {
  * @param steps - Array of steps to execute in parallel
  * @param mergeStrategy - Function to merge successful results
  * @returns A step that executes all steps in parallel
- * @throws Error if any step fails (fail-fast behavior)
+ * @throws Error if any step fails
  */
 export const parallel = <T extends BaseContext>(
   steps: Step<T>[],
@@ -117,7 +117,7 @@ export const parallel = <T extends BaseContext>(
       }
     }
 
-    // Fail-fast behavior - throw error if any step fails
+    // Throw error if any step fails
     if (failed.length > 0) {
       const error = new Error(`Parallel execution failed: ${failed.length} steps failed`);
       (error as any).cause = failed;

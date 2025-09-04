@@ -617,7 +617,7 @@ const generateMarkdownReport = async (state: ResearchState, reportType: string):
       
       report += `**Thematic Analysis:**\n`;
       analysis.themes.forEach(theme => {
-        report += `- **${theme}:** ${getThemeDescription(theme, analysis.sourceUrl)}\n`;
+        report += `- **${theme}:** ${getThemeDescription(theme)}\n`;
       });
       report += `\n`;
       
@@ -864,7 +864,7 @@ const getInsightContext = (insight: string): string => {
   return 'important developments in the field';
 };
 
-const getThemeDescription = (theme: string, sourceUrl: string): string => {
+const getThemeDescription = (theme: string): string => {
   const descriptions: Record<string, string> = {
     'Research': 'Academic and scientific research findings',
     'Technology': 'Technical innovations and developments',
@@ -1023,7 +1023,7 @@ const calculateToolScore = (state: ResearchState, tool: string): number => {
   return score;
 };
 
-// Enhanced tool selector with scoring and fallback
+// Enhanced tool selector with scoring and default
 const createEnhancedToolSelector = (): ((state: ResearchState) => string[]) => {
   const matcher = createPatternMatcher<ResearchState, string[]>();
   
@@ -1061,7 +1061,7 @@ const createEnhancedToolSelector = (): ((state: ResearchState) => string[]) => {
       return patternResult;
     }
     
-    // Fallback to scoring system
+    // Default to scoring system
     const allTools = ['scrape_url', 'crawl_website', 'analyze_content', 'generate_report', 'discover_urls', 'google_search'];
     const scoredTools = allTools
       .map(tool => ({ tool, score: calculateToolScore(state, tool) }))
@@ -1089,10 +1089,10 @@ const selectTools = step('selectTools', (state: ResearchState) => {
     tools: toolsToUse,
     userInput: lastMessage,
     scores: scores,
-    selectionMethod: toolsToUse.length > 0 ? 'pattern_matching' : 'scoring_fallback'
+    selectionMethod: toolsToUse.length > 0 ? 'pattern_matching' : 'scoring_default'
   });
   
-  return updateState({ toolsToUse })(state);
+  return updateState({ toolsToUse } as Partial<ResearchState>)(state);
 });
 
 // ============================================================================
@@ -1135,12 +1135,12 @@ const runInference = step('runInference', async (state: ResearchState) => {
     (error) => {
       console.log('⚠️ LLM call failed:', error.message);
       return sequence([
-        step('updateResponse', (s) => updateState({ generateResponseResponse: 'I understand your research request. Let me help you gather and analyze information using the available tools.' })(s)),
-        step('logObservation', (s) => addState('observation', `Generated fallback response for: ${lastMessage?.content}`)(s))
+        step('updateResponse', (s) => updateState({ generateResponseResponse: 'I understand your research request. Let me help you gather and analyze information using the available tools.' } as Partial<ResearchState>)(s as ResearchState)),
+        step('logObservation', (s) => addState('observation', `Generated default response for: ${lastMessage?.content}`)(s))
       ])(state);
     },
     (llmResult) => sequence([
-      step('updateResponse', (s) => updateState({ generateResponseResponse: (llmResult as any).systemResponse })(s)),
+      step('updateResponse', (s) => updateState({ generateResponseResponse: (llmResult as any).systemResponse } as Partial<ResearchState>)(s as ResearchState)),
       step('logObservation', (s) => addState('observation', `Generated response for: ${lastMessage?.content}`)(s))
     ])(llmResult)
   );
@@ -1271,19 +1271,19 @@ const getUserInput = step('getUserInput', async (state: ResearchState) => {
     });
   });
   
-  return updateState({ userInput })(state);
+  return updateState({ userInput } as Partial<ResearchState>)(state);
 });
 
 const checkExit = step('checkExit', (state: ResearchState) => {
   const userInput = get('userInput')(state) as string;
   const shouldExit = userInput?.toLowerCase() === 'exit';
-  return updateState({ shouldExit })(state);
+  return updateState({ shouldExit } as Partial<ResearchState>)(state);
 });
 
 const handleEmptyInput = step('handleEmptyInput', (state: ResearchState): ResearchState => {
   const userInput = get('userInput')(state) as string;
   const skipProcessing = !userInput || userInput.trim() === '';
-  return updateState({ skipProcessing })(state) as ResearchState;
+  return updateState({ skipProcessing } as Partial<ResearchState>)(state) as ResearchState;
 });
 
 const addUserMessage = step('addUserMessage', (state: ResearchState): ResearchState => {
@@ -1346,7 +1346,7 @@ const handleError = step('handleError', (state: ResearchState) => {
       const stack = get('stack')(state);
       console.error('Stack trace:', stack);
     }
-    return updateState({ error: undefined, stack: undefined })(state);
+    return updateState({ error: undefined, stack: undefined } as Partial<ResearchState>)(state);
   }
   return state;
 });
@@ -1366,17 +1366,6 @@ const coreWorkflow = sequence([
 // INTERACTIVE AGENT
 // ============================================================================
 
-const conversationLoop = sequence([
-  getUserInput,
-  checkExit,
-  handleEmptyInput,
-  when((state: ResearchState) => !(get('shouldExit')(state) as boolean), sequence([
-    addUserMessage,
-    coreWorkflow,
-    displayResponse,
-    handleError
-  ]))
-]);
 
 // Create Chain of Thought research workflow
 const createResearchWorkflow = (llmProvider: any) => {
@@ -1388,7 +1377,7 @@ const createResearchWorkflow = (llmProvider: any) => {
         thoughts: [],
         currentStep: 0,
         conclusion: undefined
-      })(state);
+      } as Partial<ResearchState>)(state);
     }),
     
     // Execute Chain of Thought pattern

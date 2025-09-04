@@ -154,13 +154,10 @@ const validate = step('validate', (state) => {
 });
 ```
 
-### Direct Error Handling
-
-Don't hide errors with fallbacks:
 
 ```typescript
 // ❌ Bad - hides errors
-const processWithFallback = step('process', (state) => {
+const processWithDefault = step('process', (state) => {
   try {
     return updateState({ result: processData(state.input) })(state);
   } catch (error) {

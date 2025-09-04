@@ -57,7 +57,7 @@ describe('Integration Tests - All Fixes Working Together', () => {
       
       // Verify events were logged (before the failure)
       const events = getEvents();
-      expect(events.length).toBeGreaterThanOrEqual(0); // May be 0 due to fail-fast behavior
+      expect(events.length).toBeGreaterThanOrEqual(0);
     });
 
     it('should handle sequence execution with proper state flow', async () => {
