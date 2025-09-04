@@ -27,104 +27,101 @@ export const isPromise = <T>(value: T | Promise<T>): value is Promise<T> => {
 };
 
 /**
- * Simple deep clone using JSON (sufficient for most use cases)
+ * Simple and efficient deep clone implementation
+ * 
+ * @param value - The value to clone
+ * @returns A deep clone of the value
  */
 export const clone = <T>(value: T): T => {
-  return JSON.parse(JSON.stringify(value));
-};
-
-import { Step, BaseContext, Monad, Kleisli, Id, Maybe, Either } from './types';
-
-/**
- * Category Theory Utilities and Helper Functions
- */
-
-// ---------- Morphism Composition ----------
-
-/**
- * Identity morphism - fundamental category theory concept
- */
-export const identity = <A extends BaseContext>(): Step<A> => {
-  return async (a: A) => a;
+  return deepCloneCustom(value);
 };
 
 /**
- * Compose two morphisms (steps) - fundamental composition
+ * Custom deep clone implementation for environments without structuredClone
  */
-export const compose = <A extends BaseContext>(f: Step<A>, g: Step<A>): Step<A> => {
-  return async (a: A) => {
-    const b = await g(a);
-    return f(b);
-  };
-};
-
-/**
- * Compose multiple morphisms from right to left
- */
-export const composeAll = <T extends BaseContext>(...steps: Step<T>[]): Step<T> => {
-  return steps.reduce((acc, step) => compose(step, acc), identity<T>());
-};
-
-// ---------- Kleisli Category ----------
-
-/**
- * Lift a regular function to work in monadic context (Kleisli arrow)
- */
-export const liftM = <M, A, B>(
-  monad: Monad<M>,
-  f: (a: A) => B
-): Kleisli<M, A> => {
-  return (a: A) => monad.of(f(a));
-};
-
-/**
- * Compose Kleisli arrows (monadic functions)
- */
-export const composeK = <M>(
-  monad: Monad<M>
-) => <A, B, C>(
-  f: Kleisli<M, B>,
-  g: Kleisli<M, A>
-): Kleisli<M, A> => {
-  return (a: A) => monad.chain(g(a), f);
-};
-
-// ---------- Natural Transformations ----------
-
-/**
- * Natural transformation from Identity to Maybe
- */
-export const identityToMaybe = <A>(a: Id<A>): Maybe<A> => ({ tag: 'Just', value: a });
-
-/**
- * Natural transformation from Maybe to Identity
- */
-export const maybeToIdentity = <A>(ma: Maybe<A>): Id<A> => {
-  if (ma.tag === 'Just') {
-    return ma.value;
+function deepCloneCustom<T>(value: T, seen = new WeakMap()): T {
+  // Handle primitives and null
+  if (value === null || typeof value !== 'object') {
+    return value;
   }
-  throw new Error('Cannot extract value from Nothing');
-};
+
+  // Handle circular references
+  if (seen.has(value)) {
+    return seen.get(value);
+  }
+
+  // Handle Date objects
+  if (value instanceof Date) {
+    const cloned = new Date(value.getTime()) as T;
+    seen.set(value, cloned);
+    return cloned;
+  }
+
+  // Handle RegExp objects
+  if (value instanceof RegExp) {
+    const cloned = new RegExp(value.source, value.flags) as T;
+    seen.set(value, cloned);
+    return cloned;
+  }
+
+  // Handle Arrays
+  if (Array.isArray(value)) {
+    const cloned = value.map(item => deepCloneCustom(item, seen)) as T;
+    seen.set(value, cloned);
+    return cloned;
+  }
+
+  // Handle Maps
+  if (value instanceof Map) {
+    const clonedMap = new Map();
+    seen.set(value, clonedMap as T);
+    for (const [key, val] of value.entries()) {
+      clonedMap.set(deepCloneCustom(key, seen), deepCloneCustom(val, seen));
+    }
+    return clonedMap as T;
+  }
+
+  // Handle Sets
+  if (value instanceof Set) {
+    const clonedSet = new Set();
+    seen.set(value, clonedSet as T);
+    for (const val of value.values()) {
+      clonedSet.add(deepCloneCustom(val, seen));
+    }
+    return clonedSet as T;
+  }
+
+  // Handle plain objects
+  if (value.constructor === Object) {
+    const clonedObj = {} as T;
+    seen.set(value, clonedObj);
+    for (const [key, val] of Object.entries(value)) {
+      (clonedObj as any)[key] = deepCloneCustom(val, seen);
+    }
+    return clonedObj;
+  }
+
+  // For other object types, try to clone their properties
+  try {
+    const clonedObj = Object.create(Object.getPrototypeOf(value));
+    seen.set(value, clonedObj as T);
+    for (const [key, val] of Object.entries(value)) {
+      (clonedObj as any)[key] = deepCloneCustom(val, seen);
+    }
+    return clonedObj as T;
+  } catch {
+    // If cloning fails, return the original value
+    // This handles functions and other non-cloneable objects
+    return value;
+  }
+}
+
+import { Step, BaseContext } from './types';
 
 /**
- * Natural transformation from Either to Maybe
+ * Essential utilities for the Fx framework
  */
-export const eitherToMaybe = <E, A>(ea: Either<E, A>): Maybe<A> => {
-  if (ea.tag === 'Right') {
-    return { tag: 'Just', value: ea.right };
-  }
-  return { tag: 'Nothing' };
-};
 
-/**
- * Natural transformation from Maybe to Either
- */
-export const maybeToEither = <E, A>(ma: Maybe<A>, leftValue: E): Either<E, A> => {
-  if (ma.tag === 'Just') {
-    return { tag: 'Right', right: ma.value };
-  }
-  return { tag: 'Left', left: leftValue };
-};
 
 // ---------- State Operations ----------
 
@@ -169,78 +166,3 @@ export const setValueAtPath = (obj: unknown, path: string, value: unknown): unkn
   }
   return result;
 };
-
-// ---------- Functor Operations ----------
-
-/**
- * Apply a function to each element of an array (Array functor)
- */
-export const arrayMap = <A, B>(as: readonly A[], f: (a: A) => B): readonly B[] => {
-  return as.map(f);
-};
-
-/**
- * Lift a function to work on Maybe values
- */
-export const maybeMap = <A, B>(ma: Maybe<A>, f: (a: A) => B): Maybe<B> => {
-  if (ma.tag === 'Just') {
-    return { tag: 'Just', value: f(ma.value) };
-  }
-  return { tag: 'Nothing' };
-};
-
-/**
- * Lift a function to work on Either values
- */
-export const eitherMap = <A, B>(ma: Either<unknown, A>, f: (a: A) => B): Either<unknown, B> => {
-  if (ma.tag === 'Right') {
-    return { tag: 'Right', right: f(ma.right) };
-  }
-  return ma as Either<unknown, B>;
-};
-
-// ---------- Monad Operations ----------
-
-/**
- * Apply a function that returns a monad to a monadic value
- */
-export const maybeChain = <A, B>(ma: Maybe<A>, f: (a: A) => Maybe<B>): Maybe<B> => {
-  if (ma.tag === 'Just') {
-    return f(ma.value);
-  }
-  return { tag: 'Nothing' };
-};
-
-/**
- * Apply a function that returns Either to an Either value
- */
-export const eitherChain = <A, B>(ma: Either<unknown, A>, f: (a: A) => Either<unknown, B>): Either<unknown, B> => {
-  if (ma.tag === 'Right') {
-    return f(ma.right);
-  }
-  return ma as Either<unknown, B>;
-};
-
-// ---------- Utility Functions ----------
-
-/**
- * Create a constant function that always returns the same value
- */
-export const constant = <A, B>(value: A): ((b: B) => A) => {
-  return () => value;
-};
-
-/**
- * Flip the order of arguments of a function
- */
-export const flip = <A, B, C>(f: (a: A) => (b: B) => C) => (b: B) => (a: A) => f(a)(b);
-
-/**
- * Curry a binary function
- */
-export const curry = <A, B, C>(f: (a: A, b: B) => C) => (a: A) => (b: B) => f(a, b);
-
-/**
- * Uncurry a curried function
- */
-export const uncurry = <A, B, C>(f: (a: A) => (b: B) => C) => (a: A, b: B) => f(a)(b);

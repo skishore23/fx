@@ -6,41 +6,49 @@
 import { BaseContext } from './types';
 import { getValueAtPath, setValueAtPath } from './utils';
 
+// ---------- Memory Types ----------
+
+export interface MemoryEntry {
+  readonly id: string;
+  readonly type: string;
+  readonly content: string;
+  readonly timestamp: Date;
+  readonly metadata?: Record<string, unknown>;
+}
+
 // ---------- Unified State Operations ----------
 
 /**
- * Unified state update function - the essence of fx-core
+ * Pure state update function - the essence of fx-core
  * Context is state, state changes are transformations
  * This is the fundamental morphism in our state category
- * Can update both regular state and memory in one operation
+ * 
+ * @param updates - Partial state updates to apply
+ * @returns A pure function that transforms state
  */
-export const updateState = <T extends BaseContext>(updates: Record<string, any>) => {
+export const updateState = <T extends BaseContext>(updates: Partial<T>) => {
   return (state: T): T => {
-    const newState = { ...state, ...updates } as T;
-    
-    // If memory entry is provided, add it to memory array
-    if (updates.memoryEntry) {
-      const memory = ((newState as any).memory as any[]) || [];
-      const newEntry = {
-        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        timestamp: new Date(),
-        ...updates.memoryEntry
-      };
-      (newState as any).memory = [...memory, newEntry];
-    }
-    
-    return newState;
+    return { ...state, ...updates } as T;
   };
 };
 
 /**
- * Add state entry (memory) - morphism in the state category
- * This is a pure function that transforms state
+ * Add memory entry - morphism in the state category
+ * This is a pure function that transforms state by adding a memory entry
+ * 
+ * @param type - Type of memory entry (e.g., 'action', 'observation', 'error')
+ * @param content - Content of the memory entry
+ * @param metadata - Optional metadata for the memory entry
+ * @returns A pure function that adds a memory entry to state
  */
-export const addState = <T extends BaseContext>(type: string, content: string, metadata?: Record<string, unknown>) => {
+export const addState = <T extends BaseContext>(
+  type: string, 
+  content: string, 
+  metadata?: Record<string, unknown>
+) => {
   return (state: T): T => {
-    const memory = (state.memory as any[]) || [];
-    const newEntry = {
+    const memory = (state.memory as MemoryEntry[]) || [];
+    const newEntry: MemoryEntry = {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type,
       content,
@@ -49,6 +57,19 @@ export const addState = <T extends BaseContext>(type: string, content: string, m
     };
     
     return { ...state, memory: [...memory, newEntry] } as T;
+  };
+};
+
+/**
+ * Add a complete memory entry - morphism in the state category
+ * 
+ * @param entry - Complete memory entry to add
+ * @returns A pure function that adds a memory entry to state
+ */
+export const addMemoryEntry = <T extends BaseContext>(entry: MemoryEntry) => {
+  return (state: T): T => {
+    const memory = (state.memory as MemoryEntry[]) || [];
+    return { ...state, memory: [...memory, entry] } as T;
   };
 };
 

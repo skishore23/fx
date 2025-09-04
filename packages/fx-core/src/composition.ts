@@ -8,8 +8,25 @@ import { Step, BaseContext } from './types';
 /**
  * Identity morphism - fundamental categorical construct
  */
-export const identity = <T extends BaseContext>(): Step<T> => {
-  return async (state: T) => state;
+export const identity = <A extends BaseContext>(): Step<A> => {
+  return async (a: A) => a;
+};
+
+/**
+ * Compose two morphisms (steps) - fundamental composition
+ */
+export const compose = <A extends BaseContext>(f: Step<A>, g: Step<A>): Step<A> => {
+  return async (a: A) => {
+    const b = await g(a);
+    return f(b);
+  };
+};
+
+/**
+ * Compose multiple morphisms from right to left
+ */
+export const composeAll = <T extends BaseContext>(...steps: Step<T>[]): Step<T> => {
+  return steps.reduce((acc, step) => compose(step, acc), identity<T>());
 };
 
 
@@ -31,10 +48,26 @@ const composeKleisli = <T extends BaseContext>(
 /**
  * Execute steps in sequence using proper Kleisli composition
  * This is the monoidal composition of Kleisli arrows
+ * 
+ * @param steps - Array of steps to execute in sequence
+ * @returns A step that executes all steps in order
+ * @throws Error if steps is not an array or contains invalid functions
  */
 export const sequence = <T extends BaseContext>(steps: Step<T>[]): Step<T> => {
+  // Input validation
+  if (!Array.isArray(steps)) {
+    throw new Error('Steps must be an array');
+  }
+  
   if (steps.length === 0) return identity<T>();
   if (steps.length === 1) return steps[0]!;
+  
+  // Validate all steps are functions
+  steps.forEach((step, index) => {
+    if (typeof step !== 'function') {
+      throw new Error(`Step at index ${index} is not a function`);
+    }
+  });
   
   return steps.reduceRight(composeKleisli);
 };
@@ -42,11 +75,32 @@ export const sequence = <T extends BaseContext>(steps: Step<T>[]): Step<T> => {
 /**
  * Execute steps in parallel with proper result merging
  * This is the correct functional approach - we need a merge strategy
+ * 
+ * @param steps - Array of steps to execute in parallel
+ * @param mergeStrategy - Function to merge successful results
+ * @returns A step that executes all steps in parallel
+ * @throws Error if any step fails (fail-fast behavior)
  */
 export const parallel = <T extends BaseContext>(
   steps: Step<T>[],
   mergeStrategy: (results: T[], originalState: T) => T = defaultMergeStrategy
 ): Step<T> => {
+  // Input validation
+  if (!Array.isArray(steps)) {
+    throw new Error('Steps must be an array');
+  }
+  
+  if (steps.length === 0) {
+    return identity<T>();
+  }
+  
+  // Validate all steps are functions
+  steps.forEach((step, index) => {
+    if (typeof step !== 'function') {
+      throw new Error(`Step at index ${index} is not a function`);
+    }
+  });
+
   return async (state: T) => {
     const results = await Promise.allSettled(
       steps.map(step => step({ ...state }))
@@ -63,8 +117,11 @@ export const parallel = <T extends BaseContext>(
       }
     }
 
+    // Fail-fast behavior - throw error if any step fails
     if (failed.length > 0) {
-      console.warn('Some parallel steps failed:', failed);
+      const error = new Error(`Parallel execution failed: ${failed.length} steps failed`);
+      (error as any).cause = failed;
+      throw error;
     }
 
     // Use merge strategy to combine results
@@ -149,17 +206,33 @@ export const mergeStrategies = {
 
 /**
  * Execute steps conditionally - simple conditional composition
+ * 
+ * @param predicate - Function that determines which step to execute
+ * @param thenStep - Step to execute if predicate returns true
+ * @param elseStep - Optional step to execute if predicate returns false
+ * @returns A step that conditionally executes one of the provided steps
  */
 export const when = <T extends BaseContext>(
   predicate: (state: T) => boolean,
-  thenStep: Step<any>,
-  elseStep?: Step<any>
+  thenStep: Step<T>,
+  elseStep?: Step<T>
 ): Step<T> => {
+  // Input validation
+  if (typeof predicate !== 'function') {
+    throw new Error('Predicate must be a function');
+  }
+  if (typeof thenStep !== 'function') {
+    throw new Error('Then step must be a function');
+  }
+  if (elseStep && typeof elseStep !== 'function') {
+    throw new Error('Else step must be a function');
+  }
+
   return async (state: T) => {
     if (predicate(state)) {
-      return await thenStep(state) as T;
+      return await thenStep(state);
     } else if (elseStep) {
-      return await elseStep(state) as T;
+      return await elseStep(state);
     }
     return state;
   };

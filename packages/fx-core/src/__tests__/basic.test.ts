@@ -9,6 +9,10 @@ interface TestState {
   value: number;
   message?: string;
   memory: any[];
+  step1?: boolean;
+  step2?: boolean;
+  userInput?: string;
+  response?: string;
   [key: string]: any;
 }
 
@@ -37,10 +41,10 @@ describe('Fx Core - Basic Functionality', () => {
   describe('sequence composition', () => {
     it('should run steps in order', async () => {
       const step1 = step('step1', (state: TestState) => 
-        updateState({ step1: true })(state)
+        updateState({ step1: true } as Partial<TestState>)(state)
       );
       const step2 = step('step2', (state: TestState) => 
-        updateState({ step2: true })(state)
+        updateState({ step2: true } as Partial<TestState>)(state)
       );
 
       const workflow = sequence([step1, step2]);
@@ -67,8 +71,8 @@ describe('Fx Core - Basic Functionality', () => {
 
   describe('state operations', () => {
     it('should update state with updateState', () => {
-      const updateFn = updateState({ value: 10, message: 'updated' });
-      const result = updateFn({ value: 5, memory: [] });
+      const updateFn = updateState({ value: 10, message: 'updated' } as Partial<TestState>);
+      const result = updateFn({ value: 5, memory: [], message: 'test' } as TestState);
 
       expect(result.value).toBe(10);
       expect(result.message).toBe('updated');
@@ -88,7 +92,7 @@ describe('Fx Core - Basic Functionality', () => {
         updateState({ value: 10 })(state)
       );
       const step2 = step('step2', (state: TestState) => 
-        updateState({ message: 'sequenced' })(state)
+        updateState({ message: 'sequenced' } as Partial<TestState>)(state)
       );
       
       const sequenced = sequence([step1, step2]);
@@ -101,7 +105,7 @@ describe('Fx Core - Basic Functionality', () => {
     it('should sequence many steps', async () => {
       const steps = [
         step('step1', (state: TestState) => updateState({ value: 10 })(state)),
-        step('step2', (state: TestState) => updateState({ message: 'first' })(state)),
+        step('step2', (state: TestState) => updateState({ message: 'first' } as Partial<TestState>)(state)),
         step('step3', (state: TestState) => addState('action', 'sequenced')(state))
       ];
       
@@ -117,11 +121,11 @@ describe('Fx Core - Basic Functionality', () => {
   describe('integration', () => {
     it('should work with complex workflows', async () => {
       const processInput = step('processInput', (state: TestState) => 
-        updateState({ userInput: state.userInput?.trim() })(state)
+        updateState({ userInput: state.userInput?.trim() } as Partial<TestState>)(state)
       );
 
       const generateResponse = step('generateResponse', (state: TestState) => 
-        updateState({ response: `Hello ${state.userInput}` })(state)
+        updateState({ response: `Hello ${state.userInput}` } as Partial<TestState>)(state)
       );
 
       const logAction = step('logAction', (state: TestState) => 

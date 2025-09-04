@@ -92,18 +92,27 @@ class LLMProviderImpl implements LLMProvider {
 
 /**
  * Create OpenAI provider
+ * 
+ * @param config - Configuration object containing API key and optional base URL
+ * @returns Configured OpenAI LLM provider
+ * @throws Error if API key is not provided
  */
-export function createOpenAIProvider(_config: { apiKey: string; baseURL?: string }): LLMProvider {
+export function createOpenAIProvider(config: { apiKey: string; baseURL?: string }): LLMProvider {
+  if (!config.apiKey) {
+    throw new Error('OpenAI API key is required');
+  }
+  
   return new LLMProviderImpl(
     'openai',
     async (messages: ChatMessage[], options?: LLMOptions) => {
-      return realOpenAICall(messages, options);
+      return realOpenAICall(messages, options, config);
     },
     async function* (messages: ChatMessage[], options?: LLMOptions) {
       const { OpenAI } = await import('openai');
       
       const client = new OpenAI({
-        apiKey: process.env.OPENAI_API_KEY,
+        apiKey: config.apiKey,
+        baseURL: config.baseURL,
       });
 
       const stream = await client.chat.completions.create({
@@ -134,11 +143,16 @@ export function createOpenAIProvider(_config: { apiKey: string; baseURL?: string
 /**
  * Real OpenAI API call
  */
-async function realOpenAICall(messages: ChatMessage[], options?: LLMOptions): Promise<LLMResponse> {
+async function realOpenAICall(
+  messages: ChatMessage[], 
+  options?: LLMOptions, 
+  config?: { apiKey: string; baseURL?: string }
+): Promise<LLMResponse> {
   const { OpenAI } = await import('openai');
   
   const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: config?.apiKey || process.env.OPENAI_API_KEY,
+    baseURL: config?.baseURL,
   });
 
   const response = await client.chat.completions.create({

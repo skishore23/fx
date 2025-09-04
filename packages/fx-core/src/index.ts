@@ -15,13 +15,22 @@ export type {
 export { Either } from './types';
 
 // ---------- Core Composition ----------
-import { sequence, parallel, when, fromFunction, loopWhile } from './composition';
+import { sequence, parallel, when, fromFunction, loopWhile, tryInOrder, retry, timeout, validate, log, fail, compose, composeAll, identity } from './composition';
 export {
   sequence,
   parallel,
   when,
   fromFunction as step,
-  loopWhile
+  loopWhile,
+  tryInOrder,
+  retry,
+  timeout,
+  validate,
+  log,
+  fail,
+  compose,
+  composeAll,
+  identity
 };
 
 // ---------- State Management ----------
@@ -45,7 +54,7 @@ export { safe, safeAsync } from './safe-functions';
 export { createOpenAIProvider, llmTemplateStep, promptTemplate } from './llm';
 
 // ---------- Ledger System ----------
-export { enableLogging, disableLogging, logEvent, getEvents } from './ledger';
+export { enableLogging, disableLogging, logEvent, getEvents, clearEvents, getEventsByName, getEventStats } from './ledger';
 
 // ---------- Observability ----------
 export { ObservabilityManager, appendDecision, getDecisionHistory } from './observability';
