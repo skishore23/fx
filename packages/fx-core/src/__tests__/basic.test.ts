@@ -131,6 +131,7 @@ describe('Fx Core - Basic Functionality', () => {
       const workflow = sequence([processInput, generateResponse, logAction]);
       
       const result = await workflow({ 
+        value: 0,
         userInput: '  World  ', 
         memory: [] 
       });

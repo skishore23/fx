@@ -36,7 +36,7 @@ export const sequence = <T extends BaseContext>(steps: Step<T>[]): Step<T> => {
   if (steps.length === 0) return identity<T>();
   if (steps.length === 1) return steps[0]!;
   
-  return steps.reduce(composeKleisli);
+  return steps.reduceRight(composeKleisli);
 };
 
 /**

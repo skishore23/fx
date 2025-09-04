@@ -49,7 +49,7 @@ Thank you for your interest in contributing to the Fx Framework! This document p
 - **Immutability**: Never mutate state in place
 - **Pure Functions**: Functions should not have side effects
 - **Composition**: Build complex operations from simple ones
-- **Fail-Fast**: No fallbacks, explicit error propagation
+- **Error Handling**: Direct error handling with proper propagation
 - **Type Safety**: Leverage TypeScript's type system
 
 ### Code Organization

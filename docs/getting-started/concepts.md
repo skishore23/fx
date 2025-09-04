@@ -141,9 +141,9 @@ const workflow = sequence([
 
 ## Error Handling
 
-### Fail-Fast Principle
+### Error Handling
 
-Fx follows the fail-fast principle - errors are propagated immediately:
+Fx handles errors by propagating them immediately:
 
 ```typescript
 const validate = step('validate', (state) => {
@@ -154,7 +154,7 @@ const validate = step('validate', (state) => {
 });
 ```
 
-### No Fallbacks
+### Direct Error Handling
 
 Don't hide errors with fallbacks:
 

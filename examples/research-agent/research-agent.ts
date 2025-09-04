@@ -1152,7 +1152,7 @@ const extractToolParameters = (state: ResearchState, toolName: string): Record<s
   
   switch (toolName) {
     case 'scrape_url':
-      // Extract URL from message - no fallback, let it fail if no URL provided
+      // Extract URL from message - direct error handling if no URL provided
       const urlMatch = lastMessage.match(/(?:https?:\/\/[^\s]+)/);
       if (!urlMatch?.[0]) {
         throw new Error('No valid URL found in message. Please provide a URL to scrape.');
@@ -1160,7 +1160,7 @@ const extractToolParameters = (state: ResearchState, toolName: string): Record<s
       return { url: urlMatch[0] };
       
     case 'crawl_website':
-      // Extract URL and max pages - no fallback, let it fail if no URL provided
+      // Extract URL and max pages - direct error handling if no URL provided
       const crawlUrlMatch = lastMessage.match(/(?:https?:\/\/[^\s]+)/);
       const pagesMatch = lastMessage.match(/(\d+)\s*(?:pages?|max)/);
       if (!crawlUrlMatch?.[0]) {
