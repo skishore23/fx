@@ -22,6 +22,8 @@ out/
 !packages/*/dist/**/*.js.map
 !dist/**/*.js
 !dist/**/*.js.map
+!.eslintrc.js
+!**/.eslintrc.js
 
 # VitePress
 docs/.vitepress/cache/
