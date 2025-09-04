@@ -12,9 +12,7 @@ f(x) gives you the tools to actually engineer context effectively.
 
 ## Why This Matters
 
-Most AI agent failures stem from poor context engineering. The problem isn't that LLMs can't reason, it's that we can't control what information they receive.
-
-f(x) makes context engineering **explicit, testable, and auditable**
+Most AI agent failures stem from poor context. f(x) makes context **explicit, testable, and auditable**
 
 ## Quick Start
 
