@@ -24,6 +24,8 @@ out/
 !dist/**/*.js.map
 !.eslintrc.js
 !**/.eslintrc.js
+!jest.config.js
+!**/jest.config.js
 
 # VitePress
 docs/.vitepress/cache/
