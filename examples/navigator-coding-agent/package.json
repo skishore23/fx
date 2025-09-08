@@ -1,0 +1,20 @@
+{
+  "name": "navigator-coding-agent-example",
+  "version": "1.0.0",
+  "description": "Navigator Coding Agent Example - Topological agent for autonomous code generation",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "tsx index.ts",
+    "dev": "tsx watch index.ts",
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fx/navigator": "file:../../packages/navigator",
+    "@fx/core": "file:../../packages/core"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -93,8 +93,8 @@ export const safeWithErrorHandling = <T, R>(
       const result = fn(input);
       return Either.right(result);
     } catch (error) {
-      const errorCode = (error as any)?.code;
-      const handler = errorHandlers[errorCode];
+      const errorCode = (error as Error & { code?: string })?.code;
+      const handler = errorCode ? errorHandlers[errorCode] : undefined;
       
       if (handler) {
         return handler(error);

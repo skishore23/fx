@@ -3,7 +3,7 @@
  */
 
 import { runCoreWorkflow } from './research-agent';
-import { ObservabilityManager } from '../../packages/fx-core/src';
+import { ObservabilityManager } from '../../packages/core/src';
 
 async function testResearchAgent() {
   console.log('🧪 Testing Research Agent...\n');

@@ -120,7 +120,7 @@ export const parallel = <T extends BaseContext>(
     // Throw error if any step fails
     if (failed.length > 0) {
       const error = new Error(`Parallel execution failed: ${failed.length} steps failed`);
-      (error as any).cause = failed;
+      Object.assign(error, { cause: failed });
       throw error;
     }
 
@@ -195,7 +195,7 @@ export const mergeStrategies = {
     for (const result of results) {
       for (const field of fields) {
         if (field in result) {
-          (mergedState as any)[field] = result[field];
+          (mergedState as Record<string, unknown>)[field as string] = result[field];
         }
       }
     }
@@ -336,14 +336,14 @@ export const repeat = <T extends BaseContext>(count: number, step: Step<T>): Ste
  */
 export const loopWhile = <T extends BaseContext>(
   predicate: (state: T) => boolean,
-  body: Step<any>
+  body: Step<T>
 ): Step<T> => {
   return async (state: T) => {
-    let currentState: any = state;
+    let currentState: T = state;
     while (predicate(currentState)) {
       currentState = await body(currentState);
     }
-    return currentState as T;
+    return currentState;
   };
 };
 

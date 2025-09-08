@@ -33,6 +33,7 @@ export {
   identity
 };
 
+
 // ---------- State Management ----------
 export { updateState, addState, get, set, push } from './lenses';
 
@@ -55,6 +56,24 @@ export { createOpenAIProvider, llmTemplateStep, promptTemplate } from './llm';
 
 // ---------- Ledger System ----------
 export { enableLogging, disableLogging, logEvent, getEvents, clearEvents, getEventsByName, getEventStats } from './ledger';
+
+// ---------- Durable Execution ----------
+export { 
+  checkpoint,
+  resumeFromCheckpoint,
+  pause,
+  withAutoCheckpointing,
+  executeDurable,
+  createDurableStep,
+  createPausableStep,
+  createResumableStep,
+  createMemoryPersistence,
+  createFilePersistence,
+  type Checkpoint,
+  type PersistenceIO,
+  type DurableExecutionConfig,
+  type DurableExecutionResult
+} from './durable-execution';
 
 // ---------- Observability ----------
 export { ObservabilityManager, appendDecision, getDecisionHistory } from './observability';

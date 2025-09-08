@@ -139,8 +139,8 @@ export const validateAllowlistStep = <T extends BaseContext>(
     
     // Validate file paths
     if (tool.caps.includes('fs.read') || tool.caps.includes('fs.write')) {
-      const filePath = (args as any)?.filePath;
-      if (filePath && !validateFilePath(config, filePath)) {
+      const filePath = (args as Record<string, unknown>)?.filePath;
+      if (filePath && typeof filePath === 'string' && !validateFilePath(config, filePath)) {
         violations.push({
           type: 'allowlist',
           message: `File path not allowed: ${filePath}`,

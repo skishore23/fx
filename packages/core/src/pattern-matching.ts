@@ -116,7 +116,7 @@ export const patterns = {
    */
   fieldEquals: <T extends BaseContext>(
     field: keyof T,
-    value: any
+    value: unknown
   ) => (state: T): boolean => {
     return state[field] === value;
   },

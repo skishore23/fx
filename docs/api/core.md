@@ -115,6 +115,22 @@ const agent = createAgent('my-agent', plan);
 const result = await agent.start(initialState);
 ```
 
+### `createDurableAgent(steps, config)`
+Create a durable agent with checkpointing capabilities.
+
+```typescript
+import { createDurableAgent, createMemoryPersistence } from '@fx/core';
+
+const persistence = createMemoryPersistence();
+const config = {
+  persistence,
+  checkpointInterval: 1000
+};
+
+const { agent, executeDurable, pause, resume } = createDurableAgent(steps, config);
+const result = await executeDurable(initialState);
+```
+
 ### `Agent` class
 The agent class with methods for starting and monitoring.
 
@@ -142,6 +158,71 @@ Either.fold(
   (error) => console.error('Error:', error.message),
   (value) => console.log('Success:', value)
 );
+```
+
+### `safe` and `safeAsync`
+Wrap potentially throwing functions into Either monads.
+
+```typescript
+import { safe, safeAsync } from '@fx/core';
+
+// Synchronous safe wrapper
+const safeParse = safe((json: string) => JSON.parse(json));
+const result = safeParse('{"valid": "json"}');
+
+// Asynchronous safe wrapper
+const safeApiCall = safeAsync(async (url: string) => {
+  const response = await fetch(url);
+  return response.json();
+});
+const apiResult = await safeApiCall('https://api.example.com/data');
+```
+
+## Durable Execution
+
+### `checkpoint(persistence, reason?)`
+Create a checkpoint of the current state.
+
+```typescript
+import { checkpoint, createMemoryPersistence } from '@fx/core';
+
+const persistence = createMemoryPersistence();
+const checkpointStep = checkpoint(persistence, 'saving progress');
+```
+
+### `resumeFromCheckpoint(persistence, checkpointId, extras?)`
+Resume execution from a saved checkpoint.
+
+```typescript
+import { resumeFromCheckpoint } from '@fx/core';
+
+const resumeStep = resumeFromCheckpoint(persistence, 'checkpoint-123', {
+  additionalData: 'new data'
+});
+```
+
+### `pause(persistence, reason?)`
+Pause execution and save current state.
+
+```typescript
+import { pause } from '@fx/core';
+
+const pauseStep = pause(persistence, 'user requested pause');
+```
+
+### `executeDurable(step, initialState, config)`
+Execute a step with automatic checkpointing.
+
+```typescript
+import { executeDurable, createMemoryPersistence } from '@fx/core';
+
+const persistence = createMemoryPersistence();
+const config = {
+  persistence,
+  checkpointInterval: 1000
+};
+
+const result = await executeDurable(myStep, initialState, config);
 ```
 
 ## Types

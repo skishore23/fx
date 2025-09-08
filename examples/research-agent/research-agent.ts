@@ -56,7 +56,7 @@ import {
   disableLogging,
   logEvent,
   getEvents
-} from '../../packages/fx-core/src';
+} from '../../packages/core/src';
 import { z } from 'zod';
 import Firecrawl from '@mendable/firecrawl-js';
 import * as dotenv from 'dotenv';

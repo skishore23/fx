@@ -96,7 +96,7 @@ function deepCloneCustom<T>(value: T, seen = new WeakMap()): T {
     const clonedObj = {} as T;
     seen.set(value, clonedObj);
     for (const [key, val] of Object.entries(value)) {
-      (clonedObj as any)[key] = deepCloneCustom(val, seen);
+      (clonedObj as Record<string, unknown>)[key] = deepCloneCustom(val, seen);
     }
     return clonedObj;
   }
@@ -106,7 +106,7 @@ function deepCloneCustom<T>(value: T, seen = new WeakMap()): T {
     const clonedObj = Object.create(Object.getPrototypeOf(value));
     seen.set(value, clonedObj as T);
     for (const [key, val] of Object.entries(value)) {
-      (clonedObj as any)[key] = deepCloneCustom(val, seen);
+      (clonedObj as Record<string, unknown>)[key] = deepCloneCustom(val, seen);
     }
     return clonedObj as T;
   } catch {

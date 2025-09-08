@@ -12,8 +12,8 @@ export interface ToolDefinition<T extends BaseContext = BaseContext> {
   name: string;
   description: string;
   execute: Step<T>;
-  schema?: any; // Zod schema for validation
-  validateInput?: (input: any) => any; // Input validation function
+  schema?: unknown; // Zod schema for validation
+  validateInput?: (input: unknown) => unknown; // Input validation function
 }
 
 /**
@@ -62,7 +62,7 @@ export class EnhancedToolRegistry<T extends BaseContext = BaseContext> {
   /**
    * Execute a tool by name with optional input validation
    */
-  async execute(name: string, state: T, input?: any): Promise<T> {
+  async execute(name: string, state: T, input?: unknown): Promise<T> {
     const tool = this.get(name);
     if (!tool) {
       throw new Error(`Tool not found: ${name}`);
@@ -70,9 +70,10 @@ export class EnhancedToolRegistry<T extends BaseContext = BaseContext> {
     
     // Validate input if schema is provided
     if (tool.schema && input) {
-      const validationResult = tool.schema.safeParse(input);
+      const schema = tool.schema as { safeParse: (input: unknown) => { success: boolean; data?: unknown; error?: { message: string } } };
+      const validationResult = schema.safeParse(input);
       if (!validationResult.success) {
-        throw new Error(`Invalid input for tool ${name}: ${validationResult.error.message}`);
+        throw new Error(`Invalid input for tool ${name}: ${validationResult.error?.message || 'Unknown validation error'}`);
       }
     }
     
@@ -120,8 +121,8 @@ export const createTool = <T extends BaseContext = BaseContext>(
   name: string,
   description: string,
   execute: Step<T>,
-  schema?: any,
-  validateInput?: (input: any) => any
+  schema?: unknown,
+  validateInput?: (input: unknown) => unknown
 ): ToolDefinition<T> => ({
   name,
   description,
@@ -133,31 +134,33 @@ export const createTool = <T extends BaseContext = BaseContext>(
 /**
  * Create a tool with schema validation and type safety
  */
-export const createValidatedTool = <T extends BaseContext = BaseContext, TInput = any>(
+export const createValidatedTool = <T extends BaseContext = BaseContext, TInput = unknown>(
   name: string,
   description: string,
-  schema: any, // Zod schema
+  schema: unknown, // Zod schema
   execute: (input: TInput, state: T) => Promise<T> | T
 ): ToolDefinition<T> => ({
   name,
   description,
   execute: async (state: T) => {
     // Extract input from state or use default
-    const input = (state as any).toolInput || {};
+    const input = (state as Record<string, unknown>).toolInput as TInput || {} as TInput;
     
     // Validate input
-    const validationResult = schema.safeParse(input);
+    const zodSchema = schema as { safeParse: (input: unknown) => { success: boolean; data?: unknown; error?: { message: string } } };
+    const validationResult = zodSchema.safeParse(input);
     if (!validationResult.success) {
-      throw new Error(`Invalid input for tool ${name}: ${validationResult.error.message}`);
+      throw new Error(`Invalid input for tool ${name}: ${validationResult.error?.message || 'Unknown validation error'}`);
     }
     
-    return await execute(validationResult.data, state);
+    return await execute(validationResult.data as TInput, state);
   },
   schema,
-  validateInput: (input: any) => {
-    const result = schema.safeParse(input);
+  validateInput: (input: unknown) => {
+    const zodSchema = schema as { safeParse: (input: unknown) => { success: boolean; data?: unknown; error?: { message: string } } };
+    const result = zodSchema.safeParse(input);
     if (!result.success) {
-      throw new Error(`Invalid input: ${result.error.message}`);
+      throw new Error(`Invalid input: ${result.error?.message || 'Unknown validation error'}`);
     }
     return result.data;
   }

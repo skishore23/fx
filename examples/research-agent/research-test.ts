@@ -4,7 +4,7 @@
  */
 
 import { createToolRegistry } from './research-agent';
-import { ObservabilityManager } from '../../packages/fx-core/src';
+import { ObservabilityManager } from '../../packages/core/src';
 
 async function testDynamicGenericResearch() {
   console.log('🚀 Testing Completely Dynamic Research Agent...\n');
