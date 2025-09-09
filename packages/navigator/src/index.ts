@@ -24,63 +24,10 @@ export type {
 // ---------- Navigator API ----------
 export { 
   NavigatorAgent,
-  createAgent,
-  composeAgent,
-  when,
+  createNavigatorAgent,
   step,
-  conditionalStep,
-  createDurableAgent,
-  createPausableAgent,
-  createResumableAgent
+  conditionalStep
 } from './navigator';
 
-// ---------- Re-export core functionality for topological agents ----------
-export {
-  // Core composition
-  sequence,
-  parallel,
-  loopWhile,
-  retry,
-  timeout,
-  validate,
-  log,
-  // LLM and prompts for intelligent decision-making
-  createOpenAIProvider,
-  llmTemplateStep,
-  promptTemplate,
-  // Tools for agent capabilities
-  createToolRegistry,
-  createValidatedTool,
-  // Patterns for autonomous behavior
-  createReActPattern,
-  createChainOfThoughtPattern,
-  // State management
-  updateState,
-  addState,
-  get,
-  set,
-  push,
-  // Memory and observability
-  enableLogging,
-  disableLogging,
-  logEvent,
-  getEvents,
-  // Durable execution
-  checkpoint,
-  resumeFromCheckpoint,
-  pause,
-  withAutoCheckpointing,
-  executeDurable,
-  createDurableStep,
-  createPausableStep,
-  createResumableStep,
-  createMemoryPersistence,
-  createFilePersistence,
-  type Checkpoint,
-  type PersistenceIO,
-  type DurableExecutionConfig,
-  type DurableExecutionResult,
-  // Base types
-  BaseContext,
-  Step
-} from '@fx/core';
+// Only re-export essential types that navigator depends on
+export type { BaseContext, Step } from '@fx/core';

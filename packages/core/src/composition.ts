@@ -4,6 +4,8 @@
  */
 
 import { Step, BaseContext } from './types';
+import { logEvent, logStateEvent, logStep, logStateStep } from './ledger';
+import { defaultJSONLLogger } from './observability';
 
 /**
  * Identity morphism - fundamental categorical construct
@@ -282,6 +284,46 @@ export const log = <T extends BaseContext>(message?: string): Step<T> => {
 };
 
 /**
+ * Create a step that logs using the ledger system
+ */
+export const logInfo = <T extends BaseContext>(message: string, data?: unknown): Step<T> => {
+  return async (state: T) => {
+    logEvent('info', { message, data });
+    return state;
+  };
+};
+
+/**
+ * Create a step that logs warnings using the ledger system
+ */
+export const logWarn = <T extends BaseContext>(message: string, data?: unknown): Step<T> => {
+  return async (state: T) => {
+    logEvent('warn', { message, data });
+    return state;
+  };
+};
+
+/**
+ * Create a step that logs errors using the ledger system
+ */
+export const logErrorStep = <T extends BaseContext>(message: string, data?: unknown): Step<T> => {
+  return async (state: T) => {
+    logEvent('error', { message, data });
+    return state;
+  };
+};
+
+/**
+ * Create a step that logs debug information using the ledger system
+ */
+export const logDebug = <T extends BaseContext>(message: string, data?: unknown): Step<T> => {
+  return async (state: T) => {
+    logEvent('debug', { message, data });
+    return state;
+  };
+};
+
+/**
  * Create a step that validates state (guard morphism)
  */
 export const validate = <T extends BaseContext>(
@@ -446,4 +488,108 @@ export const updateValue = <T extends BaseContext>(
     const newValue = updater(currentValue);
     return { ...state, [key]: newValue } as T;
   };
+};
+
+// ---------- Unified Step Logging System ----------
+
+/**
+ * Step execution metadata for logging
+ */
+export interface StepExecutionInfo {
+  readonly stepName: string;
+  readonly runtime?: 'flow' | 'navigator' | 'core';
+  readonly workflowName?: string;
+  readonly startTime: number;
+  readonly endTime?: number;
+  readonly duration?: number;
+  readonly status: 'running' | 'completed' | 'failed';
+  readonly error?: string;
+}
+
+/**
+ * Wrap any step with automatic logging using functional composition
+ * This is the pure functional way to add logging to any step
+ */
+export const withLogging = <T extends BaseContext>(
+  step: Step<T>,
+  stepName: string,
+  options?: {
+    runtime?: 'flow' | 'navigator' | 'core';
+    workflowName?: string;
+    logToConsole?: boolean;
+  }
+): Step<T> => {
+  return sequence([
+    // Log step start
+    logStep('step-start', { stepName, runtime: options?.runtime || 'core' }),
+    logStateStep('step-start', stepName, options?.runtime || 'core', {
+      workflowName: options?.workflowName,
+      stepType: 'execution'
+    }),
+    
+    // Execute the actual step
+    step,
+    
+    // Log step success
+    logStep('step-success', { stepName, runtime: options?.runtime || 'core' }),
+    logStateStep('step-success', stepName, options?.runtime || 'core', {
+      workflowName: options?.workflowName,
+      stepType: 'success'
+    })
+  ]);
+};
+
+/**
+ * Create a step with built-in logging using functional composition
+ * This is the pure functional way to create logged steps
+ */
+export const createLoggedStep = <T extends BaseContext>(
+  stepName: string,
+  stepFunction: (state: T) => Promise<T> | T,
+  options?: {
+    runtime?: 'flow' | 'navigator' | 'core';
+    workflowName?: string;
+    logToConsole?: boolean;
+  }
+): Step<T> => {
+  const baseStep: Step<T> = async (state: T) => {
+    const result = stepFunction(state);
+    return result instanceof Promise ? await result : result;
+  };
+
+  return withLogging(baseStep, stepName, options);
+};
+
+/**
+ * Create a step from function with automatic logging
+ * This replaces the basic fromFunction with logging
+ */
+export const fromFunctionWithLogging = <T extends BaseContext>(
+  fn: (state: T) => Promise<T> | T,
+  stepName?: string,
+  options?: {
+    runtime?: 'flow' | 'navigator' | 'core';
+    workflowName?: string;
+    logToConsole?: boolean;
+  }
+): Step<T> => {
+  const name = stepName || fn.name || 'anonymous-step';
+  return createLoggedStep(name, fn, options);
+};
+
+/**
+ * Wrap multiple steps with logging using functional composition
+ * This applies logging to all steps in a sequence
+ */
+export const withLoggingAll = <T extends BaseContext>(
+  steps: Array<{ step: Step<T>; name: string }>,
+  options?: {
+    runtime?: 'flow' | 'navigator' | 'core';
+    workflowName?: string;
+    logToConsole?: boolean;
+  }
+): Step<T>[] => {
+  return steps.map(({ step, name }) => 
+    withLogging(step, name, options)
+  );
 };

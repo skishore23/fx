@@ -21,7 +21,7 @@ Get up and running in under a minute! Choose your runtime:
 
 ```typescript
 // quickstart-core.ts
-import { step, sequence, updateState, createPlan, createAgent } from '@fx/core';
+import { step, sequence, updateState, Agent, logAction } from '@fx/core';
 
 type Msg = { role: 'user'|'assistant'; content: string };
 interface Ctx {
@@ -42,8 +42,12 @@ const reply = step<Ctx>('reply', (s) => {
   })(s);
 });
 
-const plan = createPlan('hello-core', [sequence([readGoal, reply])]);
-const agent = createAgent<Ctx>('hello-core', plan);
+const logStep = step<Ctx>('logStep', (s) =>
+  logAction(`Processed: ${s.goal}`)(s)
+);
+
+const workflow = sequence([readGoal, reply, logStep]);
+const agent = new Agent(workflow);
 
 agent.start({ conversation: [{ role: 'user', content: 'Hello!' }], goal: '' })
   .then(final => console.log('✅ Done:', final))
@@ -68,7 +72,8 @@ agent.start({ conversation: [{ role: 'user', content: 'Hello!' }], goal: '' })
 
 ```typescript
 // quickstart-navigator.ts
-import { createAgent, when, step, updateState } from '@fx/navigator';
+import { createNavigatorAgent, step } from '@fx/navigator';
+import { updateState, logAction } from '@fx/core';
 
 interface NCtx { 
   conversation: {role:string;content:string}[]; 
@@ -77,16 +82,19 @@ interface NCtx {
 }
 
 const read = step<NCtx>('read',
-  when(c => !c.goal && c.conversation.length > 0),
-  s => updateState({ goal: s.conversation.at(-1)?.content })(s)
+  (c) => !c.goal && c.conversation.length > 0, // guard
+  (s) => updateState({ goal: s.conversation.at(-1)?.content })(s)
 );
 
 const finish = step<NCtx>('finish',
-  when(c => !!c.goal && !c.done),
-  s => updateState({ done: true })(s)
+  (c) => !!c.goal && !c.done, // guard
+  (s) => {
+    const newState = updateState({ done: true })(s);
+    return logAction(`Completed: ${s.goal}`)(newState);
+  }
 );
 
-const nav = createAgent<NCtx>([read, finish]);
+const nav = createNavigatorAgent<NCtx>([read, finish]);
 
 nav.run({ conversation: [{ role:'user', content:'Plan my day' }] })
   .then(r => console.log('▶ plan:', r.plan, '\n✅ ctx:', r.ctx));
@@ -119,8 +127,8 @@ nav.run({ conversation: [{ role:'user', content:'Plan my day' }] })
 
 | Package         | Exports (non-exhaustive)                                                                                              |
 | --------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `@fx/core`      | `step`, `sequence`, `parallel`, `updateState`, `addState`, `createPlan`, `createAgent`, `Either`, `safe`, `safeAsync` |
-| `@fx/navigator` | `createAgent`, `step`, `when`, `updateState`, `addState`                                                              |
+| `@fx/core`      | `step`, `sequence`, `parallel`, `updateState`, `logAction`, `Agent`, `Either`, `safe`, `safeAsync` |
+| `@fx/navigator` | `createNavigatorAgent`, `step`                                                                                        |
 
 **Requirements:** Node ≥ 18, TypeScript ≥ 5.0. Works with both ESM and CommonJS.
 
@@ -206,15 +214,15 @@ const generateResponse = step('generateResponse', (state: MyAgentState) => {
 });
 
 // Log action
-const logAction = step('logAction', (state: MyAgentState) => {
-  return addState('action', `Processed: ${state.currentGoal}`)(state);
+const logActionStep = step('logAction', (state: MyAgentState) => {
+  return logAction(`Processed: ${state.currentGoal}`)(state);
 });
 
 // Main workflow
 const agentWorkflow = sequence([
   processUserInput,
   generateResponse,
-  logAction
+  logActionStep
 ]);
 ```
 
@@ -225,10 +233,10 @@ const agentWorkflow = sequence([
 Create your agent using the workflow:
 
 ```typescript
-import { createPlan, createAgent } from '@fx/core';
+import { Agent } from '@fx/core';
 
-// Create the agent plan
-const plan = createPlan('my-agent', [
+// Create the complete workflow
+const completeWorkflow = sequence([
   step('initialize', (state: MyAgentState) => {
     console.log('🚀 My Agent started!');
     return state;
@@ -243,7 +251,7 @@ const plan = createPlan('my-agent', [
 ]);
 
 // Create the agent
-const myAgent = createAgent('my-agent', plan);
+const myAgent = new Agent(completeWorkflow);
 
 // Run the agent
 export const runMyAgent = async () => {
@@ -270,11 +278,12 @@ export const runMyAgent = async () => {
 For topological execution with guard-driven steps:
 
 ```typescript
-import { createAgent, when, step, updateState } from '@fx/navigator';
+import { createNavigatorAgent, step } from '@fx/navigator';
+import { updateState, logAction } from '@fx/core';
 
 // Define steps with guards
 const analyzeInput = step('analyzeInput', 
-  when(ctx => !!ctx.conversation?.length && !ctx.analyzed),
+  (ctx) => !!ctx.conversation?.length && !ctx.analyzed, // guard
   async (state: MyAgentState) => {
     console.log('🔍 Analyzing input...');
     return updateState({ 
@@ -285,7 +294,7 @@ const analyzeInput = step('analyzeInput',
 );
 
 const processRequest = step('processRequest',
-  when(ctx => !!ctx.analyzed && !ctx.processed),
+  (ctx) => !!ctx.analyzed && !ctx.processed, // guard
   async (state: MyAgentState) => {
     console.log('⚙️ Processing request...');
     return updateState({ 
@@ -296,7 +305,7 @@ const processRequest = step('processRequest',
 );
 
 const generateResponse = step('generateResponse',
-  when(ctx => !!ctx.processed && !ctx.responseGenerated),
+  (ctx) => !!ctx.processed && !ctx.responseGenerated, // guard
   async (state: MyAgentState) => {
     console.log('📝 Generating response...');
     return updateState({ 
@@ -307,7 +316,7 @@ const generateResponse = step('generateResponse',
 );
 
 // Create navigator agent
-const navigatorAgent = createAgent<MyAgentState>([analyzeInput, processRequest, generateResponse]);
+const navigatorAgent = createNavigatorAgent<MyAgentState>([analyzeInput, processRequest, generateResponse]);
 
 // Run the agent
 export const runNavigatorAgent = async () => {

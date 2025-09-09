@@ -59,29 +59,50 @@ const newState = updateState({
 })(state);
 ```
 
-### `addState(key, value)`
-Add a value to an array field in state.
+### `logAction(content, metadata?)`
+Log an action to memory.
 
 ```typescript
-const newState = addState('memory', 'New entry')(state);
+const newState = logAction('User updated profile')(state);
+```
+
+### `logObservation(content, metadata?)`
+Log an observation to memory.
+
+```typescript
+const newState = logObservation('File read successfully')(state);
+```
+
+### `logOutcome(content, metadata?)`
+Log an outcome to memory.
+
+```typescript
+const newState = logOutcome('Task completed successfully')(state);
+```
+
+### `logError(content, metadata?)`
+Log an error to memory.
+
+```typescript
+const newState = logError('Failed to read file')(state);
 ```
 
 ## Patterns
 
-### `createReActPattern(name)`
+### `createReActPattern(llmProvider, tools?)`
 Create a ReAct pattern for reasoning and acting.
 
 ```typescript
-const reactPattern = createReActPattern('reasoning-agent');
-const result = await reactPattern(state);
+const reactPattern = createReActPattern(llmProvider, ['tool1', 'tool2']);
+const result = await reactPattern.workflow(state);
 ```
 
-### `createChainOfThoughtPattern(name)`
+### `createChainOfThoughtPattern(llmProvider)`
 Create a Chain of Thought pattern for step-by-step reasoning.
 
 ```typescript
-const cotPattern = createChainOfThoughtPattern('thinking-agent');
-const result = await cotPattern(state);
+const cotPattern = createChainOfThoughtPattern(llmProvider);
+const result = await cotPattern.workflow(state);
 ```
 
 ### `createPattern(predicate, action)`
@@ -96,30 +117,29 @@ const customPattern = createPattern(
 
 ## High-Level API
 
-### `createPlan(name, steps)`
-Create a plan from a sequence of steps.
+### `Agent` class
+The agent class with methods for starting and monitoring.
 
 ```typescript
-const plan = createPlan('my-plan', [
+import { Agent, step, sequence } from '@fx/core';
+
+const workflow = sequence([
   step('init', (state) => state),
   step('process', processInput),
   step('respond', generateResponse)
 ]);
+
+const agent = new Agent(workflow);
+await agent.start(initialState);
+console.log(agent.getStatus()); // 'running' | 'completed' | 'error'
+console.log(agent.getState()); // current state
 ```
 
-### `createAgent(name, plan)`
-Create an agent from a plan.
+### Durable Execution
+Create durable agents with checkpointing capabilities.
 
 ```typescript
-const agent = createAgent('my-agent', plan);
-const result = await agent.start(initialState);
-```
-
-### `createDurableAgent(steps, config)`
-Create a durable agent with checkpointing capabilities.
-
-```typescript
-import { createDurableAgent, createMemoryPersistence } from '@fx/core';
+import { executeDurable, createMemoryPersistence } from '@fx/core';
 
 const persistence = createMemoryPersistence();
 const config = {
@@ -127,18 +147,7 @@ const config = {
   checkpointInterval: 1000
 };
 
-const { agent, executeDurable, pause, resume } = createDurableAgent(steps, config);
-const result = await executeDurable(initialState);
-```
-
-### `Agent` class
-The agent class with methods for starting and monitoring.
-
-```typescript
-const agent = new Agent(plan);
-await agent.start(initialState);
-console.log(agent.getStatus()); // 'running' | 'completed' | 'error'
-console.log(agent.getState()); // current state
+const result = await executeDurable(workflow, initialState, config);
 ```
 
 ## Error Handling

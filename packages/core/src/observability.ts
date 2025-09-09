@@ -5,8 +5,22 @@
  */
 
 import { BaseContext, Step } from './types';
-import { Tool } from './router';
-import { RouterCandidate } from './router';
+import { writeFileSync, appendFileSync, existsSync, mkdirSync } from 'fs';
+import { join } from 'path';
+
+// ---------- Tool and Router Types ----------
+
+export interface Tool {
+  readonly name: string;
+  readonly description: string;
+  readonly risk: 'low' | 'medium' | 'high';
+}
+
+export interface RouterCandidate {
+  readonly tool: Tool;
+  readonly score: number;
+  readonly reason: 'pattern' | 'classifier' | 'fallback';
+}
 
 // ---------- Observability Types ----------
 
@@ -633,6 +647,116 @@ export const getDecisionHistoryStep = <T extends BaseContext>(): Step<T> => {
   };
 };
 
+// ---------- JSONL File Logger ----------
+
+/**
+ * JSONL File Logger for automatic logging
+ * Logs all events to a JSONL file for easy analysis
+ */
+export class JSONLLogger {
+  private logPath: string;
+  private logDir: string;
+
+  constructor(logDir: string = './logs') {
+    this.logDir = logDir;
+    this.logPath = join(logDir, 'fx-events.jsonl');
+    
+    // Ensure log directory exists
+    if (!existsSync(this.logDir)) {
+      mkdirSync(this.logDir, { recursive: true });
+    }
+  }
+
+  /**
+   * Log an event to JSONL file
+   */
+  logEvent(event: {
+    type: string;
+    timestamp: string;
+    data: unknown;
+    id?: string;
+  }): void {
+    const logEntry = {
+      id: event.id || `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      type: event.type,
+      timestamp: event.timestamp,
+      data: event.data
+    };
+
+    const jsonLine = JSON.stringify(logEntry) + '\n';
+    appendFileSync(this.logPath, jsonLine, 'utf8');
+  }
+
+  /**
+   * Log step execution to JSONL file
+   */
+  logStepExecution(stepInfo: {
+    stepName: string;
+    runtime: 'flow' | 'navigator' | 'core';
+    workflowName?: string;
+    startTime: number;
+    endTime: number;
+    success: boolean;
+    error?: string;
+    context?: unknown;
+  }): void {
+    this.logEvent({
+      type: 'step_execution',
+      timestamp: new Date().toISOString(),
+      data: {
+        stepName: stepInfo.stepName,
+        runtime: stepInfo.runtime,
+        workflowName: stepInfo.workflowName,
+        duration: stepInfo.endTime - stepInfo.startTime,
+        success: stepInfo.success,
+        error: stepInfo.error,
+        context: stepInfo.context
+      }
+    });
+  }
+
+  /**
+   * Log workflow/agent execution to JSONL file
+   */
+  logWorkflowExecution(workflowInfo: {
+    name: string;
+    runtime: 'flow' | 'navigator';
+    startTime: number;
+    endTime: number;
+    success: boolean;
+    error?: string;
+    stepCount?: number;
+  }): void {
+    this.logEvent({
+      type: 'workflow_execution',
+      timestamp: new Date().toISOString(),
+      data: {
+        name: workflowInfo.name,
+        runtime: workflowInfo.runtime,
+        duration: workflowInfo.endTime - workflowInfo.startTime,
+        success: workflowInfo.success,
+        error: workflowInfo.error,
+        stepCount: workflowInfo.stepCount
+      }
+    });
+  }
+
+  /**
+   * Get log file path
+   */
+  getLogPath(): string {
+    return this.logPath;
+  }
+
+  /**
+   * Clear log file
+   */
+  clearLogs(): void {
+    writeFileSync(this.logPath, '', 'utf8');
+  }
+}
+
 // ---------- Default Instance ----------
 
 export const defaultObservabilityManager = new ObservabilityManager();
+export const defaultJSONLLogger = new JSONLLogger();

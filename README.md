@@ -23,7 +23,7 @@ npm install @fx/core
 ```
 
 ```typescript
-import { step, sequence, createPlan, createAgent } from '@fx/core';
+import { step, sequence, Agent } from '@fx/core';
 
 // Every step is Context → Context
 const analyzeStep = step('analyze', (context) => ({
@@ -38,9 +38,9 @@ const generateStep = step('generate', (context) => ({
   confidence: 0.95
 }));
 
-// Create a plan and agent
-const plan = createPlan('my-agent', [sequence([analyzeStep, generateStep])]);
-const agent = createAgent('my-agent', plan);
+// Create workflow and agent
+const workflow = sequence([analyzeStep, generateStep]);
+const agent = new Agent(workflow);
 
 // Run with explicit context
 const result = await agent.start({ 
@@ -103,14 +103,14 @@ const safeOperation = step('safeOperation', (context) => {
 Immutable state transformations with lenses.
 
 ```typescript
-import { updateState, addState } from '@fx/core';
+import { updateState, logAction } from '@fx/core';
 
 const updateUser = step('updateUser', (context) => 
   updateState({ lastActive: Date.now() })(context)
 );
 
 const addMemory = step('addMemory', (context) =>
-  addState('memory', 'User updated')(context)
+  logAction('User updated')(context)
 );
 ```
 
@@ -121,10 +121,10 @@ Common AI agent patterns ready to use.
 import { createReActPattern, createChainOfThoughtPattern } from '@fx/core';
 
 // ReAct pattern for reasoning and acting
-const reactPattern = createReActPattern('reasoning-agent');
+const reactPattern = createReActPattern(llmProvider, ['tool1', 'tool2']);
 
 // Chain of thought pattern
-const cotPattern = createChainOfThoughtPattern('thinking-agent');
+const cotPattern = createChainOfThoughtPattern(llmProvider);
 ```
 
 ### 5. **Observability & logging**
@@ -210,7 +210,7 @@ const result = agent.replayFrom(checkpoint);
 Here's a practical agent that demonstrates explicit context:
 
 ```typescript
-import { step, sequence, createPlan, createAgent } from '@fx/core';
+import { step, sequence, Agent } from '@fx/core';
 
 // Each step is Context → Context
 const readCodeStep = step('readCode', async (context) => {
@@ -243,13 +243,13 @@ const generateReviewStep = step('generateReview', (context) => {
   };
 });
 
-// Create plan and agent
-const plan = createPlan('code-reviewer', [sequence([
+// Create workflow and agent
+const workflow = sequence([
   readCodeStep,
   analyzeCodeStep,
   generateReviewStep
-])]);
-const codeReviewAgent = createAgent('code-reviewer', plan);
+]);
+const codeReviewAgent = new Agent(workflow);
 
 // Run with explicit context
 const result = await codeReviewAgent.start({

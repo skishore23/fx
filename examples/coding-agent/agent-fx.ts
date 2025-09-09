@@ -15,7 +15,8 @@ import {
   get,
   push,
   updateState,
-  addState,
+  logObservation,
+  logAction,
   
   // LLM Provider
   createOpenAIProvider,
@@ -35,11 +36,13 @@ import {
   createPattern,
   patterns,
   
+  // ReAct Patterns
+  createReActPattern,
+  createChainOfThoughtPattern,
+  
   // Types
   BaseContext,
   Step,
-  createPlan,
-  createAgent,
   Either,
   
   // Ledger System
@@ -112,6 +115,18 @@ interface AgentState extends BaseContext {
   operation?: string;
   searchResults?: string;
   searchPattern?: string;
+  // ReAct pattern properties
+  currentGoal: string;
+  plan: Array<{
+    step: number;
+    action: string;
+    reasoning: string;
+    status: 'pending' | 'completed' | 'failed';
+    result?: string;
+  }>;
+  currentStep: number;
+  maxIterations: number;
+  iterationCount: number;
   [key: string]: unknown;
 }
 
@@ -224,14 +239,14 @@ const createToolStep = <T>(
         const errorState = onError ? onError(error) : { error: error.message };
         return sequence([
           step('updateError', (s) => updateState(errorState)(s)),
-          step('logError', (s) => addState('observation', `Error in ${name}: ${error.message}`)(s))
+          step('logError', (s) => logObservation(`Error in ${name}: ${error.message}`)(s))
         ])(state);
       },
       (value) => {
         const successState = onSuccess(value);
         return sequence([
           step('updateResult', (s) => updateState(successState)(s)),
-          step('logAction', (s) => addState('action', `${name} completed successfully`)(s))
+          step('logAction', (s) => logAction(`${name} completed successfully`)(s))
         ])(state);
       }
     );
@@ -277,7 +292,7 @@ const createToolRegistry = () => {
           const securityStep = step('security_block', (s) => 
             sequence([
               step('updateError', (s) => updateState({ error: `Command blocked for security: ${input.command}` } as Partial<AgentState>)(s as AgentState)),
-              step('logError', (s) => addState('observation', `Command blocked for security: ${input.command}`)(s))
+              step('logError', (s) => logObservation(`Command blocked for security: ${input.command}`)(s))
             ])(s)
           );
           return await securityStep(state) as AgentState;
@@ -536,7 +551,7 @@ const selectTools = step('selectTools', (state: AgentState) => {
     const decisionId = state.observability.recordDecision({
       input: lastMessage,
       patternsMatched: toolsToUse.length > 0 ? toolsToUse : [],
-      routerCandidates: scores.map(s => ({ tool: s.tool as any, score: s.score, reason: 'scoring' })),
+      routerCandidates: scores.map(s => ({ tool: s.tool as any, score: s.score, reason: 'pattern' as const })),
       chosen: toolsToUse as any[],
       args: { tools: toolsToUse },
       outcome: 'ok',
@@ -584,12 +599,12 @@ const runInference = step('runInference', async (state: AgentState) => {
       console.log('⚠️ LLM call failed:', error.message);
       return sequence([
         step('updateResponse', (s) => updateState({ generateResponseResponse: 'I understand your request. Let me help you with that using the available tools.' } as Partial<AgentState>)(s as AgentState)),
-        step('logObservation', (s) => addState('observation', `Generated default response for: ${lastMessage?.content}`)(s))
+        step('logObservation', (s) => logObservation(`Generated default response for: ${lastMessage?.content}`)(s))
       ])(state);
     },
     (llmResult) => sequence([
       step('updateResponse', (s) => updateState({ generateResponseResponse: (llmResult as any).systemResponse } as Partial<AgentState>)(s as AgentState)),
-      step('logObservation', (s) => addState('observation', `Generated response for: ${lastMessage?.content}`)(s))
+      step('logObservation', (s) => logObservation(`Generated response for: ${lastMessage?.content}`)(s))
     ])(llmResult)
   );
 });
@@ -810,9 +825,19 @@ const handleError = step('handleError', (state: AgentState) => {
 });
 
 // ============================================================================
-// CORE WORKFLOW
+// REACT PATTERN FOR CODING AGENT
 // ============================================================================
 
+// Create ReAct pattern for coding tasks
+const createCodingReActPattern = (llmProvider: any) => {
+  return createReActPattern(llmProvider, ['read_file', 'list_files', 'bash_command', 'edit_file', 'code_search']);
+};
+
+// ============================================================================
+// WORKFLOWS
+// ============================================================================
+
+// Core workflow using ReAct pattern
 const coreWorkflow = sequence([
   selectTools,
   runInference,
@@ -820,10 +845,7 @@ const coreWorkflow = sequence([
   updateConversation
 ]);
 
-// ============================================================================
-// INTERACTIVE AGENT
-// ============================================================================
-
+// Interactive conversation loop
 const conversationLoop = sequence([
   getUserInput,
   checkExit,
@@ -836,26 +858,22 @@ const conversationLoop = sequence([
   ]))
 ]);
 
-const plan = createPlan('coding-agent', [
-  step('initialize', (state: AgentState) => {
-    console.log('Type your message and press Enter. Type "exit" to quit.\n');
-    return state;
-  }),
-  loopWhile(
-    (state: AgentState) => !(get('shouldExit')(state) as boolean),
-    conversationLoop
-  ),
-  step('goodbye', (state: AgentState) => {
-    console.log('👋 Goodbye!');
-    return state;
-  })
-]);
-
 // ============================================================================
 // EXPORTS
 // ============================================================================
 
-export const codingAgent = createAgent('coding-agent', plan);
+// Main coding agent workflow (uses ReAct pattern)
+export const codingWorkflow = sequence([
+  step('initialize', (state: AgentState) => {
+    console.log('🚀 Starting ReAct Coding Agent...');
+    return state;
+  }),
+  // Use ReAct pattern for reasoning and acting
+  step('react_reasoning', async (state: AgentState) => {
+    const reactPattern = createCodingReActPattern(llmProvider);
+    return await reactPattern.workflow(state);
+  })
+]);
 
 // Helper function for testing - runs core workflow without interactive loop
 export async function runCoreWorkflow(state: AgentState): Promise<AgentState> {
@@ -881,17 +899,20 @@ export async function runCodingAgent(verbose = false) {
     conversation: [],
     currentWorkingDirectory: process.cwd(),
     verbose,
+    // ReAct pattern properties
     currentGoal: '',
     plan: [],
     currentStep: 0,
     maxIterations: 10,
     iterationCount: 0,
+    // Observability
     observability: new ObservabilityManager(),
     decisionHistory: []
   };
   
   try {
-    await codingAgent.start(initialState);
+    // Use conversation loop for interactive mode
+    await conversationLoop(initialState);
     
     // Show ledger events after completion
     if (verbose) {

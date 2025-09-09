@@ -8,17 +8,14 @@ import {
   Step, 
   sequence, 
   retry, 
-  timeout, 
-  executeDurable,
-  createDurableStep,
-  createPausableStep,
-  createResumableStep,
+  timeout,
+  safe,
   safeAsync,
-  Either,
-  type DurableExecutionConfig,
-  type DurableExecutionResult,
-  type PersistenceIO
-} from '@fx/core';
+  withLogging,
+  logEvent,
+  getEvents,
+  defaultJSONLLogger,
+  Either} from '@fx/core';
 import { 
   FlowStep, 
   FlowWorkflow, 
@@ -42,11 +39,28 @@ export class FlowExecutor<T extends BaseContext> {
   ) {}
 
   /**
-   * Execute workflow using core's functional composition with Either monads
+   * Execute workflow using core's functional composition
+   * Uses Either monad for error handling
    */
   async execute(initialState: T): Promise<ExecutionResult<T>> {
     const startTime = Date.now();
     const history: ExecutionHistoryEntry[] = [];
+
+    // Log workflow start using core's event system
+    logEvent('workflow-start', { 
+      workflowName: this.workflow.name,
+      timestamp: new Date().toISOString()
+    });
+
+    // Log to JSONL file
+    defaultJSONLLogger.logWorkflowExecution({
+      name: this.workflow.name,
+      runtime: 'flow',
+      startTime,
+      endTime: startTime, // Will be updated later
+      success: false, // Will be updated later
+      stepCount: this.workflow.steps.length
+    });
 
     this.emitEvent({ type: 'flowStart', workflow: this.workflow });
 
@@ -60,6 +74,25 @@ export class FlowExecutor<T extends BaseContext> {
     const duration = Date.now() - startTime;
 
     if (executionResult.tag === 'Left') {
+      // Log workflow failure using core's event system
+      logEvent('workflow-failure', { 
+        workflowName: this.workflow.name,
+        error: executionResult.left.message,
+        duration,
+        timestamp: new Date().toISOString()
+      });
+
+      // Log to JSONL file
+      defaultJSONLLogger.logWorkflowExecution({
+        name: this.workflow.name,
+        runtime: 'flow',
+        startTime,
+        endTime: Date.now(),
+        success: false,
+        error: executionResult.left.message,
+        stepCount: this.workflow.steps.length
+      });
+
       this.emitEvent({ type: 'flowEnd', success: false, duration, error: executionResult.left.message });
       
       return {
@@ -71,6 +104,23 @@ export class FlowExecutor<T extends BaseContext> {
         error: executionResult.left.message
       };
     } else {
+      // Log workflow success using core's event system
+      logEvent('workflow-success', { 
+        workflowName: this.workflow.name,
+        duration,
+        timestamp: new Date().toISOString()
+      });
+
+      // Log to JSONL file
+      defaultJSONLLogger.logWorkflowExecution({
+        name: this.workflow.name,
+        runtime: 'flow',
+        startTime,
+        endTime: Date.now(),
+        success: true,
+        stepCount: this.workflow.steps.length
+      });
+
       this.emitEvent({ type: 'flowEnd', success: true, duration });
       
       return {
@@ -97,81 +147,38 @@ export class FlowExecutor<T extends BaseContext> {
   }
 
   /**
-   * Wrap flow step with logging and error handling using Either monads
+   * Wrap flow step with logging and error handling using unified logging system
    */
-  private wrapFlowStep(flowStep: FlowStep<T>, history: ExecutionHistoryEntry[]): Step<T> {
-    return async (state: T) => {
-      const startTime = new Date();
-      
-      // Add to history
-      const historyEntry: ExecutionHistoryEntry = {
-        stepName: flowStep.name,
-        startTime,
-        status: 'running'
-      };
-      history.push(historyEntry);
-
-      this.emitEvent({ type: 'stepStart', stepName: flowStep.name, step: flowStep });
-
-      // Create safe execution using Either monad
-      const safeStepExecution = safeAsync(async (ctx: T) => {
-        // Apply retry policy if configured
-        let stepToExecute = flowStep.execute;
-        
-        if (this.config.maxRetries) {
-          stepToExecute = retry(stepToExecute, this.config.maxRetries);
-        }
-
-        // Apply timeout policy if configured
-        if (this.config.timeoutMs) {
-          stepToExecute = timeout(stepToExecute, this.config.timeoutMs);
-        }
-
-        return await stepToExecute(ctx);
-      });
-
-      const executionResult = await safeStepExecution(state);
-      const endTime = new Date();
-      const duration = endTime.getTime() - startTime.getTime();
-
-      if (executionResult.tag === 'Left') {
-        // Update history for failure
-        Object.assign(historyEntry, {
-          endTime,
-          status: 'failed',
-          error: executionResult.left.message,
-          duration
-        });
-
-        this.emitEvent({ 
-          type: 'stepEnd', 
-          stepName: flowStep.name, 
-          status: 'failed', 
-          duration,
-          error: executionResult.left.message
-        });
-
-        // Re-throw the error to maintain the Either pattern
-        throw new Error(executionResult.left.message);
-      } else {
-        // Update history for success
-        Object.assign(historyEntry, {
-          endTime,
-          status: 'completed',
-          duration
-        });
-
-        this.emitEvent({ 
-          type: 'stepEnd', 
-          stepName: flowStep.name, 
-          status: 'completed', 
-          duration
-        });
-
-        return executionResult.right;
-      }
-    };
+  private wrapFlowStep(flowStep: FlowStep<T>, _history: ExecutionHistoryEntry[]): Step<T> {
+    const stepWithPolicies = this.createStepWithPolicies(flowStep);
+    
+    // Use core's unified logging system
+    return withLogging(stepWithPolicies, flowStep.name, {
+      runtime: 'flow',
+      workflowName: this.workflow.name,
+      logToConsole: this.config.logToConsole
+    });
   }
+
+  /**
+   * Create step with policies using functional composition
+   */
+  private createStepWithPolicies(flowStep: FlowStep<T>): Step<T> {
+    let stepToExecute = flowStep.execute;
+    
+    // Apply retry policy if configured
+    if (this.config.maxRetries) {
+      stepToExecute = retry(stepToExecute, this.config.maxRetries);
+    }
+
+    // Apply timeout policy if configured
+    if (this.config.timeoutMs) {
+      stepToExecute = timeout(stepToExecute, this.config.timeoutMs);
+    }
+
+    return stepToExecute;
+  }
+
 
   /**
    * Get execution plan
@@ -180,72 +187,22 @@ export class FlowExecutor<T extends BaseContext> {
     return this.workflow;
   }
 
-  /**
-   * Execute workflow with durable execution using core's durable execution
-   */
-  async executeDurable(
-    initialState: T, 
-    config: DurableExecutionConfig<T>
-  ): Promise<DurableExecutionResult<T>> {
-    const executionStep = this.createExecutionStep([]);
-    return await executeDurable(executionStep, initialState, config);
-  }
 
   /**
-   * Create a durable workflow step using core's durable execution
-   */
-  createDurableWorkflow(config: DurableExecutionConfig<T>): Step<T> {
-    const executionStep = this.createExecutionStep([]);
-    return createDurableStep(executionStep, config);
-  }
-
-  /**
-   * Create a pausable workflow step using core's durable execution
-   */
-  createPausableWorkflow(
-    config: DurableExecutionConfig<T>,
-    pauseCondition?: (ctx: T) => boolean
-  ): Step<T> {
-    const executionStep = this.createExecutionStep([]);
-    return createPausableStep(executionStep, config.persistence!, pauseCondition);
-  }
-
-  /**
-   * Create a resumable workflow step using core's durable execution
-   */
-  createResumableWorkflow(
-    config: DurableExecutionConfig<T>,
-    checkpointId: string,
-    extras?: Partial<T>
-  ): Step<T> {
-    const executionStep = this.createExecutionStep([]);
-    return createResumableStep(executionStep, config.persistence!, checkpointId, extras);
-  }
-
-  /**
-   * Validate workflow
+   * Validate workflow using functional composition
    */
   validate(): { valid: boolean; errors: string[] } {
-    const errors: string[] = [];
-
-    // Check for duplicate step names
     const stepNames = this.workflow.steps.map(s => s.name);
-    const duplicates = stepNames.filter((name, index) => stepNames.indexOf(name) !== index);
-    if (duplicates.length > 0) {
-      errors.push(`Duplicate step names: ${duplicates.join(', ')}`);
-    }
+    
+    // Check for duplicate step names using functional composition
+    const duplicateErrors = this.findDuplicateStepNames(stepNames);
+    
+    // Check dependencies using functional composition
+    const dependencyErrors = this.config.validateDependencies 
+      ? this.validateDependencies(stepNames)
+      : [];
 
-    // Check dependencies
-    if (this.config.validateDependencies) {
-      const dependencies = this.getDependencies();
-      for (const [stepName, deps] of dependencies) {
-        for (const dep of deps) {
-          if (!stepNames.includes(dep)) {
-            errors.push(`Step '${stepName}' depends on non-existent step '${dep}'`);
-          }
-        }
-      }
-    }
+    const errors = [...duplicateErrors, ...dependencyErrors];
 
     return {
       valid: errors.length === 0,
@@ -254,16 +211,42 @@ export class FlowExecutor<T extends BaseContext> {
   }
 
   /**
-   * Get step dependencies
+   * Find duplicate step names using functional composition
+   */
+  private findDuplicateStepNames(stepNames: string[]): string[] {
+    const duplicates = stepNames
+      .filter((name, index) => stepNames.indexOf(name) !== index)
+      .filter((name, index, arr) => arr.indexOf(name) === index); // Remove duplicates from duplicates array
+    
+    return duplicates.length > 0 
+      ? [`Duplicate step names: ${duplicates.join(', ')}`]
+      : [];
+  }
+
+  /**
+   * Validate dependencies using functional composition
+   */
+  private validateDependencies(stepNames: string[]): string[] {
+    const dependencies = this.getDependencies();
+    
+    return Array.from(dependencies.entries())
+      .flatMap(([stepName, deps]) => 
+        deps
+          .filter(dep => !stepNames.includes(dep))
+          .map(dep => `Step '${stepName}' depends on non-existent step '${dep}'`)
+      );
+  }
+
+  /**
+   * Get step dependencies using functional composition
    */
   getDependencies(): Map<string, string[]> {
-    const deps = new Map<string, string[]>();
-    
-    for (const step of this.workflow.steps) {
-      deps.set(step.name, step.dependencies || []);
-    }
-    
-    return deps;
+    return new Map(
+      this.workflow.steps.map(step => [
+        step.name, 
+        step.dependencies || []
+      ])
+    );
   }
 
   /**
@@ -274,23 +257,51 @@ export class FlowExecutor<T extends BaseContext> {
   }
 
   /**
-   * Emit event
+   * Emit event using functional composition
    */
   private emitEvent(event: FlowEvent<T>): void {
-    for (const handler of this.eventHandlers) {
-      try {
-        handler(event);
-      } catch (error) {
-        console.error('Error in event handler:', error);
+    this.eventHandlers.forEach(handler => {
+      const safeHandler = safe(() => handler(event));
+      const result = safeHandler(undefined);
+      if (result.tag === 'Left') {
+        console.error('Error in event handler:', result.left);
       }
+    });
+  }
+
+  /**
+   * Get workflow events from core's logging system
+   */
+  getWorkflowEvents() {
+    return getEvents().filter(event => 
+      event.name.startsWith('workflow-') || 
+      event.name.startsWith('step-')
+    );
+  }
+
+  /**
+   * Get step events from core's logging system
+   */
+  getStepEvents(stepName?: string) {
+    const stepEvents = getEvents().filter(event => event.name.startsWith('step-'));
+    
+    if (stepName) {
+      return stepEvents.filter(event => 
+        event.data && 
+        typeof event.data === 'object' && 
+        'stepName' in event.data && 
+        event.data.stepName === stepName
+      );
     }
+    
+    return stepEvents;
   }
 }
 
 // ---------- Pure Functional Composition Functions ----------
 
 /**
- * Create a flow step using functional composition
+ * Create a flow step using functional composition with unified logging
  */
 export function createFlowStep<T extends BaseContext>(
   name: string,
@@ -298,11 +309,20 @@ export function createFlowStep<T extends BaseContext>(
   options?: {
     description?: string;
     dependencies?: string[];
+    workflowName?: string;
+    logToConsole?: boolean;
   }
 ): FlowStep<T> {
+  // Wrap the step with unified logging
+  const loggedStep = withLogging(execute, name, {
+    runtime: 'flow',
+    workflowName: options?.workflowName,
+    logToConsole: options?.logToConsole
+  });
+
   return {
     name,
-    execute,
+    execute: loggedStep,
     description: options?.description,
     dependencies: options?.dependencies
   };
@@ -310,6 +330,7 @@ export function createFlowStep<T extends BaseContext>(
 
 /**
  * Create a workflow using pure functional composition
+ * Simplified - users can create workflows directly
  */
 export function createWorkflow<T extends BaseContext>(
   name: string,
@@ -319,11 +340,9 @@ export function createWorkflow<T extends BaseContext>(
     version?: string;
   }
 ): FlowWorkflow<T> {
-  const executionStep = sequence(steps);
-  
   return {
     name,
-    execute: executionStep,
+    execute: sequence(steps),
     description: options?.description,
     version: options?.version,
     steps: steps.map((step, index) => ({
@@ -333,100 +352,6 @@ export function createWorkflow<T extends BaseContext>(
   };
 }
 
-/**
- * Create a durable workflow using core's durable execution
- */
-export function createDurableWorkflow<T extends BaseContext>(
-  name: string,
-  steps: Step<T>[],
-  config: DurableExecutionConfig<T>,
-  options?: {
-    description?: string;
-    version?: string;
-  }
-): FlowWorkflow<T> {
-  const executionStep = sequence(steps);
-  const durableStep = createDurableStep(executionStep, config);
-  
-  return {
-    name,
-    execute: durableStep,
-    description: options?.description,
-    version: options?.version,
-    steps: steps.map((step, index) => ({
-      name: `step_${index}`,
-      execute: step
-    }))
-  };
-}
-
-/**
- * Create a pausable workflow using core's durable execution
- */
-export function createPausableWorkflow<T extends BaseContext>(
-  name: string,
-  steps: Step<T>[],
-  persistence: PersistenceIO<T>,
-  pauseCondition?: (ctx: T) => boolean,
-  options?: {
-    description?: string;
-    version?: string;
-  }
-): FlowWorkflow<T> {
-  const executionStep = sequence(steps);
-  const pausableStep = createPausableStep(executionStep, persistence, pauseCondition);
-  
-  return {
-    name,
-    execute: pausableStep,
-    description: options?.description,
-    version: options?.version,
-    steps: steps.map((step, index) => ({
-      name: `step_${index}`,
-      execute: step
-    }))
-  };
-}
-
-/**
- * Create a resumable workflow using core's durable execution
- */
-export function createResumableWorkflow<T extends BaseContext>(
-  name: string,
-  steps: Step<T>[],
-  persistence: PersistenceIO<T>,
-  checkpointId: string,
-  extras?: Partial<T>,
-  options?: {
-    description?: string;
-    version?: string;
-  }
-): FlowWorkflow<T> {
-  const executionStep = sequence(steps);
-  const resumableStep = createResumableStep(executionStep, persistence, checkpointId, extras);
-  
-  return {
-    name,
-    execute: resumableStep,
-    description: options?.description,
-    version: options?.version,
-    steps: steps.map((step, index) => ({
-      name: `step_${index}`,
-      execute: step
-    }))
-  };
-}
-
-/**
- * Execute workflow with durable execution using core's functions
- */
-export async function executeWorkflowDurable<T extends BaseContext>(
-  workflow: FlowWorkflow<T>,
-  initialState: T,
-  config: DurableExecutionConfig<T>
-): Promise<DurableExecutionResult<T>> {
-  return await executeDurable(workflow.execute, initialState, config);
-}
 
 /**
  * Execute workflow with Either monad error handling

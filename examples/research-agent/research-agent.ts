@@ -15,7 +15,8 @@ import {
   get,
   push,
   updateState,
-  addState,
+  logObservation,
+  logAction,
   
   // LLM Provider
   createOpenAIProvider,
@@ -42,8 +43,6 @@ import {
   // Types
   BaseContext,
   Step,
-  createPlan,
-  createAgent,
   Either,
   
   // Ledger System
@@ -204,14 +203,14 @@ const createToolStep = <T>(
         const errorState = onError ? onError(error) : { error: error.message };
         return sequence([
           step('updateError', (s) => updateState(errorState)(s)),
-          step('logError', (s) => addState('observation', `Error in ${name}: ${error.message}`)(s))
+          step('logError', (s) => logObservation(`Error in ${name}: ${error.message}`)(s))
         ])(state);
       },
       (value) => {
         const successState = onSuccess(value);
         return sequence([
           step('updateResult', (s) => updateState(successState)(s)),
-          step('logAction', (s) => addState('action', `${name} completed successfully`)(s))
+          step('logAction', (s) => logAction(`${name} completed successfully`)(s))
         ])(state);
       }
     );
@@ -1136,12 +1135,12 @@ const runInference = step('runInference', async (state: ResearchState) => {
       console.log('⚠️ LLM call failed:', error.message);
       return sequence([
         step('updateResponse', (s) => updateState({ generateResponseResponse: 'I understand your research request. Let me help you gather and analyze information using the available tools.' } as Partial<ResearchState>)(s as ResearchState)),
-        step('logObservation', (s) => addState('observation', `Generated default response for: ${lastMessage?.content}`)(s))
+        step('logObservation', (s) => logObservation(`Generated default response for: ${lastMessage?.content}`)(s))
       ])(state);
     },
     (llmResult) => sequence([
       step('updateResponse', (s) => updateState({ generateResponseResponse: (llmResult as any).systemResponse } as Partial<ResearchState>)(s as ResearchState)),
-      step('logObservation', (s) => addState('observation', `Generated response for: ${lastMessage?.content}`)(s))
+      step('logObservation', (s) => logObservation(`Generated response for: ${lastMessage?.content}`)(s))
     ])(llmResult)
   );
 });
@@ -1394,27 +1393,21 @@ const createResearchWorkflow = (llmProvider: any) => {
   ]);
 };
 
-const plan = createPlan('research-agent', [
-  step('initialize', (state: ResearchState) => {
-    console.log('🔍 Deep Research Agent with Chain of Thought & Firecrawl Integration');
-    console.log('Type your research query and press Enter. Type "exit" to quit.\n');
-    return state;
-  }),
-  loopWhile(
-    (state: ResearchState) => !(get('shouldExit')(state) as boolean),
-    createResearchWorkflow(llmProvider)
-  ),
-  step('goodbye', (state: ResearchState) => {
-    console.log('👋 Research complete! Goodbye!');
-    return state;
-  })
-]);
-
 // ============================================================================
 // EXPORTS
 // ============================================================================
 
-export const researchAgent = createAgent('research-agent', plan);
+// Simple workflow for testing
+export const researchWorkflow = sequence([
+  step('initialize', (state: ResearchState) => {
+    console.log('🔍 Deep Research Agent with Chain of Thought & Firecrawl Integration');
+    return state;
+  }),
+  selectTools,
+  runInference,
+  handleToolCalls,
+  updateConversation
+]);
 
 // Helper function for testing - runs core workflow without interactive loop
 export async function runCoreWorkflow(state: ResearchState): Promise<ResearchState> {
@@ -1466,7 +1459,7 @@ export async function runResearchAgent(verbose = false) {
   };
   
   try {
-    await researchAgent.start(initialState);
+    await researchWorkflow(initialState);
     
     // Show ledger events after completion
     if (verbose) {

@@ -14,20 +14,10 @@ import {
   timeout,
   log,
   safeAsync,
-  checkpoint,
-  resumeFromCheckpoint,
-  pause,
-  withAutoCheckpointing,
-  executeDurable,
-  createDurableStep,
-  createPausableStep,
-  createResumableStep,
-  createMemoryPersistence,
-  type Checkpoint,
-  type PersistenceIO,
-  type DurableExecutionConfig,
-  type DurableExecutionResult
-} from '@fx/core';
+  withLogging,
+  logEvent,
+  defaultJSONLLogger,
+  type PersistenceIO} from '@fx/core';
 import { 
   Guard, 
   FxStep, 
@@ -68,6 +58,22 @@ export class NavigatorAgent<TCtx extends BaseContext> implements Agent<TCtx> {
     // Reset executed steps for this run
     this.executedSteps.clear();
     
+    // Log agent start
+    logEvent('agent-start', {
+      agentType: 'navigator',
+      timestamp: new Date().toISOString()
+    });
+
+    // Log to JSONL file
+    defaultJSONLLogger.logWorkflowExecution({
+      name: 'navigator-agent',
+      runtime: 'navigator',
+      startTime,
+      endTime: startTime, // Will be updated later
+      success: false, // Will be updated later
+      stepCount: this.steps.length
+    });
+    
     // Create safe execution function using Either monad
     const safeExecution = safeAsync(async (inputCtx: TCtx) => {
       // Choose execution strategy based on configuration
@@ -85,22 +91,59 @@ export class NavigatorAgent<TCtx extends BaseContext> implements Agent<TCtx> {
 
     // Execute with Either monad
     const executionResult = await safeExecution(ctx);
+    const duration = Date.now() - startTime;
     
     if (executionResult.tag === 'Left') {
+      // Log agent failure
+      logEvent('agent-failure', {
+        agentType: 'navigator',
+        error: executionResult.left.message,
+        duration,
+        timestamp: new Date().toISOString()
+      });
+
+      // Log to JSONL file
+      defaultJSONLLogger.logWorkflowExecution({
+        name: 'navigator-agent',
+        runtime: 'navigator',
+        startTime,
+        endTime: Date.now(),
+        success: false,
+        error: executionResult.left.message,
+        stepCount: this.steps.length
+      });
+
       return {
         ctx,
         plan: { layers: [], blocked: {} },
         success: false,
         error: executionResult.left.message,
-        duration: Date.now() - startTime
+        duration
       };
     } else {
+      // Log agent success
+      logEvent('agent-success', {
+        agentType: 'navigator',
+        duration,
+        timestamp: new Date().toISOString()
+      });
+
+      // Log to JSONL file
+      defaultJSONLLogger.logWorkflowExecution({
+        name: 'navigator-agent',
+        runtime: 'navigator',
+        startTime,
+        endTime: Date.now(),
+        success: true,
+        stepCount: this.steps.length
+      });
+
       const plan = await this.plan(ctx);
       return {
         ctx: executionResult.right,
         plan,
         success: true,
-        duration: Date.now() - startTime
+        duration
       };
     }
   }
@@ -135,46 +178,55 @@ export class NavigatorAgent<TCtx extends BaseContext> implements Agent<TCtx> {
   }
 
   /**
-   * Get execution plan
+   * Get execution plan using functional composition
    */
   async plan(ctx: TCtx): Promise<PlanView> {
     const runnable = this.getRunnableSteps(ctx);
-    const layers: string[][] = [];
-    const blocked: Record<string, string> = {};
-
-    // Check blocked steps
-    for (const step of this.steps) {
-      if (!runnable.includes(step)) {
+    
+    // Check blocked steps using functional composition
+    const blocked = this.steps
+      .filter(step => !runnable.includes(step))
+      .reduce((acc, step) => {
         try {
-          if (!step.guard(ctx)) {
-            blocked[step.name] = 'guard-false';
+          const guardResult = step.guard(ctx);
+          if (!guardResult) {
+            acc[step.name] = 'guard-false';
           }
         } catch (error) {
-          blocked[step.name] = 'guard-error';
+          acc[step.name] = 'guard-error';
         }
-      }
-    }
+        return acc;
+      }, {} as Record<string, string>);
 
-    // Build layers
-    let remaining = [...runnable];
-    while (remaining.length > 0) {
-      const layer = this.buildExecutionLayer(remaining, ctx);
-      if (layer.length === 0) {
-        // No independent steps, create single-step layer
-        const singleStep = remaining[0];
-        if (singleStep) {
-          layers.push([singleStep.name]);
-          remaining = remaining.slice(1);
-        } else {
-          break;
-        }
-      } else {
-        layers.push(layer.map(s => s.name));
-        remaining = remaining.filter(s => !layer.includes(s));
-      }
-    }
+    // Build layers using functional composition
+    const layers = this.buildLayersRecursively(runnable, ctx, []);
 
     return { layers, blocked };
+  }
+
+  /**
+   * Build execution layers recursively using functional composition
+   */
+  private buildLayersRecursively(
+    remaining: FxStep<TCtx>[], 
+    ctx: TCtx, 
+    layers: string[][]
+  ): string[][] {
+    if (remaining.length === 0) return layers;
+    
+    const layer = this.buildExecutionLayer(remaining, ctx);
+    
+    if (layer.length === 0) {
+      // No independent steps, create single-step layer
+      const singleStep = remaining[0];
+      return singleStep 
+        ? this.buildLayersRecursively(remaining.slice(1), ctx, [...layers, [singleStep.name]])
+        : layers;
+    } else {
+      const layerNames = layer.map(s => s.name);
+      const newRemaining = remaining.filter(s => !layer.includes(s));
+      return this.buildLayersRecursively(newRemaining, ctx, [...layers, layerNames]);
+    }
   }
 
   /**
@@ -219,9 +271,9 @@ export class NavigatorAgent<TCtx extends BaseContext> implements Agent<TCtx> {
   }
 
   /**
-   * ReAct reasoning step - pure function
+   * ReAct reasoning step - pure function using functional composition
    */
-  private async reactReasonStep(ctx: TCtx): Promise<TCtx> {
+  private reactReasonStep = async (ctx: TCtx): Promise<TCtx> => {
     if (!this.reactConfig) return ctx;
     
     const { decide } = this.reactConfig;
@@ -232,30 +284,43 @@ export class NavigatorAgent<TCtx extends BaseContext> implements Agent<TCtx> {
       currentStep: nextStep,
       iterationCount: ((ctx as Record<string, unknown>).iterationCount as number || 0) + 1
     } as TCtx;
-  }
+  };
 
   /**
-   * ReAct action step - pure function
+   * ReAct action step - pure function using functional composition
    */
-  private async reactActStep(ctx: TCtx): Promise<TCtx> {
+  private reactActStep = async (ctx: TCtx): Promise<TCtx> => {
     const currentStep = (ctx as Record<string, unknown>).currentStep as string;
     if (!currentStep) return ctx;
 
-    // Execute the selected step
+    // Execute the selected step using safe execution
     const step = this.steps.find(s => s.name === currentStep);
-    if (step && step.guard(ctx)) {
-      const result = await step.run(ctx);
-      return { ...result, lastAction: currentStep } as TCtx;
+    if (!step) return ctx;
+
+    try {
+      const guardResult = step.guard(ctx);
+      if (!guardResult) {
+        return ctx;
+      }
+    } catch (error) {
+      return ctx;
     }
 
-    return ctx;
-  }
+    const executionResult = await safeAsync(step.run)(ctx);
+    if (executionResult.tag === 'Left') {
+      return ctx; // Fail silently for ReAct pattern
+    }
+
+    return {
+      ...executionResult.right,
+      lastAction: currentStep
+    } as TCtx;
+  };
 
   /**
-   * ReAct observation step - pure function
-   * Analyzes the results and updates context with observations
+   * ReAct observation step - pure function using functional composition
    */
-  private async reactObserveStep(ctx: TCtx): Promise<TCtx> {
+  private reactObserveStep = async (ctx: TCtx): Promise<TCtx> => {
     const lastAction = (ctx as Record<string, unknown>).lastAction as string;
     const observation = lastAction 
       ? `Successfully executed ${lastAction}. Context updated.`
@@ -266,7 +331,7 @@ export class NavigatorAgent<TCtx extends BaseContext> implements Agent<TCtx> {
       lastObservation: observation,
       observationCount: ((ctx as Record<string, unknown>).observationCount as number || 0) + 1
     } as TCtx;
-  }
+  };
 
   /**
    * Policy configuration - functional policy composition
@@ -292,29 +357,34 @@ export class NavigatorAgent<TCtx extends BaseContext> implements Agent<TCtx> {
       },
       
       independent: (a: string[] | Guard<TCtx>, b: string[] | Guard<TCtx>) => {
-        const aNames = Array.isArray(a) ? a : this.steps.filter(s => {
-          try {
-            return a(s.guard as unknown as TCtx);
-          } catch {
-            return false;
-          }
-        }).map(s => s.name);
-        const bNames = Array.isArray(b) ? b : this.steps.filter(s => {
-          try {
-            return b(s.guard as unknown as TCtx);
-          } catch {
-            return false;
-          }
-        }).map(s => s.name);
+        const aNames = Array.isArray(a) ? a : this.steps
+          .filter(s => {
+            try {
+              return a(s.guard as unknown as TCtx);
+            } catch {
+              return false;
+            }
+          })
+          .map(s => s.name);
+        const bNames = Array.isArray(b) ? b : this.steps
+          .filter(s => {
+            try {
+              return b(s.guard as unknown as TCtx);
+            } catch {
+              return false;
+            }
+          })
+          .map(s => s.name);
         
-        for (const aName of aNames) {
+        // Use functional composition for independence mapping
+        aNames.forEach(aName => {
           if (!this.independenceMap.has(aName)) {
             this.independenceMap.set(aName, new Set());
           }
-          for (const bName of bNames) {
+          bNames.forEach(bName => {
             this.independenceMap.get(aName)!.add(bName);
-          }
-        }
+          });
+        });
         return this;
       },
       
@@ -432,10 +502,8 @@ export class NavigatorAgent<TCtx extends BaseContext> implements Agent<TCtx> {
    */
   private markExecutedSteps = (layer: FxStep<TCtx>[]): Step<TCtx> => {
     return async (ctx: TCtx): Promise<TCtx> => {
-      // Mark executed steps
-      for (const step of layer) {
-        this.executedSteps.add(step.name);
-      }
+      // Mark executed steps using functional approach
+      layer.forEach(step => this.executedSteps.add(step.name));
       return ctx;
     };
   }
@@ -458,31 +526,18 @@ export class NavigatorAgent<TCtx extends BaseContext> implements Agent<TCtx> {
  * Create a navigator agent using functional composition
  * This is the proper functional way to create agents
  */
-export function createAgent<TCtx extends BaseContext>(steps: FxStep<TCtx>[]): Agent<TCtx> {
+export function createNavigatorAgent<TCtx extends BaseContext>(steps: FxStep<TCtx>[]): Agent<TCtx> {
   const agent = new NavigatorAgent<TCtx>();
   agent.steps = steps;
   return agent;
 }
 
-/**
- * Compose steps into a navigator agent using functional composition
- * Alternative API for direct step composition
- */
-export function composeAgent<TCtx extends BaseContext>(...steps: FxStep<TCtx>[]): Agent<TCtx> {
-  return createAgent(steps);
-}
 
 
-/**
- * Create a guard function
- */
-export function when<TCtx>(pred: (ctx: TCtx) => boolean): Guard<TCtx> {
-  return pred;
-}
 
 /**
  * Create a step - fundamental morphism in the navigator category
- * Uses core's functional composition patterns
+ * Uses core's functional composition patterns with unified logging
  */
 export function step<TCtx extends BaseContext>(
   name: string,
@@ -491,12 +546,21 @@ export function step<TCtx extends BaseContext>(
   opts?: {
     idempotentKey?: (ctx: TCtx) => string;
     projection?: (ctx: TCtx) => unknown;
+    workflowName?: string;
+    logToConsole?: boolean;
   }
 ): FxStep<TCtx> {
+  // Wrap the step with unified logging
+  const loggedStep = withLogging(run, name, {
+    runtime: 'navigator',
+    workflowName: opts?.workflowName,
+    logToConsole: opts?.logToConsole
+  });
+
   return {
     name,
     guard,
-    run,
+    run: loggedStep,
     idempotentKey: opts?.idempotentKey,
     projection: opts?.projection
   };
@@ -517,97 +581,4 @@ export function conditionalStep<TCtx extends BaseContext>(
     predicate,
     coreWhen(predicate, thenStep, elseStep)
   );
-}
-
-// ---------- Durable Execution Helpers ----------
-
-/**
- * Create a durable navigator agent using core's durable execution
- */
-export function createDurableAgent<TCtx extends BaseContext>(
-  steps: FxStep<TCtx>[],
-  config: DurableExecutionConfig<TCtx>
-): {
-  agent: Agent<TCtx>;
-  executeDurable: (ctx: TCtx, opts?: RunOpts<TCtx>) => Promise<DurableExecutionResult<TCtx>>;
-  pause: (ctx: TCtx, reason?: string) => Promise<TCtx>;
-  resume: (checkpointId: string, extras?: Partial<TCtx>) => Promise<TCtx>;
-} {
-  const agent = createAgent(steps);
-  
-  return {
-    agent,
-    
-    executeDurable: async (ctx: TCtx, opts?: RunOpts<TCtx>) => {
-      // Create execution step using core's sequence
-      const executionStep = sequence([
-        log('navigator_execution_start'),
-        ...steps.map(s => s.run),
-        log('navigator_execution_complete')
-      ]);
-      
-      return await executeDurable(executionStep, ctx, config);
-    },
-    
-    pause: async (ctx: TCtx, reason?: string) => {
-      if (!config.persistence) {
-        throw new Error('Persistence not configured');
-      }
-      const pauseStep = pause(config.persistence, reason);
-      return await pauseStep(ctx);
-    },
-    
-    resume: async (checkpointId: string, extras?: Partial<TCtx>) => {
-      if (!config.persistence) {
-        throw new Error('Persistence not configured');
-      }
-      const resumeStep = resumeFromCheckpoint(config.persistence, checkpointId, extras);
-      return await resumeStep({} as TCtx);
-    }
-  };
-}
-
-/**
- * Create a pausable navigator agent using core's durable execution
- */
-export function createPausableAgent<TCtx extends BaseContext>(
-  steps: FxStep<TCtx>[],
-  persistence: PersistenceIO<TCtx>,
-  pauseCondition?: (ctx: TCtx) => boolean
-): {
-  agent: Agent<TCtx>;
-  createPausableStep: (step: Step<TCtx>) => Step<TCtx>;
-} {
-  const agent = createAgent(steps);
-  
-  return {
-    agent,
-    
-    createPausableStep: (step: Step<TCtx>) => {
-      return createPausableStep(step, persistence, pauseCondition);
-    }
-  };
-}
-
-/**
- * Create a resumable navigator agent using core's durable execution
- */
-export function createResumableAgent<TCtx extends BaseContext>(
-  steps: FxStep<TCtx>[],
-  persistence: PersistenceIO<TCtx>,
-  checkpointId: string,
-  extras?: Partial<TCtx>
-): {
-  agent: Agent<TCtx>;
-  createResumableStep: (step: Step<TCtx>) => Step<TCtx>;
-} {
-  const agent = createAgent(steps);
-  
-  return {
-    agent,
-    
-    createResumableStep: (step: Step<TCtx>) => {
-      return createResumableStep(step, persistence, checkpointId, extras);
-    }
-  };
 }

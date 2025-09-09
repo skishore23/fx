@@ -25,17 +25,8 @@
     "./lenses": {
       "types": "./dist/lenses.d.ts"
     },
-    "./resilience": {
-      "types": "./dist/resilience.d.ts"
-    },
-    "./registry": {
-      "types": "./dist/registry.d.ts"
-    },
     "./composition": {
       "types": "./dist/composition.d.ts"
-    },
-    "./json": {
-      "types": "./dist/json.d.ts"
     }
   },
   "scripts": {

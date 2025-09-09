@@ -27,27 +27,36 @@ Use `@fx/navigator` when you need:
 ## Quick Start
 
 ```typescript
-import { createAgent, step, when } from '@fx/navigator';
+import { createNavigatorAgent, step } from '@fx/navigator';
+import { when } from '@fx/core';
 
 // Define steps with guards
-const fetch = step('fetch', when(ctx => !!ctx.query), async (ctx) => ({
-  ...ctx, 
-  docs: await web(ctx.query) 
-}));
+const fetch = step('fetch', 
+  (ctx) => !!ctx.query, // guard
+  async (ctx) => ({
+    ...ctx, 
+    docs: await web(ctx.query) 
+  })
+);
 
-const chunk = step('chunk', when(ctx => !!ctx.docs), async (ctx) => ({
-  ...ctx, 
-  chunks: split(ctx.docs) 
-}));
+const chunk = step('chunk', 
+  (ctx) => !!ctx.docs, // guard
+  async (ctx) => ({
+    ...ctx, 
+    chunks: split(ctx.docs) 
+  })
+);
 
-const summarize = step('summarize', when(ctx => !!ctx.chunks), async (ctx) => ({
-  ...ctx, 
-  summary: await llm(ctx.chunks) 
-}));
+const summarize = step('summarize', 
+  (ctx) => !!ctx.chunks, // guard
+  async (ctx) => ({
+    ...ctx, 
+    summary: await llm(ctx.chunks) 
+  })
+);
 
 // Create agent and run
-const agent = createAgent()
-  .add(fetch, chunk, summarize);
+const agent = createNavigatorAgent([fetch, chunk, summarize]);
 
 const result = await agent.run({ query: 'why fx?' });
 // Parallelism and order are inferred automatically!
@@ -66,14 +75,10 @@ Steps are the fundamental unit of execution. Each step has:
 - **Policies** - Optional execution policies
 
 ```typescript
-const step = step(
+const processStep = step(
   'processData',
-  when(ctx => ctx.data !== undefined), // guard
-  async (ctx) => ({ ...ctx, processed: true }), // run
-  {
-    idempotentKey: (ctx) => ctx.id,
-    projection: (ctx) => ctx.data
-  }
+  (ctx) => ctx.data !== undefined, // guard
+  async (ctx) => ({ ...ctx, processed: true }) // run
 );
 ```
 
@@ -82,19 +87,19 @@ const step = step(
 Guards determine when steps can run. Common guard patterns:
 
 ```typescript
-import { when } from '@fx/navigator';
+import { when } from '@fx/core';
 
 // Check for single field
-const hasData = when(ctx => ctx.data !== undefined);
+const hasData = (ctx) => ctx.data !== undefined;
 
 // Check for multiple fields
-const hasAll = when(ctx => ctx.data && ctx.config);
+const hasAll = (ctx) => ctx.data && ctx.config;
 
 // Check for any field
-const hasAny = when(ctx => ctx.data || ctx.cache);
+const hasAny = (ctx) => ctx.data || ctx.cache;
 
 // Custom guard
-const customGuard = when(ctx => ctx.value > 0 && ctx.enabled);
+const customGuard = (ctx) => ctx.value > 0 && ctx.enabled;
 ```
 
 ### Policies

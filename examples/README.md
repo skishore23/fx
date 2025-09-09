@@ -96,10 +96,11 @@ The examples showcase the two agent approaches:
 - **@fx/navigator**: **Topological Agents** - Autonomous, emergent execution with intelligent decision-making
 
 Both agent types build on `@fx/core` and use core's prompts, tools, and patterns:
-- **Core Integration**: Both use `createOpenAIProvider`, `llmTemplateStep`, `createToolRegistry`, `createValidatedTool`
-- **Functional Composition**: Both use `sequence`, `parallel`, `while` loops from core
+- **Core Integration**: Both use `createOpenAIProvider`, `llmTemplateStep`, `promptTemplate`
+- **Memory System**: Both use `logAction`, `logObservation`, `logOutcome`, `logError` for tracking
+- **Functional Composition**: Both use `sequence`, `parallel`, `when` from core
 - **Patterns**: Both use `createReActPattern`, `createChainOfThoughtPattern` for intelligent behavior
-- **State Management**: Both use `updateState`, `addState`, `get`, `set` for state operations
+- **State Management**: Both use `updateState`, `get`, `set` for state operations
 
 ## Getting Started
 
@@ -136,9 +137,12 @@ const workflow = sequence([
 Steps run based on state conditions rather than explicit sequencing:
 
 ```typescript
-const fetch = step('fetch', when(ctx => !!ctx.query), async (ctx) => {
-  // Only runs when ctx.query exists
-});
+const fetch = step('fetch', 
+  (ctx) => !!ctx.query, // guard
+  async (ctx) => {
+    // Only runs when ctx.query exists
+  }
+);
 ```
 
 ### Emergent Parallelism
@@ -153,11 +157,8 @@ agent.policy.independent(['warmCache'], ['fetch']);
 Iterative reasoning and acting:
 
 ```typescript
-const agent = createAgent()
-  .react({
-    decide: async (ctx) => ctx.testsPassing ? 'commit' : 'test',
-    goal: (ctx) => ctx.committed === true
-  });
+const reactPattern = createReActPattern(llmProvider, ['test', 'commit']);
+const agent = createNavigatorAgent([reactPattern.workflow]);
 ```
 
 ### Plan Inspection

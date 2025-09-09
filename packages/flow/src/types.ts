@@ -56,6 +56,7 @@ export interface ExecutionHistoryEntry {
 export interface FlowConfig {
   readonly enableLogging?: boolean;
   readonly enableMetrics?: boolean;
+  readonly logToConsole?: boolean;
   readonly maxRetries?: number;
   readonly retryDelay?: number;
   readonly timeoutMs?: number;

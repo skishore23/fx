@@ -5,17 +5,11 @@
 
 // ---------- Core Types ----------
 import type { BaseContext, Step, Plan } from './types';
-export type {
-  BaseContext,
-  Step,
-  Plan
-};
-
-// ---------- Error Handling ----------
+export type { BaseContext, Step, Plan };
 export { Either } from './types';
 
 // ---------- Core Composition ----------
-import { sequence, parallel, when, fromFunction, loopWhile, tryInOrder, retry, timeout, validate, log, fail, compose, composeAll, identity } from './composition';
+import { sequence, parallel, when, fromFunction, loopWhile, tryInOrder, retry, timeout, validate, log, logInfo, logWarn, logErrorStep, logDebug, fail, compose, composeAll, identity, withLogging, createLoggedStep, withLoggingAll, fromFunctionWithLogging, type StepExecutionInfo } from './composition';
 export {
   sequence,
   parallel,
@@ -27,17 +21,61 @@ export {
   timeout,
   validate,
   log,
+  logInfo,
+  logWarn,
+  logErrorStep,
+  logDebug,
   fail,
   compose,
   composeAll,
-  identity
+  identity,
+  withLogging,
+  createLoggedStep,
+  withLoggingAll,
+  fromFunctionWithLogging,
+  type StepExecutionInfo
 };
 
+// ---------- State Management & Lenses ----------
+export { 
+  updateState, 
+  addState, 
+  addMemoryEntry,
+  get, 
+  set, 
+  push, 
+  remove,
+  update
+} from './lenses';
 
-// ---------- State Management ----------
-export { updateState, addState, get, set, push } from './lenses';
+// ---------- Memory System ----------
+export { 
+  addMemory,
+  getMemory,
+  clearMemory,
+  searchMemory,
+  getMemoryCount,
+  memoryLens,
+  filteredMemoryLens,
+  // New intuitive names
+  logObservation,
+  logAction,
+  logOutcome,
+  logError,
+  // Legacy aliases for backward compatibility
+  addObservation,
+  addAction,
+  addResult,
+  addError,
+  getRecentMemory,
+  getMemoryByType,
+  getMemorySince,
+  searchMemoryContent,
+  type MemoryEntry,
+  type MemoryFilter
+} from './memory';
 
-// ---------- Essential Patterns ----------
+// ---------- Patterns ----------
 export { 
   createReActPattern, 
   createChainOfThoughtPattern
@@ -45,7 +83,7 @@ export {
 
 export { createPattern, createPatternMatcher, patterns } from './pattern-matching';
 
-// ---------- Essential Tools ----------
+// ---------- Tools ----------
 export { createToolRegistry, createValidatedTool } from './tool-registry';
 
 // ---------- Safe Functions ----------
@@ -55,7 +93,35 @@ export { safe, safeAsync } from './safe-functions';
 export { createOpenAIProvider, llmTemplateStep, promptTemplate } from './llm';
 
 // ---------- Ledger System ----------
-export { enableLogging, disableLogging, logEvent, getEvents, clearEvents, getEventsByName, getEventStats } from './ledger';
+export { 
+  enableLogging, 
+  enableStateLogging,
+  enableFullLogging,
+  disableLogging, 
+  logEvent, 
+  logStateEvent,
+  createCheckpoint,
+  getStateAtCheckpoint,
+  replayFromCheckpoint,
+  getEvents, 
+  getStateEvents,
+  getStateEventsByStep,
+  getStateEventsByRuntime,
+  getCheckpoints,
+  clearEvents, 
+  getEventsByName, 
+  getEventStats,
+  getStateEventStats,
+  // Step-based logging
+  logStep,
+  logStateStep,
+  checkpointStep,
+  // State recreation
+  recreateStateFromEvents,
+  getStateAtTime,
+  type StateEvent,
+  type StateCheckpoint
+} from './ledger';
 
 // ---------- Durable Execution ----------
 export { 
@@ -76,18 +142,14 @@ export {
 } from './durable-execution';
 
 // ---------- Observability ----------
-export { ObservabilityManager, appendDecision, getDecisionHistory } from './observability';
+export { 
+  ObservabilityManager, 
+  appendDecision, 
+  getDecisionHistory,
+  JSONLLogger,
+  defaultJSONLLogger
+} from './observability';
 
-// ---------- High-Level API ----------
-export function createPlan<T extends BaseContext>(
-  name: string,
-  steps: Step<T>[]
-): Plan<T> {
-  return {
-    name,
-    execute: sequence(steps)
-  };
-}
 
 export class Agent<T extends BaseContext> {
   private plan: Plan<T>;
@@ -120,11 +182,4 @@ export class Agent<T extends BaseContext> {
   getState() {
     return this.state;
   }
-}
-
-export function createAgent<T extends BaseContext>(
-  name: string,
-  plan: Plan<T>
-): Agent<T> {
-  return new Agent(plan);
 }

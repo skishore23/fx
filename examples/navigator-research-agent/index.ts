@@ -4,9 +4,10 @@
  */
 
 import { 
-  createAgent, 
-  when, 
-  step,
+  createNavigatorAgent, 
+  step
+} from '@fx/navigator';
+import {
   updateState,
   addState,
   BaseContext,
@@ -15,7 +16,7 @@ import {
   promptTemplate,
   createToolRegistry,
   createValidatedTool
-} from '@fx/navigator';
+} from '@fx/core';
 import { Either, safe, safeAsync, sequence } from '@fx/core';
 import { z } from 'zod';
 import Firecrawl from '@mendable/firecrawl-js';
@@ -857,9 +858,6 @@ const getLongTermPrediction = (): string => {
   return predictions[Math.floor(Math.random() * predictions.length)]!;
 };
 
-// All hardcoded helper functions removed - everything is now AI-powered and dynamic
-
-// All hardcoded helper functions removed - everything is now AI-powered and dynamic
 
 // ============================================================================
 // TOPOLOGICAL STEPS (Navigator-specific)
@@ -870,16 +868,13 @@ const getLongTermPrediction = (): string => {
  * Runs when: conversation exists and topic not yet analyzed
  */
 const analyzeTopic = step('analyzeTopic', 
-  when(ctx => !!ctx.conversation?.length && !ctx.topicAnalyzed),
+  (ctx: ResearchState) => !!ctx.conversation?.length && !ctx.topicAnalyzed,
   async (state: ResearchState): Promise<ResearchState> => {
     const lastMessage = state.conversation[state.conversation.length - 1]?.content || '';
     console.log('🔍 Step 1: Analyzing research topic:', lastMessage);
     
-    // Extract research topic from user message
-    const topic = lastMessage.toLowerCase().includes('ai trends') ? 'AI Trends' :
-                  lastMessage.toLowerCase().includes('machine learning') ? 'Machine Learning' :
-                  lastMessage.toLowerCase().includes('research') ? 'Research Topic' :
-                  'General Research';
+    // Use the actual user input as the research topic
+    const topic = lastMessage.trim() || 'Research Topic';
     
     return updateState({ 
       researchTopic: topic,
@@ -894,7 +889,7 @@ const analyzeTopic = step('analyzeTopic',
  * Runs when: topic analyzed and sources not yet identified
  */
 const identifySources = step('identifySources', 
-  when(ctx => !!ctx.topicAnalyzed && !ctx.sourcesIdentified),
+  (ctx: ResearchState) => !!ctx.topicAnalyzed && !ctx.sourcesIdentified,
   async (state: ResearchState) => {
     console.log('🔍 Step 2: Identifying research sources for:', state.researchTopic);
     
@@ -923,7 +918,7 @@ const identifySources = step('identifySources',
  * Runs when: sources identified and pages not yet scraped
  */
 const scrapeAndAnalyze = step('scrapeAndAnalyze', 
-  when(ctx => !!ctx.sourcesIdentified && !ctx.pagesScraped),
+  (ctx: ResearchState) => !!ctx.sourcesIdentified && !ctx.pagesScraped,
   async (state: ResearchState) => {
     console.log('🔍 Step 3: Scraping and analyzing content');
     
@@ -973,7 +968,7 @@ const scrapeAndAnalyze = step('scrapeAndAnalyze',
  * Runs when: content scraped and analysis not complete
  */
 const generateReport = step('generateReport', 
-  when(ctx => !!ctx.pagesScraped && !ctx.analysisComplete),
+  (ctx: ResearchState) => !!ctx.pagesScraped && !ctx.analysisComplete,
   async (state: ResearchState) => {
     console.log('🔍 Step 4: Generating comprehensive report');
     
@@ -1010,7 +1005,7 @@ const generateReport = step('generateReport',
  * Runs when: analysis complete and report not yet displayed
  */
 const displayReport = step('displayReport', 
-  when(ctx => !!ctx.analysisComplete && !ctx.reportGenerated),
+  (ctx: ResearchState) => !!ctx.analysisComplete && !ctx.reportGenerated,
   async (state: ResearchState): Promise<ResearchState> => {
     console.log('📊 Step 5: Displaying research report');
     
@@ -1055,7 +1050,7 @@ const displayReport = step('displayReport',
 // NAVIGATOR AGENT
 // ============================================================================
 
-async function runNavigatorResearchAgent() {
+async function runNavigatorResearchAgent(userInput?: string) {
   console.log('🚀 Navigator Research Agent - Topological Research Execution\n');
 
   if (!process.env.OPENAI_API_KEY) {
@@ -1069,25 +1064,29 @@ async function runNavigatorResearchAgent() {
     return;
   }
 
-  // Create navigator agent with topological execution
-  const agent = createAgent<ResearchState>([analyzeTopic, identifySources, scrapeAndAnalyze, generateReport, displayReport]);
+  // Get user input if not provided
+  const researchQuery = userInput || 'Generate a comprehensive report about AI trends';
+  console.log(`🔍 Research Query: ${researchQuery}\n`);
 
-  // Initialize state
+  // Create navigator agent with topological execution
+  const agent = createNavigatorAgent<ResearchState>([analyzeTopic, identifySources, scrapeAndAnalyze, generateReport, displayReport]);
+
+  // Initialize state with user input
   const initialState: ResearchState = {
-    conversation: [{ role: 'user', content: 'Generate a comprehensive report about AI trends' }],
-    researchTopic: 'AI Trends',
+    conversation: [{ role: 'user', content: researchQuery }],
+    researchTopic: researchQuery,
     researchDepth: 'medium',
     maxSources: 3,
     maxPagesPerSource: 2,
     scrapedPages: [],
     analysisResults: [],
     verbose: true,
-    currentGoal: '',
+    currentGoal: researchQuery,
     plan: [],
     currentStep: 0,
     maxIterations: 10,
     iterationCount: 0,
-    problem: '',
+    problem: researchQuery,
     thoughts: [],
     conclusion: undefined,
     decisionHistory: []
@@ -1117,7 +1116,7 @@ async function runNavigatorResearchAgent() {
   }
 }
 
-// Run the example
-runNavigatorResearchAgent().catch(console.error);
+// Run the example with a specific research query
+runNavigatorResearchAgent('Research the latest developments in quantum computing').catch(console.error);
 
 export { runNavigatorResearchAgent };

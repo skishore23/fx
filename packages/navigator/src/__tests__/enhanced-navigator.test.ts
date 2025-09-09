@@ -3,7 +3,7 @@
  * Test the improved navigator API using core functions
  */
 
-import { createAgent, composeAgent, when, step } from '../navigator';
+import { createNavigatorAgent, step } from '../navigator';
 import { sequence, parallel, updateState, compose, retry, timeout, validate, log } from '@fx/core';
 
 // ---------- Test Context ----------
@@ -16,21 +16,21 @@ interface TestContext {
 
 // ---------- Test Steps ----------
 const incrementStep = step<TestContext>('increment', 
-  when((ctx: TestContext) => !ctx.processed),
+  (ctx: TestContext) => !ctx.processed,
   async (ctx: TestContext) => {
     return { ...ctx, value: (ctx.value || 0) + 1 };
   }
 );
 
 const processStep = step<TestContext>('process',
-  when((ctx: TestContext) => ctx.value !== undefined && !ctx.processed),
+  (ctx: TestContext) => ctx.value !== undefined && !ctx.processed,
   async (ctx: TestContext) => {
     return { ...ctx, processed: true };
   }
 );
 
 const validateStep = step<TestContext>('validate',
-  when((ctx: TestContext) => !!ctx.processed),
+  (ctx: TestContext) => !!ctx.processed,
   validate((ctx: TestContext) => ctx.value !== undefined && ctx.processed === true)
 );
 
@@ -39,7 +39,7 @@ const validateStep = step<TestContext>('validate',
 describe('Enhanced Navigator API', () => {
   test('should create agent with functional composition', async () => {
     // Proper functional composition - no .add() builder pattern
-    const agent = createAgent<TestContext>([incrementStep, processStep, validateStep]);
+    const agent = createNavigatorAgent<TestContext>([incrementStep, processStep, validateStep]);
 
     const result = await agent.run({ value: 0 });
 
@@ -48,9 +48,9 @@ describe('Enhanced Navigator API', () => {
     expect(result.ctx.processed).toBe(true);
   });
 
-  test('should use composeAgent for functional composition', async () => {
+  test('should use createNavigatorAgent for functional composition', async () => {
     // Even more functional - compose steps directly
-    const agent = composeAgent<TestContext>(incrementStep, processStep, validateStep);
+    const agent = createNavigatorAgent<TestContext>([incrementStep, processStep, validateStep]);
 
     const result = await agent.run({ value: 0 });
 
@@ -63,8 +63,8 @@ describe('Enhanced Navigator API', () => {
     // Direct functional composition using core's sequence
     const sequenceStep = sequence([incrementStep.run, processStep.run]);
     
-    const agent = createAgent<TestContext>([
-      step('sequence', when(() => true), sequenceStep)
+    const agent = createNavigatorAgent<TestContext>([
+      step('sequence', () => true, sequenceStep)
     ]);
 
     const result = await agent.run({ value: 0 });
@@ -78,8 +78,8 @@ describe('Enhanced Navigator API', () => {
     // Direct functional composition using core's parallel
     const parallelStep = parallel([incrementStep.run, processStep.run]);
     
-    const agent = createAgent<TestContext>([
-      step('parallel', when(() => true), parallelStep)
+    const agent = createNavigatorAgent<TestContext>([
+      step('parallel', () => true, parallelStep)
     ]);
 
     const result = await agent.run({ value: 0 });
@@ -95,8 +95,8 @@ describe('Enhanced Navigator API', () => {
       processStep.run
     );
     
-    const agent = createAgent<TestContext>([
-      step('composed', when(() => true), composedStep)
+    const agent = createNavigatorAgent<TestContext>([
+      step('composed', () => true, composedStep)
     ]);
 
     const result = await agent.run({ value: 0 });
@@ -109,7 +109,7 @@ describe('Enhanced Navigator API', () => {
   test('should use lenses for state transformation', async () => {
     // Show proper use of lenses for state management
     const lensStep = step<TestContext>('lensStep',
-      when((ctx: TestContext) => !ctx.processed),
+      (ctx: TestContext) => !ctx.processed,
       async (ctx: TestContext) => {
         return updateState({
           value: (ctx.value || 0) + 1,
@@ -118,7 +118,7 @@ describe('Enhanced Navigator API', () => {
       }
     );
     
-    const agent = createAgent<TestContext>([lensStep]);
+    const agent = createNavigatorAgent<TestContext>([lensStep]);
 
     const result = await agent.run({ value: 0 });
 
@@ -130,20 +130,20 @@ describe('Enhanced Navigator API', () => {
   test('should use core retry and timeout functions', async () => {
     // Use core functions directly with step wrapper
     const retryStepInstance = step<TestContext>('retryIncrement', 
-      when((ctx: TestContext) => !ctx.processed),
+      (ctx: TestContext) => !ctx.processed,
       retry(async (ctx: TestContext) => {
         return { ...ctx, value: (ctx.value || 0) + 1 } as TestContext;
       }, 3, 100)
     );
 
     const timeoutStepInstance = step<TestContext>('timeoutProcess',
-      when((ctx: TestContext) => ctx.value !== undefined && !ctx.processed),
+      (ctx: TestContext) => ctx.value !== undefined && !ctx.processed,
       timeout(async (ctx: TestContext) => {
         return { ...ctx, processed: true } as TestContext;
       }, 5000)
     );
 
-    const agent = createAgent<TestContext>([retryStepInstance, timeoutStepInstance]);
+    const agent = createNavigatorAgent<TestContext>([retryStepInstance, timeoutStepInstance]);
 
     const result = await agent.run({ value: 0 });
 
@@ -155,11 +155,11 @@ describe('Enhanced Navigator API', () => {
   test('should use core log function', async () => {
     // Use core's log function directly
     const logStep = step<TestContext>('logStep',
-      when((ctx: TestContext) => !ctx.processed),
+      (ctx: TestContext) => !ctx.processed,
       log('Processing step')
     );
 
-    const agent = createAgent<TestContext>([logStep, processStep]);
+    const agent = createNavigatorAgent<TestContext>([logStep, processStep]);
 
     const result = await agent.run({ value: 0 });
 
@@ -167,9 +167,9 @@ describe('Enhanced Navigator API', () => {
     expect(result.ctx.processed).toBe(true);
   });
 
-  test('should use composeAgent for direct composition', async () => {
+  test('should use createNavigatorAgent for direct composition', async () => {
     // This test shows direct step composition
-    const agent = composeAgent<TestContext>(incrementStep, processStep);
+    const agent = createNavigatorAgent<TestContext>([incrementStep, processStep]);
     
     const result = await agent.run({ value: 0 });
 

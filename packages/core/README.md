@@ -11,14 +11,15 @@ npm install @fx/core
 ## Quick Start
 
 ```typescript
-import { step, sequence, updateState } from '@fx/core';
+import { step, sequence, updateState, Agent } from '@fx/core';
 
 const workflow = sequence([
   step('process', (state) => updateState({ processed: true })(state)),
   step('save', (state) => updateState({ saved: true })(state))
 ]);
 
-const result = await workflow({ data: 'example' });
+const agent = new Agent(workflow);
+const result = await agent.start({ data: 'example' });
 ```
 
 ## Documentation

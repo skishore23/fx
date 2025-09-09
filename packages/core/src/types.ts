@@ -52,6 +52,32 @@ export interface Event {
   readonly data?: unknown;
 }
 
+/**
+ * Enhanced event with full context state for replay-ability
+ */
+export interface StateEvent<T extends BaseContext = BaseContext> {
+  readonly id: string;
+  readonly name: string;
+  readonly timestamp: Date;
+  readonly stepName?: string;
+  readonly runtime?: 'core' | 'navigator' | 'flow';
+  readonly state: T;
+  readonly stateDiff?: Partial<T>;
+  readonly metadata?: Record<string, unknown>;
+}
+
+/**
+ * State checkpoint for replay-ability
+ */
+export interface StateCheckpoint<T extends BaseContext = BaseContext> {
+  readonly id: string;
+  readonly timestamp: Date;
+  readonly stepName: string;
+  readonly runtime: 'core' | 'navigator' | 'flow';
+  readonly state: T;
+  readonly eventId: string;
+}
+
 // ---------- Configuration Types ----------
 
 export interface FxConfig {

@@ -149,4 +149,68 @@ export const filteredMemoryLens = <T extends BaseContext>(): {
   };
 };
 
+// ---------- Memory Helper Functions ----------
+
+/**
+ * Log an observation - what the agent sees or notices
+ */
+export const logObservation = <T extends BaseContext>(content: string, metadata?: Record<string, unknown>) => {
+  return addMemory('observation', content, metadata);
+};
+
+/**
+ * Log an action - what the agent does or executes
+ */
+export const logAction = <T extends BaseContext>(content: string, metadata?: Record<string, unknown>) => {
+  return addMemory('action', content, metadata);
+};
+
+/**
+ * Log an outcome - what happened as a result
+ */
+export const logOutcome = <T extends BaseContext>(content: string, metadata?: Record<string, unknown>) => {
+  return addMemory('result', content, metadata);
+};
+
+/**
+ * Log an error - what went wrong
+ */
+export const logError = <T extends BaseContext>(content: string, metadata?: Record<string, unknown>) => {
+  return addMemory('error', content, metadata);
+};
+
+// Legacy aliases for backward compatibility
+export const addObservation = logObservation;
+export const addAction = logAction;
+export const addResult = logOutcome;
+export const addError = logError;
+
+/**
+ * Get recent memory entries (last N entries)
+ */
+export const getRecentMemory = <T extends BaseContext>(count: number = 10): Step<T> => {
+  return getMemory({ limit: count });
+};
+
+/**
+ * Get memory by type
+ */
+export const getMemoryByType = <T extends BaseContext>(type: MemoryEntry['type']): Step<T> => {
+  return getMemory({ type });
+};
+
+/**
+ * Get memory since a specific time
+ */
+export const getMemorySince = <T extends BaseContext>(since: Date): Step<T> => {
+  return getMemory({ since });
+};
+
+/**
+ * Search memory for specific content
+ */
+export const searchMemoryContent = <T extends BaseContext>(query: string): Step<T> => {
+  return searchMemory(query);
+};
+
 

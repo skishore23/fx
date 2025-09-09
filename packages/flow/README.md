@@ -28,45 +28,30 @@ Use `@fx/flow` when you need:
 import { 
   step, 
   sequence, 
-  createFlowBuilder, 
-  createFlowExecutor,
-  // Core functionality
-  createOpenAIProvider,
-  llmTemplateStep,
-  createToolRegistry,
-  createValidatedTool
-} from '@fx/flow';
+  updateState,
+  logAction,
+  Agent
+} from '@fx/core';
 
-// Define workflow steps using core's tools
-const workflow = createFlowBuilder('my-workflow')
-  .addStep(createValidatedTool({
-    name: 'processInput',
-    description: 'Process user input',
-    execute: step('processInput', async (ctx) => {
-      // Process input using core's state management
-      return updateState({ processed: true })(ctx);
-    })
-  }))
-  .addStep(createValidatedTool({
-    name: 'generateResponse',
-    description: 'Generate response using LLM',
-    execute: llmTemplateStep({
-      provider: createOpenAIProvider({ apiKey: 'your-key' }),
-      messages: [
-        { role: 'user', content: 'Process: {{input}}' }
-      ]
-    })
-  }))
-  .withConfig({
-    enableLogging: true,
-    maxRetries: 3,
-    timeoutMs: 5000
-  })
-  .build();
+// Define workflow steps
+const processInput = step('processInput', async (ctx) => {
+  return updateState({ processed: true })(ctx);
+});
+
+const generateResponse = step('generateResponse', async (ctx) => {
+  return updateState({ response: 'Generated response' })(ctx);
+});
+
+const logResult = step('logResult', async (ctx) => {
+  return logAction('Workflow completed')(ctx);
+});
+
+// Create workflow
+const workflow = sequence([processInput, generateResponse, logResult]);
 
 // Execute workflow
-const executor = createFlowExecutor(workflow);
-const result = await executor.execute(initialState);
+const agent = new Agent(workflow);
+const result = await agent.start(initialState);
 ```
 
 ## Core Integration
@@ -74,9 +59,9 @@ const result = await executor.execute(initialState);
 `@fx/flow` seamlessly integrates with `@fx/core`:
 
 - **LLM Integration**: Use `createOpenAIProvider`, `llmTemplateStep`, `promptTemplate`
-- **Tool System**: Use `createToolRegistry`, `createValidatedTool` for workflow tools
+- **Memory System**: Use `logAction`, `logObservation`, `logOutcome`, `logError` for tracking
 - **Patterns**: Use `createReActPattern`, `createChainOfThoughtPattern` for intelligent workflows
-- **State Management**: Use `updateState`, `addState`, `get`, `set` for state operations
+- **State Management**: Use `updateState`, `get`, `set` for state operations
 - **Composition**: Use `sequence`, `parallel`, `when` for workflow composition
 
 ## Architecture
