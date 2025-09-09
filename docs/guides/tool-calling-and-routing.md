@@ -25,37 +25,45 @@ The Fx Framework uses a simple approach for tool calling:
 ### Simple Tool Implementation
 
 ```typescript
-import { step, sequence, updateState, addState } from '@fx/core';
+import { step, sequence, updateState, logAction, safe, safeAsync } from '@fx/core';
 
-// Define your tool as a step
-const readFileTool = step('readFile', (state) => {
-  try {
+// Define your tool as a step with proper error handling
+const readFileTool = step('readFile', async (state) => {
+  const result = await safeAsync(async () => {
     // Your file reading logic here
     const content = 'File content here';
+    return { content, success: true };
+  });
+  
+  if (result.tag === 'Left') {
     return updateState({ 
-      fileContent: content,
+      error: result.left.message,
       lastTool: 'readFile'
     })(state);
-  } catch (error) {
+  } else {
     return updateState({ 
-      error: error.message,
+      fileContent: result.right.content,
       lastTool: 'readFile'
     })(state);
   }
 });
 
-const writeFileTool = step('writeFile', (state) => {
-  try {
+const writeFileTool = step('writeFile', async (state) => {
+  const result = await safeAsync(async () => {
     // Your file writing logic here
     console.log('Writing file...');
+    return { success: true };
+  });
+  
+  if (result.tag === 'Left') {
+    return updateState({ 
+      error: result.left.message,
+      lastTool: 'writeFile'
+    })(state);
+  } else {
     return updateState({ 
       lastTool: 'writeFile',
       success: true
-    })(state);
-  } catch (error) {
-    return updateState({ 
-      error: error.message,
-      lastTool: 'writeFile'
     })(state);
   }
 });
@@ -161,9 +169,9 @@ const updateUser = step('updateUser', (state) => {
   })(state);
 });
 
-// Add to memory
-const logAction = step('logAction', (state) => {
-  return addState('action', 'User updated')(state);
+// Log action to memory
+const logActionStep = step('logAction', (state) => {
+  return logAction('User updated')(state);
 });
 ```
 
@@ -185,8 +193,8 @@ const conditionalUpdate = when(
 
 ```typescript
 import { 
-  step, sequence, createPlan, createAgent,
-  updateState, addState, createPattern
+  step, sequence, Agent,
+  updateState, logAction, createPattern, safeAsync
 } from '@fx/core';
 
 interface FileAgentState extends BaseContext {
@@ -197,33 +205,41 @@ interface FileAgentState extends BaseContext {
   memory: Array<{ type: string; content: string; timestamp: string }>;
 }
 
-// Tools
-const readFileTool = step('readFile', (state: FileAgentState) => {
-  try {
+// Tools with proper error handling
+const readFileTool = step('readFile', async (state: FileAgentState) => {
+  const result = await safeAsync(async () => {
     const content = `Content of file from: ${state.userInput}`;
+    return { content, success: true };
+  });
+  
+  if (result.tag === 'Left') {
     return updateState({ 
-      fileContent: content,
+      error: result.left.message,
       selectedTool: 'readFile'
     })(state);
-  } catch (error) {
+  } else {
     return updateState({ 
-      error: error.message,
+      fileContent: result.right.content,
       selectedTool: 'readFile'
     })(state);
   }
 });
 
-const writeFileTool = step('writeFile', (state: FileAgentState) => {
-  try {
+const writeFileTool = step('writeFile', async (state: FileAgentState) => {
+  const result = await safeAsync(async () => {
     console.log('Writing file...');
+    return { success: true };
+  });
+  
+  if (result.tag === 'Left') {
+    return updateState({ 
+      error: result.left.message,
+      selectedTool: 'writeFile'
+    })(state);
+  } else {
     return updateState({ 
       selectedTool: 'writeFile',
       success: true
-    })(state);
-  } catch (error) {
-    return updateState({ 
-      error: error.message,
-      selectedTool: 'writeFile'
     })(state);
   }
 });
@@ -270,12 +286,12 @@ const fileAgentWorkflow = sequence([
   }),
   
   step('logAction', (state: FileAgentState) => {
-    return addState('action', `Executed: ${state.selectedTool}`)(state);
+    return logAction(`Executed: ${state.selectedTool}`)(state);
   })
 ]);
 
 // Agent
-const plan = createPlan('file-agent', [
+const completeFileAgentWorkflow = sequence([
   step('init', (state) => {
     console.log('📁 File Agent started!');
     return state;
@@ -283,15 +299,15 @@ const plan = createPlan('file-agent', [
   fileAgentWorkflow
 ]);
 
-export const fileAgent = createAgent('file-agent', plan);
+export const fileAgent = new Agent(completeFileAgentWorkflow);
 ```
 
 ### Advanced Agent with Patterns
 
 ```typescript
 import { 
-  step, sequence, parallel, when, createPlan, createAgent,
-  updateState, addState, createReActPattern, createChainOfThoughtPattern
+  step, sequence, parallel, when, Agent,
+  updateState, logAction, createReActPattern, createChainOfThoughtPattern
 } from '@fx/core';
 
 interface AdvancedAgentState extends BaseContext {
@@ -333,11 +349,11 @@ const advancedAgentWorkflow = sequence([
   }),
   
   step('logAction', (state: AdvancedAgentState) => {
-    return addState('action', `Processed: ${state.userInput}`)(state);
+    return logAction(`Processed: ${state.userInput}`)(state);
   })
 ]);
 
-const plan = createPlan('advanced-agent', [
+const completeAdvancedWorkflow = sequence([
   step('init', (state) => {
     console.log('🚀 Advanced Agent started!');
     return state;
@@ -345,7 +361,7 @@ const plan = createPlan('advanced-agent', [
   advancedAgentWorkflow
 ]);
 
-export const advancedAgent = createAgent('advanced-agent', plan);
+export const advancedAgent = new Agent(completeAdvancedWorkflow);
 ```
 
 ## Best Practices
@@ -390,13 +406,16 @@ import {
   step, sequence, parallel, when,
   
   // State operations
-  updateState, addState,
+  updateState, logAction,
+  
+  // Error handling
+  safe, safeAsync,
   
   // Patterns
   createReActPattern, createChainOfThoughtPattern, createPattern,
   
   // Agent creation
-  createPlan, createAgent
+  Agent
 } from '@fx/core';
 ```
 
@@ -431,12 +450,16 @@ const executeTool = step('executeTool', (state) => {
 
 #### Error Handling
 ```typescript
-const safeTool = step('safeTool', (state) => {
-  try {
+const safeTool = step('safeTool', async (state) => {
+  const result = await safeAsync(async () => {
     // Your tool logic here
-    return updateState({ result: 'success' })(state);
-  } catch (error) {
-    return updateState({ error: error.message })(state);
+    return { success: true, data: 'some data' };
+  });
+  
+  if (result.tag === 'Left') {
+    return updateState({ error: result.left.message })(state);
+  } else {
+    return updateState({ result: 'success', data: result.right.data })(state);
   }
 });
 ```

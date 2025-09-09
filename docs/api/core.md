@@ -59,29 +59,50 @@ const newState = updateState({
 })(state);
 ```
 
-### `addState(key, value)`
-Add a value to an array field in state.
+### `logAction(content, metadata?)`
+Log an action to memory.
 
 ```typescript
-const newState = addState('memory', 'New entry')(state);
+const newState = logAction('User updated profile')(state);
+```
+
+### `logObservation(content, metadata?)`
+Log an observation to memory.
+
+```typescript
+const newState = logObservation('File read successfully')(state);
+```
+
+### `logOutcome(content, metadata?)`
+Log an outcome to memory.
+
+```typescript
+const newState = logOutcome('Task completed successfully')(state);
+```
+
+### `logError(content, metadata?)`
+Log an error to memory.
+
+```typescript
+const newState = logError('Failed to read file')(state);
 ```
 
 ## Patterns
 
-### `createReActPattern(name)`
+### `createReActPattern(llmProvider, tools?)`
 Create a ReAct pattern for reasoning and acting.
 
 ```typescript
-const reactPattern = createReActPattern('reasoning-agent');
-const result = await reactPattern(state);
+const reactPattern = createReActPattern(llmProvider, ['tool1', 'tool2']);
+const result = await reactPattern.workflow(state);
 ```
 
-### `createChainOfThoughtPattern(name)`
+### `createChainOfThoughtPattern(llmProvider)`
 Create a Chain of Thought pattern for step-by-step reasoning.
 
 ```typescript
-const cotPattern = createChainOfThoughtPattern('thinking-agent');
-const result = await cotPattern(state);
+const cotPattern = createChainOfThoughtPattern(llmProvider);
+const result = await cotPattern.workflow(state);
 ```
 
 ### `createPattern(predicate, action)`
@@ -96,33 +117,37 @@ const customPattern = createPattern(
 
 ## High-Level API
 
-### `createPlan(name, steps)`
-Create a plan from a sequence of steps.
-
-```typescript
-const plan = createPlan('my-plan', [
-  step('init', (state) => state),
-  step('process', processInput),
-  step('respond', generateResponse)
-]);
-```
-
-### `createAgent(name, plan)`
-Create an agent from a plan.
-
-```typescript
-const agent = createAgent('my-agent', plan);
-const result = await agent.start(initialState);
-```
-
 ### `Agent` class
 The agent class with methods for starting and monitoring.
 
 ```typescript
-const agent = new Agent(plan);
+import { Agent, step, sequence } from '@fx/core';
+
+const workflow = sequence([
+  step('init', (state) => state),
+  step('process', processInput),
+  step('respond', generateResponse)
+]);
+
+const agent = new Agent(workflow);
 await agent.start(initialState);
 console.log(agent.getStatus()); // 'running' | 'completed' | 'error'
 console.log(agent.getState()); // current state
+```
+
+### Durable Execution
+Create durable agents with checkpointing capabilities.
+
+```typescript
+import { executeDurable, createMemoryPersistence } from '@fx/core';
+
+const persistence = createMemoryPersistence();
+const config = {
+  persistence,
+  checkpointInterval: 1000
+};
+
+const result = await executeDurable(workflow, initialState, config);
 ```
 
 ## Error Handling
@@ -142,6 +167,71 @@ Either.fold(
   (error) => console.error('Error:', error.message),
   (value) => console.log('Success:', value)
 );
+```
+
+### `safe` and `safeAsync`
+Wrap potentially throwing functions into Either monads.
+
+```typescript
+import { safe, safeAsync } from '@fx/core';
+
+// Synchronous safe wrapper
+const safeParse = safe((json: string) => JSON.parse(json));
+const result = safeParse('{"valid": "json"}');
+
+// Asynchronous safe wrapper
+const safeApiCall = safeAsync(async (url: string) => {
+  const response = await fetch(url);
+  return response.json();
+});
+const apiResult = await safeApiCall('https://api.example.com/data');
+```
+
+## Durable Execution
+
+### `checkpoint(persistence, reason?)`
+Create a checkpoint of the current state.
+
+```typescript
+import { checkpoint, createMemoryPersistence } from '@fx/core';
+
+const persistence = createMemoryPersistence();
+const checkpointStep = checkpoint(persistence, 'saving progress');
+```
+
+### `resumeFromCheckpoint(persistence, checkpointId, extras?)`
+Resume execution from a saved checkpoint.
+
+```typescript
+import { resumeFromCheckpoint } from '@fx/core';
+
+const resumeStep = resumeFromCheckpoint(persistence, 'checkpoint-123', {
+  additionalData: 'new data'
+});
+```
+
+### `pause(persistence, reason?)`
+Pause execution and save current state.
+
+```typescript
+import { pause } from '@fx/core';
+
+const pauseStep = pause(persistence, 'user requested pause');
+```
+
+### `executeDurable(step, initialState, config)`
+Execute a step with automatic checkpointing.
+
+```typescript
+import { executeDurable, createMemoryPersistence } from '@fx/core';
+
+const persistence = createMemoryPersistence();
+const config = {
+  persistence,
+  checkpointInterval: 1000
+};
+
+const result = await executeDurable(myStep, initialState, config);
 ```
 
 ## Types

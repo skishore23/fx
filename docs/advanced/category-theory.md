@@ -269,11 +269,6 @@ const workflow: Step<UserState> = sequence(
 );
 ```
 
-## Further Reading
-
-- [Category Theory for Programmers](https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-part-one/)
-- [Functional Programming in TypeScript](https://github.com/enricopolanski/functional-programming)
-- [fp-ts Documentation](https://gcanti.github.io/fp-ts/)
 
 ## Conclusion
 

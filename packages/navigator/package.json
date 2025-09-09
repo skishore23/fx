@@ -1,0 +1,71 @@
+{
+  "name": "@fx/navigator",
+  "version": "1.0.0",
+  "description": "Autonomous runtime for fx-core - adaptive, emergent execution with guards and policies",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "functional-programming",
+    "category-theory",
+    "typescript",
+    "autonomous-agents",
+    "reactive",
+    "adaptive",
+    "guards",
+    "policies"
+  ],
+  "author": "Fx Framework Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fx-framework/fx.git",
+    "directory": "packages/navigator"
+  },
+  "bugs": {
+    "url": "https://github.com/fx-framework/fx/issues"
+  },
+  "homepage": "https://github.com/fx-framework/fx#readme",
+  "dependencies": {
+    "@fx/core": "file:../core"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.0.0",
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0",
+    "prettier": "^3.0.0",
+    "ts-jest": "^29.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

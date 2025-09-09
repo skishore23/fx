@@ -34,15 +34,15 @@ const conditional = when(
 // Sequence two steps
 const combined = sequence([
   step('update', (state) => updateState({ field1: 'value1' })(state)),
-  step('log', (state) => addState('action', 'Updated field1')(state))
+  step('log', (state) => logAction('Updated field1')(state))
 ]);
 
 // Sequence multiple steps
 const multiStep = sequence([
   step('step1', (state) => updateState({ field1: 'value1' })(state)),
-  step('log1', (state) => addState('action', 'Step 1')(state)),
+  step('log1', (state) => logAction('Step 1')(state)),
   step('step2', (state) => updateState({ field2: 'value2' })(state)),
-  step('log2', (state) => addState('action', 'Step 2')(state))
+  step('log2', (state) => logAction('Step 2')(state))
 ]);
 ```
 
@@ -53,7 +53,10 @@ Every state operation is a pure function that takes state and returns new state:
 | Function | Purpose | Use Case |
 |----------|---------|----------|
 | `updateState` | Update multiple fields | General state updates |
-| `addState` | Add memory entries | Log actions/observations |
+| `logAction` | Log actions to memory | Track what the agent does |
+| `logObservation` | Log observations to memory | Track what the agent sees |
+| `logOutcome` | Log outcomes to memory | Track results |
+| `logError` | Log errors to memory | Track failures |
 
 ## When to Use What
 
@@ -79,7 +82,7 @@ const codingAgent = sequence([
 ```typescript
 const updateUserSession = sequence([
   step('update', (state) => updateState({ lastActive: Date.now() })(state)),
-  step('log', (state) => addState('action', 'User session updated')(state))
+  step('log', (state) => logAction('User session updated')(state))
 ]);
 ```
 
@@ -100,9 +103,12 @@ const readFileStep = step('readFile', async (state) => {
 ```typescript
 import { createReActPattern, createChainOfThoughtPattern } from '@fx/core';
 
+const reactPattern = createReActPattern(llmProvider, ['tool1', 'tool2']);
+const cotPattern = createChainOfThoughtPattern(llmProvider);
+
 const patternWorkflow = sequence([
-  step('reason', createReActPattern('reasoning-agent')),
-  step('think', createChainOfThoughtPattern('thinking-agent')),
+  step('reason', reactPattern.workflow),
+  step('think', cotPattern.workflow),
   step('respond', generateResponse)
 ]);
 ```

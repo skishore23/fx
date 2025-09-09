@@ -11,8 +11,12 @@
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-      "@fx/core": ["./packages/fx-core/src"],
-      "@fx/core/*": ["./packages/fx-core/src/*"]
+      "@fx/core": ["./packages/core/src"],
+      "@fx/core/*": ["./packages/core/src/*"],
+      "@fx/flow": ["./packages/flow/src"],
+      "@fx/flow/*": ["./packages/flow/src/*"],
+      "@fx/navigator": ["./packages/navigator/src"],
+      "@fx/navigator/*": ["./packages/navigator/src/*"]
     },
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
@@ -41,7 +45,8 @@
     "skipLibCheck": true
   },
   "include": [
-    "packages/**/*"
+    "packages/**/*",
+    "examples/**/*"
   ],
   "exclude": [
     "node_modules",

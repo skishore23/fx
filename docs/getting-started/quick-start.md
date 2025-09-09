@@ -10,12 +10,11 @@ A simple agent that processes input and generates responses. This demonstrates t
 
 ```typescript
 import { 
-  createPlan,
-  createAgent,
+  Agent,
   step, 
   sequence, 
   updateState, 
-  addState
+  logAction
 } from '@fx/core';
 
 // Define your agent's state
@@ -40,15 +39,15 @@ const generateResponse = step('generateResponse', (state: AgentState) => {
 });
 
 // Step 3: Log the action
-const logAction = step('logAction', (state: AgentState) => {
-  return addState('action', `Processed: ${state.userInput}`)(state);
+const logActionStep = step('logAction', (state: AgentState) => {
+  return logAction(`Processed: ${state.userInput}`)(state);
 });
 
 // Create the agent workflow
 const agentWorkflow = sequence([
   processInput,
   generateResponse,
-  logAction
+  logActionStep
 ]);
 ```
 
@@ -56,8 +55,7 @@ const agentWorkflow = sequence([
 
 ```typescript
 // Create the agent
-const plan = createPlan('simple-workflow', agentWorkflow);
-const agent = createAgent('simple-agent', plan);
+const agent = new Agent(agentWorkflow);
 
 // Run the agent
 async function runAgent() {
@@ -105,15 +103,15 @@ const processWithErrorHandling = step('processWithErrorHandling', (state: AgentS
 import { createReActPattern, createChainOfThoughtPattern } from '@fx/core';
 
 // ReAct pattern for reasoning and acting
-const reactAgent = createReActPattern('reasoning-agent');
+const reactPattern = createReActPattern(llmProvider, ['tool1', 'tool2']);
 
 // Chain of thought pattern for step-by-step reasoning
-const cotAgent = createChainOfThoughtPattern('thinking-agent');
+const cotPattern = createChainOfThoughtPattern(llmProvider);
 
 // Use patterns in your workflow
 const patternWorkflow = sequence([
-  step('reason', reactAgent),
-  step('think', cotAgent),
+  step('reason', reactPattern.workflow),
+  step('think', cotPattern.workflow),
   step('respond', generateResponse)
 ]);
 ```
@@ -158,15 +156,13 @@ const conditionalWorkflow = sequence([
 
 ```typescript
 import { 
-  createPlan,
-  createAgent,
+  Agent,
   step, 
   sequence, 
   parallel,
   when,
   updateState, 
-  addState,
-  createReActPattern
+  logAction
 } from '@fx/core';
 
 interface AgentState {
@@ -198,13 +194,12 @@ const completeWorkflow = sequence([
   }),
   
   step('logAction', (state) => 
-    addState('action', `Processed: ${state.userInput}`)(state)
+    logAction(`Processed: ${state.userInput}`)(state)
   )
 ]);
 
 // Create and run the agent
-const plan = createPlan('complete-workflow', completeWorkflow);
-const agent = createAgent('complete-agent', plan);
+const agent = new Agent(completeWorkflow);
 
 async function runCompleteAgent() {
   const result = await agent.start({
@@ -233,7 +228,7 @@ runCompleteAgent();
 ```typescript
 const updateUser = sequence([
   step('updateLastActive', (s) => updateState({ lastActive: Date.now() })(s)),
-  step('addAction', (s) => addState('action', 'User updated')(s)),
+  step('addAction', (s) => logAction('User updated')(s)),
   step('updateVersion', (s) => updateState({ version: '1.0.0' })(s))
 ]);
 ```
