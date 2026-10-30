@@ -281,6 +281,9 @@ console.log(result.issues.length); // 3
 
 ## Examples
 
+- **[Algorithm search for FX and Beetle](./docs/advanced/algorithm-search.md)** — search scan,
+  early-exit and indexing algorithms against independent correctness checks and withheld cases.
+
 - **[Experimental program discovery](./docs/advanced/program-discovery.md)** — inspectable programs,
   parameterized abstraction learning, bounded search, and reproducible transfer and GPU scheduling experiments.
 

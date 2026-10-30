@@ -1,37 +1,52 @@
 {
-  "baseRevision": "61e11f428660cc215d4467153b47204280b81ff6",
+  "baseRevision": "09795eaa62b5dd5d87f1b9f92efe04340be9dcd0",
   "node": "v24.22.1",
   "sourceSha256": {
+    ".github/workflows/ci.yml": "36ba15f487863752952456e800631c39aafce3adec3ffdc8f314806aff858b24",
+    "examples/algorithm-search/algorithm-search.test.cjs": "4ae01daed8395e5ff333874a0f5724e6a1a9d85c59ec1e82140561888cfac77c",
+    "examples/algorithm-search/builders.cjs": "6a4a98ba0d6d53761fec501928c034985637abc98e5c08c9e3d9955296bda5af",
+    "examples/algorithm-search/memory.cjs": "6a62f8dbaada8196a808785984592d51cb27a8f9aa69f8d750050fc515a93d71",
+    "examples/algorithm-search/routes.cjs": "8c1773c2108bc54ed2260ecb89c4ae1cde16f2a9782b08d2b1d33dfa6bfbcecf",
+    "examples/algorithm-search/run.cjs": "5c39395630e6cd793c20ec3db2b32c27a4a8e9dfa8454fff0fedd0b98764581a",
     "examples/discovery/experiments.test.cjs": "d8ea5c4077192b010e879d4ebec5d9f611ad0d962b464584bbc69b31eb557515",
     "examples/discovery/scheduling-discovery.cjs": "816dadc6a6f5d7f371d4121ae215bdae4d2f4e9c872966e0f58d1e69509595f5",
     "examples/discovery/scheduling.cjs": "3d8894c30f56d2b324b1ebd73a8f77361a4c5e9c6d9af7ed7d74d3c0e95f4401",
     "examples/discovery/transfer.cjs": "d594c1e37ffe2d20310efcaadf702338cfd7e67b1625ae0f1ecdb005ddac219c",
-    "package.json": "36e372c4d01bb3b439c70ed4512c8e525d1092a935ed8485290782df3ebc1390",
+    "package.json": "6f6a6ed6458a65f30a0f8f2cad0feebbc8915883f9d0b9a080783dd940eb4b12",
     "packages/fx-core/package.json": "f1c969ad9c921f4721a7320fa2f6e7f86fc2032861a3778ebc5928e286a59391",
+    "packages/fx-core/src/__tests__/algorithm-proposer.test.ts": "58d77f35d5590ce76fc303028eae48f56bc1ec9cb96bb345d2f041d67d51a091",
+    "packages/fx-core/src/__tests__/algorithm-runtime.test.ts": "a966ff5c51692d7038a022b68d3fd36a78ab94fba76763e93a29784e847a6dbe",
+    "packages/fx-core/src/__tests__/algorithm-search.test.ts": "4ee75694a33dc5c39277b133c4d190e22fc9ba14ccbc580e7bf670eac01cb6d6",
+    "packages/fx-core/src/__tests__/discovery-learning.test.ts": "c329454c55569e56c2d91793f0b57cb6ca50ec3b620d952e07eb774c3ed155b3",
+    "packages/fx-core/src/__tests__/discovery-runtime.test.ts": "1d0cb5e3af4e45717368911f7e082506788600482a4c30c05749b823851307bf",
     "packages/fx-core/src/discovery/abstractions.ts": "2816285cba38041bfb87fd8c93bf707672106596d9cf41d616dbbeacd7fb77ee",
-    "packages/fx-core/src/discovery/index.ts": "d677da1ffed8fa46636d0aa8e2a2312e61932534fed45f2af82271ea9d992a92",
+    "packages/fx-core/src/discovery/algorithm-model.ts": "dc2adfbdebe6e1a926891fa0a7f6330aed27ee6c8ecf5b9d6db83ae90e2861a0",
+    "packages/fx-core/src/discovery/algorithm-proposer.ts": "32956a7e50b759278f9da40bb3a5ea101b1b83219ddcf5db83c57349cd48a945",
+    "packages/fx-core/src/discovery/algorithm-runtime.ts": "18f8c35a70e529c87bdcfce4f6da5f67ac825939d44b2fb5cdfe54e5b628765e",
+    "packages/fx-core/src/discovery/algorithm-search.ts": "0e46ea637a0aa9c33a2c07adcb85fb5bc54688720c52a5ad192938092f988031",
+    "packages/fx-core/src/discovery/algorithm-values.ts": "671769e0fb6c11f3f8b840ed4611060b0e0095f122937ca5c821b55ccfdb580e",
+    "packages/fx-core/src/discovery/index.ts": "6585c3cdfdc7c32c734b71030fe5b833d7e6df2ebed27d9384dccb90f60e641f",
     "packages/fx-core/src/discovery/model.ts": "14be2a8b12799012ae2de3073285cf715c666d3d5d3f004d4ccfc26ccdc03a39",
     "packages/fx-core/src/discovery/optimization.ts": "6bd7c36a67b081fca0ca70be56c5419a87005b6463b90d72aaa2225e120fd086",
     "packages/fx-core/src/discovery/runtime.ts": "60d478996cc47f915f5b87cf9a87f5e7f28235aafc66a5f32d8e8f407b930068",
     "packages/fx-core/src/discovery/search.ts": "385d53ef14505733f5aeda3b55056be1f7c5642700fcecb5fbd7be973ab6dc03",
     "packages/fx-core/src/discovery/state.ts": "fb107bbbded284f32a09cdb50909cd7a999343f27431fc77435771ee4a0d9942",
     "packages/fx-core/src/index.ts": "8e5f25252124a7493fda966f31a30d2c42593d21ba9c8d1c6f41d6892199cfc8",
-    "packages/fx-core/src/__tests__/discovery-learning.test.ts": "c329454c55569e56c2d91793f0b57cb6ca50ec3b620d952e07eb774c3ed155b3",
-    "packages/fx-core/src/__tests__/discovery-runtime.test.ts": "1d0cb5e3af4e45717368911f7e082506788600482a4c30c05749b823851307bf",
-    ".github/workflows/ci.yml": "36ba15f487863752952456e800631c39aafce3adec3ffdc8f314806aff858b24"
+    "packages/fx-core/src/memory.ts": "5e795790cff6d096b7906e7a2130553672ab44e0b34fb59c57fe8d8bc9b704ba"
   },
   "checks": {
-    "libraryTests": 161,
-    "experimentTests": 4,
+    "libraryTests": 193,
+    "experimentTests": 7,
     "lint": "passed",
     "typeCheck": "passed",
     "build": "passed",
     "esmExport": "passed",
-    "discoveryLineCoverage": 98.35,
-    "discoveryBranchCoverage": 82.73
+    "discoveryLineCoverage": 97.03,
+    "discoveryBranchCoverage": 82.17,
+    "liveModelRun": false
   },
   "outputSha256": {
-    "transfer.json": "2c4cbc6cbddc16cb306e07c85378a2fc9e461d996e7a9fdd045948ca1bcdb29f",
-    "scheduling.json": "527aefeef11e5872f91f852a8089e682e3bddbb3ee61a03881bcd5ec0d58f7c3"
+    "scheduling.json": "527aefeef11e5872f91f852a8089e682e3bddbb3ee61a03881bcd5ec0d58f7c3",
+    "transfer.json": "2c4cbc6cbddc16cb306e07c85378a2fc9e461d996e7a9fdd045948ca1bcdb29f"
   }
 }

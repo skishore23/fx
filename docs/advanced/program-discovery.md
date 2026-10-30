@@ -1,5 +1,9 @@
 # Experimental program discovery
 
+For control-flow and indexing algorithm search targeting FX and Beetle, see
+[Algorithm search](algorithm-search.md). That extension has a separate bounded
+language with loops and branches; the numeric `Program` language below remains unchanged.
+
 FX can now represent a bounded program as JSON, execute it as an ordinary FX
 `Step`, search for programs against an external evaluator, and extract
 parameterized abstractions from a successful program corpus. This is an
