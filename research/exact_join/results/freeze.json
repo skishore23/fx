@@ -1,0 +1,56 @@
+{
+  "selection_sha256": "259a4a94ef27b8408ebeedacbd3ad087be6c62e241c367e4fe60197ab3a75824",
+  "protocol_sha256": "6c412917b6610ba42ba43f03cc9f6a51de4a2ff8a11a877c445b4451088e6755",
+  "primary_seed": 42817,
+  "baseline": "hybrid",
+  "winners": [
+    {
+      "seed": 42817,
+      "planner": {
+        "order": "entropy",
+        "verify_at": 4,
+        "probes": 0,
+        "rank_filter": false,
+        "next_order": "same",
+        "inverse": true,
+        "image_guard": false,
+        "memo": false
+      }
+    },
+    {
+      "seed": 42829,
+      "planner": {
+        "order": "entropy",
+        "verify_at": 4,
+        "probes": 0,
+        "rank_filter": false,
+        "next_order": "same",
+        "inverse": true,
+        "image_guard": false,
+        "memo": false
+      }
+    },
+    {
+      "seed": 42841,
+      "planner": {
+        "order": "entropy",
+        "verify_at": 4,
+        "probes": 0,
+        "rank_filter": false,
+        "next_order": "same",
+        "inverse": true,
+        "image_guard": false,
+        "memo": false
+      }
+    }
+  ],
+  "source_sha256": {
+    "__init__.py": "c395c735b570661d877cd6424e8de1866424b84c8eed800c5ed8400b27fae306",
+    "bench.py": "c68aadfcff8b198c1a72c8b307ecd08638d3ffd08ede428924c27c276087d88f",
+    "domains.py": "c6f329ffd26fc4d6d0388c0c78749abef4d988f8fa66f656efe23715db0488ef",
+    "index.py": "3391cad1573d5f494cfbf3c7b427f5297509b3e48f50cc89a3040112bdbd6b21",
+    "learn.py": "aa6a49b8ee3616c69263876458ef32a78ab4cedcee6e6ed2b8f7a9bac121ffe4",
+    "solvers.py": "f0bb1b87f8ab0ba975c2e8d7dc1cdcd3a57dc9bd0444d975a1add31024f3cabe",
+    "test_exact.py": "20e5bd1573358dafa96b659367a02e131f1ed4a795d10dc2219534dcc0e147bb"
+  }
+}
