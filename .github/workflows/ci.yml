@@ -34,6 +34,9 @@ jobs:
     
     - name: Run tests
       run: npm run test
+
+    - name: Run discovery experiments and controls
+      run: npm run test:experiments
     
     - name: Build packages
       run: npm run build

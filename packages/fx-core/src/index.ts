@@ -59,6 +59,9 @@ export { enableLogging, disableLogging, logEvent, getEvents, clearEvents, getEve
 // ---------- Observability ----------
 export { ObservabilityManager, appendDecision, getDecisionHistory } from './observability';
 
+// ---------- Experimental Program Discovery ----------
+export * from './discovery';
+
 // ---------- High-Level API ----------
 export function createPlan<T extends BaseContext>(
   name: string,

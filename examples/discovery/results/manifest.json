@@ -1,0 +1,37 @@
+{
+  "baseRevision": "61e11f428660cc215d4467153b47204280b81ff6",
+  "node": "v24.22.1",
+  "sourceSha256": {
+    "examples/discovery/experiments.test.cjs": "d8ea5c4077192b010e879d4ebec5d9f611ad0d962b464584bbc69b31eb557515",
+    "examples/discovery/scheduling-discovery.cjs": "816dadc6a6f5d7f371d4121ae215bdae4d2f4e9c872966e0f58d1e69509595f5",
+    "examples/discovery/scheduling.cjs": "3d8894c30f56d2b324b1ebd73a8f77361a4c5e9c6d9af7ed7d74d3c0e95f4401",
+    "examples/discovery/transfer.cjs": "d594c1e37ffe2d20310efcaadf702338cfd7e67b1625ae0f1ecdb005ddac219c",
+    "package.json": "36e372c4d01bb3b439c70ed4512c8e525d1092a935ed8485290782df3ebc1390",
+    "packages/fx-core/package.json": "f1c969ad9c921f4721a7320fa2f6e7f86fc2032861a3778ebc5928e286a59391",
+    "packages/fx-core/src/discovery/abstractions.ts": "2816285cba38041bfb87fd8c93bf707672106596d9cf41d616dbbeacd7fb77ee",
+    "packages/fx-core/src/discovery/index.ts": "d677da1ffed8fa46636d0aa8e2a2312e61932534fed45f2af82271ea9d992a92",
+    "packages/fx-core/src/discovery/model.ts": "14be2a8b12799012ae2de3073285cf715c666d3d5d3f004d4ccfc26ccdc03a39",
+    "packages/fx-core/src/discovery/optimization.ts": "6bd7c36a67b081fca0ca70be56c5419a87005b6463b90d72aaa2225e120fd086",
+    "packages/fx-core/src/discovery/runtime.ts": "60d478996cc47f915f5b87cf9a87f5e7f28235aafc66a5f32d8e8f407b930068",
+    "packages/fx-core/src/discovery/search.ts": "385d53ef14505733f5aeda3b55056be1f7c5642700fcecb5fbd7be973ab6dc03",
+    "packages/fx-core/src/discovery/state.ts": "fb107bbbded284f32a09cdb50909cd7a999343f27431fc77435771ee4a0d9942",
+    "packages/fx-core/src/index.ts": "8e5f25252124a7493fda966f31a30d2c42593d21ba9c8d1c6f41d6892199cfc8",
+    "packages/fx-core/src/__tests__/discovery-learning.test.ts": "c329454c55569e56c2d91793f0b57cb6ca50ec3b620d952e07eb774c3ed155b3",
+    "packages/fx-core/src/__tests__/discovery-runtime.test.ts": "1d0cb5e3af4e45717368911f7e082506788600482a4c30c05749b823851307bf",
+    ".github/workflows/ci.yml": "36ba15f487863752952456e800631c39aafce3adec3ffdc8f314806aff858b24"
+  },
+  "checks": {
+    "libraryTests": 161,
+    "experimentTests": 4,
+    "lint": "passed",
+    "typeCheck": "passed",
+    "build": "passed",
+    "esmExport": "passed",
+    "discoveryLineCoverage": 98.35,
+    "discoveryBranchCoverage": 82.73
+  },
+  "outputSha256": {
+    "transfer.json": "2c4cbc6cbddc16cb306e07c85378a2fc9e461d996e7a9fdd045948ca1bcdb29f",
+    "scheduling.json": "527aefeef11e5872f91f852a8089e682e3bddbb3ee61a03881bcd5ec0d58f7c3"
+  }
+}

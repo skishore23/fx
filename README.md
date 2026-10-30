@@ -281,6 +281,9 @@ console.log(result.issues.length); // 3
 
 ## Examples
 
+- **[Experimental program discovery](./docs/advanced/program-discovery.md)** — inspectable programs,
+  parameterized abstraction learning, bounded search, and reproducible transfer and GPU scheduling experiments.
+
 - **[Coding Agent](./examples/coding-agent/)** - Full-featured coding assistant
 - **[Research Agent](./examples/research-agent/)** - Advanced research and analysis
 
