@@ -84,8 +84,8 @@ the planner search. These change cost, not the accepted semantic relation.
 
 The primary experiment uses three training families: permutations, modular affine
 maps and bitvector operations. Four seeds per family give 12 training domains,
-32 states, five primitives, and half-depth three. One affine training domain has
-only two eligible targets; the remaining domains have six, giving 68 training
+32 states, five primitives, and half-depth three. One affine training domain yields
+only two sampled eligible targets; the remaining domains have six, giving 68 training
 queries. Validation uses three different seeds per family, giving 54 queries.
 
 Final testing uses eight new seeds in each of five families, 64 states, six
@@ -120,7 +120,8 @@ scaling protocol was sealed in commit
 `7f4a6dc9ccd5dee4e4fdde7480044780a7397816` before deeper-domain timings.
 This study uses new seeds, 64 states, six primitives, half-depth five and four
 queries per domain. Nineteen of twenty domains yield all four requested targets;
-`affine:2011` is saturated and retained with zero targets. A depth-five semantic
+the random sampler exhausts its attempts on `affine:2011`, retained with zero
+targets. This is sampler exhaustion, not proven semantic saturation. A depth-five semantic
 bank reaches 9331 entries; the unconstrained primitive word space at length ten
 contains \(6^{10}=60,466,176\) words. Semantic deduplication and indexed joining
 avoid explicit enumeration of that full word space.
@@ -197,6 +198,19 @@ Each reset word maps every initial state to state 0. This reproduces a known
 family and shows the kind of universal recovery plan that could be synthesized
 for a small faithful protocol abstraction. It neither proves the Černý conjecture
 nor establishes recovery for an actual deployed bot.
+
+### 4.4 Random word sampling misses rare semantic behaviors
+
+A post hoc exact-length frontier audit finds 1088 reachable length-ten functions
+for `affine:2011`, including **405 outside the half-bank**, although the random
+word sampler found none in 400 attempts. Likewise, the shortfall training domain
+`affine:53` has ten reachable novel length-six functions, of which the sampler
+found two. The historical `saturated_domains` fields report sampler exhaustion;
+they must not be interpreted as proof of semantic saturation. Uniform sampling
+of primitive words is not uniform sampling of their semantic functions. All
+original timing and selection data remain unchanged; the audit and concrete
+witness words are retained separately. This exposes a benchmark-coverage limit
+and motivates semantic or counterexample-directed curricula.
 
 ## 5. Related work and novelty boundary
 

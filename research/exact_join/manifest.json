@@ -22,7 +22,7 @@
     "packages/fx-core/src/discovery/finite-search.ts": "7e1827549a35805975b68c1931ada95fb4efb3c93db42716f89f2fd4757a512e",
     "packages/fx-core/src/discovery/index.ts": "6549074737ed77eb18b1fc2fa0a643bba824b74fa3433f37d76fc1ada7d171ca",
     "research/exact_join/.gitignore": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793",
-    "research/exact_join/README.md": "ec6fc4733270e77ff9adce5ea5b61b9f8485470d393d753e5256a8839b7c17ad",
+    "research/exact_join/README.md": "82b6d5d641ba904aa063cda51f82336e60b303163ae8b3f23db4c78dafe3188b",
     "research/exact_join/__init__.py": "c395c735b570661d877cd6424e8de1866424b84c8eed800c5ed8400b27fae306",
     "research/exact_join/analyze.py": "91b4753827cc71b74ca3c9ef9b98816c66af0a272da51c708afea9a4c7406213",
     "research/exact_join/bench.py": "c68aadfcff8b198c1a72c8b307ecd08638d3ffd08ede428924c27c276087d88f",
@@ -34,7 +34,7 @@
     "research/exact_join/learn.py": "aa6a49b8ee3616c69263876458ef32a78ab4cedcee6e6ed2b8f7a9bac121ffe4",
     "research/exact_join/native.cpp": "f2d93334f2f225564c1c07f8a78c16ae2c6a616926447d628931e1c1673db28d",
     "research/exact_join/native_audit.py": "6e2efb5581119b4f56f2275f8e82cd4ea9ad7eb9ef0e854fab34623da13e9f2e",
-    "research/exact_join/paper.md": "bc23bbfd5d9e3bd3e6350b1be7da4d97fa9192d82fcd94c3b53eed7c79a1ba41",
+    "research/exact_join/paper.md": "bbd69ab060dd26420202e58d47279e21f4f74481795fec0a7de4db4ceba0fd22",
     "research/exact_join/protocol.json": "6c412917b6610ba42ba43f03cc9f6a51de4a2ff8a11a877c445b4451088e6755",
     "research/exact_join/recovery.cjs": "adf8b796caa9b2f0ce3e3a4ed07d74c215828cf96f9bc7cc16903d7a61d9700c",
     "research/exact_join/requirements.txt": "4c40934e438ae009a1eb0b5a9322cce029fba6ca1af6e314c088c1957cee0c04",
@@ -54,6 +54,9 @@
     "research/exact_join/summarize.py": "db9001585ec92485ffe7866bbe58faf199b6b47f2d1f23542ea15490c33ca703",
     "research/exact_join/test_exact.py": "20e5bd1573358dafa96b659367a02e131f1ed4a795d10dc2219534dcc0e147bb",
     "research/exact_join/verify-fx.cjs": "2bc62954c0e30e87494973e949ae3c67de2b06be48f488f131a6b447b26d4cd8",
-    "research/exact_join/verify_manifest.py": "d708e0314013b06dbfd70a26a2afd61e84254f0c7dc395606eb787e04ec7ade2"
-  }
+    "research/exact_join/verify_manifest.py": "d708e0314013b06dbfd70a26a2afd61e84254f0c7dc395606eb787e04ec7ade2",
+    "research/exact_join/sampling_audit.py": "9e57c455db6f8445af505781ddb26ec44a045751bf07d4a55aca55103f885844",
+    "research/exact_join/results/sampling-audit.json": "3fb6fb36da8f47845dbfa55de294534f6a8c25ff836be1a0018566b6c6fbcb4f"
+  },
+  "post_hoc_sampling_audit": "Sampler exhaustion is not semantic saturation; affine:2011 has 405 reachable exact-length novel tables, affine:53 has 10. Frozen timing data unchanged."
 }

@@ -16,15 +16,19 @@ result and measured the underlying exact join in Python and optimized C++.
 | Independent FX implementation | 396/396 verified | All 320 primary and 76 deeper synthesis tasks |
 | Learned planner vs validation-selected strongest fixed planner | Identical in 3/3 runs | No demonstrated learned improvement; no finite discovery break-even |
 | C++ length ≤6 warm join vs C++ pairwise | 1.93× [1.78, 2.10] | Supplemental audit after primary evaluation |
-| C++ length ≤10 warm join vs C++ pairwise | 14.97× [10.43, 21.87] | Separately sealed scaling protocol, 19 non-saturated domains |
+| C++ length ≤10 warm join vs C++ pairwise | 14.97× [10.43, 21.87] | Separately sealed scaling protocol, 19 domains with sampled targets |
 | Length ≤10 conservative cold estimate | 2.75× [1.73, 4.11] | Includes common semantic-bank cost and charges the complete shared C++ index to hybrid |
 | Universal recovery example | 36 actions; no solution of length ≤35 | Known seven-state Černý example; full model recovery, no new theorem |
 
 Intervals are paired domain-bootstrap 95% intervals, conditional on this single
 host and fixed synthetic generators. Warm results exclude preprocessing. Cold
 values are attributed CPU estimates, not independently measured fresh-process
-latencies. The scaling study retains saturated `affine:2011` with zero eligible
-targets. It does not silently replace that domain.
+latencies. The scaling study retains `affine:2011` with zero sampled eligible
+targets. It does not silently replace that domain. A later exact audit finds
+405 reachable target tables outside its half-bank: the random sampler missed
+them. Historical `saturated_domains` fields therefore mean **sampler exhaustion**,
+not proven semantic saturation. The training shortfall at `affine:53` similarly
+samples two of ten reachable novel tables. See `results/sampling-audit.json`.
 
 ![Native runtime comparisons](figures/native-results.png)
 
@@ -62,6 +66,7 @@ python3 -m research.exact_join.evaluate
 python3 -m research.exact_join.analyze
 python3 -m research.exact_join.native_audit
 python3 -m research.exact_join.scaling
+python3 -m research.exact_join.sampling_audit
 node research/exact_join/verify-fx.cjs --record
 node research/exact_join/verify-fx.cjs --scaling --record
 node research/exact_join/recovery.cjs --record
@@ -89,7 +94,8 @@ before scaling timings. Neither is a third-party preregistration service.
 | `results/selection.json` | Every candidate, training measurements, validation and discovery cost |
 | `results/heldout.json`, `results/analysis.json` | All primary repeated timings, exact tasks and statistical analysis |
 | `results/native-audit.json` | Compiled implementation audit on the primary tasks |
-| `scaling-protocol.json`, `results/scaling.json` | New seeds, deeper tasks, native timings and saturation |
+| `scaling-protocol.json`, `results/scaling.json` | New seeds, deeper tasks, native timings and sampler exhaustion |
+| `results/sampling-audit.json` | Exact enumeration exposes rare reachable behaviors missed by the random sampler |
 | `results/fx-verification.json`, `results/scaling-fx-verification.json` | Independently synthesized FX certificates for all 396 tasks |
 | `results/recovery.json` | Bounded impossibility and recovery certificates for five, six and seven states |
 | `results/overview.json`, `manifest.json` | Compact findings and hashes of the complete artifact |
