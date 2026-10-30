@@ -1,0 +1,16 @@
+{
+  "status": "Supplemental scaling study registered after the primary test, before any scaling-domain timing",
+  "question": "Does the fixed hybrid exact join retain a native C++ query advantage on longer compositions, and how much does index construction cost?",
+  "policy": "The hybrid is fixed. No further learning or tuning is allowed from these cases.",
+  "families": ["permutation", "affine", "bitvector", "automaton", "local"],
+  "seeds": [2003, 2011, 2017, 2027],
+  "states": 64,
+  "actions": 6,
+  "half_depth": 5,
+  "queries": 4,
+  "timing_repeats": 7,
+  "methods": ["cpp_pairwise", "cpp_inverse_hash", "cpp_hybrid"],
+  "goal_filter": "Exclude targets in the half-bank; disclose saturation without replacing domains.",
+  "analysis": "Paired per-domain native CPU medians and geometric ratios. Warm results exclude preparation; cold estimates charge the entire shared C++ index union to hybrid and no preprocessing to pairwise as a conservative bound. Include Python semantic bank construction time equally for both.",
+  "limits": "Synthetic finite domains; the selected learner was already identical to the fixed hybrid in the primary study. This study cannot establish learned algorithm discovery."
+}
