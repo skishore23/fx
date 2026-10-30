@@ -15,7 +15,8 @@
     "test:experiments": "npm run build && node --test examples/discovery/experiments.test.cjs examples/algorithm-search/algorithm-search.test.cjs",
     "experiment:transfer": "npm run build --silent && node examples/discovery/transfer.cjs",
     "experiment:scheduling": "npm run build --silent && node examples/discovery/scheduling-discovery.cjs",
-    "algorithm:search": "npm run build --silent && node examples/algorithm-search/run.cjs"
+    "algorithm:search": "npm run build --silent && node examples/algorithm-search/run.cjs",
+    "research:verify": "npm run build --silent && python3 -m research.exact_join.verify_manifest && python3 -m unittest research.exact_join.test_exact -v && node research/exact_join/verify-fx.cjs && node research/exact_join/verify-fx.cjs --scaling && node research/exact_join/recovery.cjs"
   },
   "keywords": [
     "functional-programming",

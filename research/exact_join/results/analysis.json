@@ -1,0 +1,1035 @@
+{
+  "primary_baseline": "hybrid",
+  "primary_method": "learned_42817",
+  "queries": 320,
+  "domains": 40,
+  "saturated_domains": [],
+  "groups": {
+    "all": {
+      "pairwise": {
+        "warm": {
+          "geometric_mean": 47.937952894052735,
+          "ci95": [
+            38.794621656522075,
+            60.195823185722105
+          ],
+          "domains": 40,
+          "median": 37.160211506071846,
+          "wins": 40,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 2.709439825105333,
+          "ci95": [
+            1.9238992008437348,
+            3.803498480127609
+          ],
+          "domains": 40,
+          "median": 4.990724473096731,
+          "wins": 28,
+          "losses": 12
+        }
+      },
+      "numpy": {
+        "warm": {
+          "geometric_mean": 43.8388909983053,
+          "ci95": [
+            35.74799102761796,
+            54.5686418326529
+          ],
+          "domains": 40,
+          "median": 34.69608696531344,
+          "wins": 40,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 2.4864397787753094,
+          "ci95": [
+            1.7886618440561135,
+            3.4494656509914003
+          ],
+          "domains": 40,
+          "median": 4.476348172681018,
+          "wins": 28,
+          "losses": 12
+        }
+      },
+      "inverse_hash": {
+        "warm": {
+          "geometric_mean": 11.900260322544346,
+          "ci95": [
+            7.675045389876217,
+            17.759677182522015
+          ],
+          "domains": 40,
+          "median": 23.860018307940422,
+          "wins": 32,
+          "losses": 8
+        },
+        "cold_estimate": {
+          "geometric_mean": 2.218270503761514,
+          "ci95": [
+            1.6233769980310246,
+            3.046402570435611
+          ],
+          "domains": 40,
+          "median": 2.239695624737435,
+          "wins": 24,
+          "losses": 16
+        }
+      },
+      "bitset_entropy": {
+        "warm": {
+          "geometric_mean": 1.8739948198370477,
+          "ci95": [
+            1.5032399265509724,
+            2.3749369533666385
+          ],
+          "domains": 40,
+          "median": 1.5804316373073677,
+          "wins": 32,
+          "losses": 8
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.038453502609,
+          "ci95": [
+            1.017478339763328,
+            1.0635752268463414
+          ],
+          "domains": 40,
+          "median": 1.0178992996200167,
+          "wins": 31,
+          "losses": 9
+        }
+      },
+      "hybrid": {
+        "warm": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 40,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 40,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        }
+      },
+      "hybrid_rank": {
+        "warm": {
+          "geometric_mean": 0.97908538517955,
+          "ci95": [
+            0.9261999814909259,
+            1.028721704158585
+          ],
+          "domains": 40,
+          "median": 1.0198931305096401,
+          "wins": 21,
+          "losses": 19
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.158978282999696,
+          "ci95": [
+            1.1211413655219504,
+            1.2091162886183562
+          ],
+          "domains": 40,
+          "median": 1.1249126931791147,
+          "wins": 40,
+          "losses": 0
+        }
+      }
+    },
+    "unseen_families": {
+      "pairwise": {
+        "warm": {
+          "geometric_mean": 34.873025020508464,
+          "ci95": [
+            31.82612883103579,
+            38.59080626158004
+          ],
+          "domains": 16,
+          "median": 32.996851640296825,
+          "wins": 16,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 6.661456919291689,
+          "ci95": [
+            5.701904401968815,
+            7.612171343268819
+          ],
+          "domains": 16,
+          "median": 7.070015473401584,
+          "wins": 16,
+          "losses": 0
+        }
+      },
+      "numpy": {
+        "warm": {
+          "geometric_mean": 30.58944718251467,
+          "ci95": [
+            27.93165887820915,
+            33.857386566389266
+          ],
+          "domains": 16,
+          "median": 28.6372162835476,
+          "wins": 16,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 5.85101684680634,
+          "ci95": [
+            4.974689867257868,
+            6.71071171941889
+          ],
+          "domains": 16,
+          "median": 6.130167814211951,
+          "wins": 16,
+          "losses": 0
+        }
+      },
+      "inverse_hash": {
+        "warm": {
+          "geometric_mean": 31.795655061867595,
+          "ci95": [
+            30.219811013730666,
+            33.626048889847475
+          ],
+          "domains": 16,
+          "median": 31.96713485181919,
+          "wins": 16,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 6.626309491431391,
+          "ci95": [
+            5.8939894364205365,
+            7.342925746717994
+          ],
+          "domains": 16,
+          "median": 6.775588181091102,
+          "wins": 16,
+          "losses": 0
+        }
+      },
+      "bitset_entropy": {
+        "warm": {
+          "geometric_mean": 1.0403449070465158,
+          "ci95": [
+            0.9582000022770588,
+            1.1392569299664232
+          ],
+          "domains": 16,
+          "median": 1.0223199842012702,
+          "wins": 10,
+          "losses": 6
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.0047352147581239,
+          "ci95": [
+            0.9878334806368447,
+            1.0232765541530047
+          ],
+          "domains": 16,
+          "median": 1.0016733278989571,
+          "wins": 9,
+          "losses": 7
+        }
+      },
+      "hybrid": {
+        "warm": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 16,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 16,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        }
+      },
+      "hybrid_rank": {
+        "warm": {
+          "geometric_mean": 1.0046116126344682,
+          "ci95": [
+            0.9623153862432549,
+            1.050428684103217
+          ],
+          "domains": 16,
+          "median": 1.0026602613342472,
+          "wins": 8,
+          "losses": 8
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.1967964060006409,
+          "ci95": [
+            1.128560830700905,
+            1.3065160151273283
+          ],
+          "domains": 16,
+          "median": 1.14819809422178,
+          "wins": 16,
+          "losses": 0
+        }
+      }
+    },
+    "permutation": {
+      "pairwise": {
+        "warm": {
+          "geometric_mean": 170.94639765564884,
+          "ci95": [
+            165.22305589652103,
+            176.81425576721014
+          ],
+          "domains": 8,
+          "median": 170.62811703404884,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.7466968542810932,
+          "ci95": [
+            0.7832892967105634,
+            4.381990383241416
+          ],
+          "domains": 8,
+          "median": 0.9366989989908601,
+          "wins": 4,
+          "losses": 4
+        }
+      },
+      "numpy": {
+        "warm": {
+          "geometric_mean": 149.02051855029038,
+          "ci95": [
+            145.63309728764685,
+            152.2184127228107
+          ],
+          "domains": 8,
+          "median": 150.390843239322,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.5316518048210688,
+          "ci95": [
+            0.6853312762921719,
+            3.8054372930647773
+          ],
+          "domains": 8,
+          "median": 0.8553913254064407,
+          "wins": 4,
+          "losses": 4
+        }
+      },
+      "inverse_hash": {
+        "warm": {
+          "geometric_mean": 0.8876326640408589,
+          "ci95": [
+            0.8599698869944785,
+            0.9158635724904736
+          ],
+          "domains": 8,
+          "median": 0.8872275556719965,
+          "wins": 0,
+          "losses": 8
+        },
+        "cold_estimate": {
+          "geometric_mean": 0.6608038821409827,
+          "ci95": [
+            0.564893728177479,
+            0.7898321800350555
+          ],
+          "domains": 8,
+          "median": 0.6418446405816767,
+          "wins": 0,
+          "losses": 8
+        }
+      },
+      "bitset_entropy": {
+        "warm": {
+          "geometric_mean": 6.769557693494328,
+          "ci95": [
+            6.134017805432194,
+            7.484388555457596
+          ],
+          "domains": 8,
+          "median": 6.617156915660281,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.1109826985874778,
+          "ci95": [
+            1.04296261496053,
+            1.2037936107629439
+          ],
+          "domains": 8,
+          "median": 1.0244194360067393,
+          "wins": 8,
+          "losses": 0
+        }
+      },
+      "hybrid": {
+        "warm": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 8,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 8,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        }
+      },
+      "hybrid_rank": {
+        "warm": {
+          "geometric_mean": 1.0579953163808566,
+          "ci95": [
+            1.0271528195072657,
+            1.0940049206658298
+          ],
+          "domains": 8,
+          "median": 1.0530710350552028,
+          "wins": 7,
+          "losses": 1
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.1777097961261167,
+          "ci95": [
+            1.0749354367175483,
+            1.3004257955647889
+          ],
+          "domains": 8,
+          "median": 1.1764814322155746,
+          "wins": 8,
+          "losses": 0
+        }
+      }
+    },
+    "affine": {
+      "pairwise": {
+        "warm": {
+          "geometric_mean": 36.71316465652535,
+          "ci95": [
+            27.315033339548147,
+            49.6468529880211
+          ],
+          "domains": 8,
+          "median": 35.031780865895705,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 0.7392854044632193,
+          "ci95": [
+            0.5034333432180195,
+            1.0975677725660353
+          ],
+          "domains": 8,
+          "median": 0.7843073905615436,
+          "wins": 2,
+          "losses": 6
+        }
+      },
+      "numpy": {
+        "warm": {
+          "geometric_mean": 36.44052625942496,
+          "ci95": [
+            27.902030902654626,
+            47.62869556280538
+          ],
+          "domains": 8,
+          "median": 34.71174367186013,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 0.7379423759775229,
+          "ci95": [
+            0.5307074497624259,
+            1.0391866274242365
+          ],
+          "domains": 8,
+          "median": 0.7365839935612489,
+          "wins": 2,
+          "losses": 6
+        }
+      },
+      "inverse_hash": {
+        "warm": {
+          "geometric_mean": 15.077299318727428,
+          "ci95": [
+            11.853652535554877,
+            19.495248747456564
+          ],
+          "domains": 8,
+          "median": 14.206015708615354,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 0.9084913949634913,
+          "ci95": [
+            0.7427386165768787,
+            1.1443565018124051
+          ],
+          "domains": 8,
+          "median": 0.8132393935340541,
+          "wins": 2,
+          "losses": 6
+        }
+      },
+      "bitset_entropy": {
+        "warm": {
+          "geometric_mean": 1.8875841429687696,
+          "ci95": [
+            1.435147077353919,
+            2.496760557800716
+          ],
+          "domains": 8,
+          "median": 1.7359769756074193,
+          "wins": 7,
+          "losses": 1
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.0131323763144597,
+          "ci95": [
+            1.0048861680898855,
+            1.0208965434416495
+          ],
+          "domains": 8,
+          "median": 1.013852895018911,
+          "wins": 7,
+          "losses": 1
+        }
+      },
+      "hybrid": {
+        "warm": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 8,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 8,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        }
+      },
+      "hybrid_rank": {
+        "warm": {
+          "geometric_mean": 1.0064596153204204,
+          "ci95": [
+            0.8695541828858796,
+            1.1465682438771625
+          ],
+          "domains": 8,
+          "median": 1.099472988046227,
+          "wins": 5,
+          "losses": 3
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.1237365378124924,
+          "ci95": [
+            1.1035367131643044,
+            1.1431485263544432
+          ],
+          "domains": 8,
+          "median": 1.127566665703362,
+          "wins": 8,
+          "losses": 0
+        }
+      }
+    },
+    "bitvector": {
+      "pairwise": {
+        "warm": {
+          "geometric_mean": 33.16930740889077,
+          "ci95": [
+            24.20075958774849,
+            42.938472325106254
+          ],
+          "domains": 8,
+          "median": 35.55359477997533,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 2.5481760698946063,
+          "ci95": [
+            1.4391449102127434,
+            4.237740453589287
+          ],
+          "domains": 8,
+          "median": 3.0771596173208606,
+          "wins": 6,
+          "losses": 2
+        }
+      },
+      "numpy": {
+        "warm": {
+          "geometric_mean": 31.86572680751472,
+          "ci95": [
+            22.560133118799598,
+            41.20769680218643
+          ],
+          "domains": 8,
+          "median": 34.61802679804852,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 2.456091439207145,
+          "ci95": [
+            1.4026211469616872,
+            4.028802180898299
+          ],
+          "domains": 8,
+          "median": 3.0472231003330448,
+          "wins": 6,
+          "losses": 2
+        }
+      },
+      "inverse_hash": {
+        "warm": {
+          "geometric_mean": 17.63964836074378,
+          "ci95": [
+            12.89062136059493,
+            22.918269614889216
+          ],
+          "domains": 8,
+          "median": 20.073358280729714,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 2.0376786055333103,
+          "ci95": [
+            1.3777184903591928,
+            3.0069290400620976
+          ],
+          "domains": 8,
+          "median": 2.239695624737435,
+          "wins": 6,
+          "losses": 2
+        }
+      },
+      "bitset_entropy": {
+        "warm": {
+          "geometric_mean": 1.6711699785855447,
+          "ci95": [
+            1.2913258140264738,
+            2.156440506016275
+          ],
+          "domains": 8,
+          "median": 1.704360068570126,
+          "wins": 7,
+          "losses": 1
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.0628171154539259,
+          "ci95": [
+            1.0260216185475297,
+            1.1025297264483649
+          ],
+          "domains": 8,
+          "median": 1.0601599424476453,
+          "wins": 7,
+          "losses": 1
+        }
+      },
+      "hybrid": {
+        "warm": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 8,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 8,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        }
+      },
+      "hybrid_rank": {
+        "warm": {
+          "geometric_mean": 0.8371944739553386,
+          "ci95": [
+            0.7026628416476364,
+            0.9676773591224578
+          ],
+          "domains": 8,
+          "median": 0.8659241902332783,
+          "wins": 1,
+          "losses": 7
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.1031463919134419,
+          "ci95": [
+            1.0879446606302086,
+            1.118638589271147
+          ],
+          "domains": 8,
+          "median": 1.1050561323285362,
+          "wins": 8,
+          "losses": 0
+        }
+      }
+    },
+    "automaton": {
+      "pairwise": {
+        "warm": {
+          "geometric_mean": 30.025406066448664,
+          "ci95": [
+            28.704068296278983,
+            31.467421085136
+          ],
+          "domains": 8,
+          "median": 29.95537458495769,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 5.995554005988048,
+          "ci95": [
+            5.469688005220154,
+            6.589691703883378
+          ],
+          "domains": 8,
+          "median": 6.07482984967533,
+          "wins": 8,
+          "losses": 0
+        }
+      },
+      "numpy": {
+        "warm": {
+          "geometric_mean": 26.521529868738455,
+          "ci95": [
+            25.422533837316553,
+            27.648403171809157
+          ],
+          "domains": 8,
+          "median": 27.081049139563547,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 5.304744277002014,
+          "ci95": [
+            4.824203509106587,
+            5.844620617321701
+          ],
+          "domains": 8,
+          "median": 5.383834988735954,
+          "wins": 8,
+          "losses": 0
+        }
+      },
+      "inverse_hash": {
+        "warm": {
+          "geometric_mean": 30.044480854155513,
+          "ci95": [
+            28.66077568514214,
+            31.530044034696758
+          ],
+          "domains": 8,
+          "median": 29.2966668788354,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 6.471265733680029,
+          "ci95": [
+            5.9480763205576235,
+            7.051027184949988
+          ],
+          "domains": 8,
+          "median": 6.499047914330758,
+          "wins": 8,
+          "losses": 0
+        }
+      },
+      "bitset_entropy": {
+        "warm": {
+          "geometric_mean": 0.9833112585422374,
+          "ci95": [
+            0.8958544265998661,
+            1.0946511053773758
+          ],
+          "domains": 8,
+          "median": 0.9637267979879769,
+          "wins": 4,
+          "losses": 4
+        },
+        "cold_estimate": {
+          "geometric_mean": 0.9954565317109877,
+          "ci95": [
+            0.975750176723009,
+            1.0192887952407814
+          ],
+          "domains": 8,
+          "median": 0.987695115090784,
+          "wins": 3,
+          "losses": 5
+        }
+      },
+      "hybrid": {
+        "warm": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 8,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 8,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        }
+      },
+      "hybrid_rank": {
+        "warm": {
+          "geometric_mean": 1.0024060807860626,
+          "ci95": [
+            0.947416595602268,
+            1.0603513527471624
+          ],
+          "domains": 8,
+          "median": 1.0297193093493608,
+          "wins": 5,
+          "losses": 3
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.232118604761773,
+          "ci95": [
+            1.1053545645859337,
+            1.4498558614325565
+          ],
+          "domains": 8,
+          "median": 1.1090374388514117,
+          "wins": 8,
+          "losses": 0
+        }
+      }
+    },
+    "local": {
+      "pairwise": {
+        "warm": {
+          "geometric_mean": 40.50329482271176,
+          "ci95": [
+            35.88202184386824,
+            45.641723622092734
+          ],
+          "domains": 8,
+          "median": 41.033222616848576,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 7.401319084651674,
+          "ci95": [
+            5.538087655415631,
+            8.902447778295523
+          ],
+          "domains": 8,
+          "median": 8.3356187883804,
+          "wins": 8,
+          "losses": 0
+        }
+      },
+      "numpy": {
+        "warm": {
+          "geometric_mean": 35.281308565642085,
+          "ci95": [
+            31.157364811846236,
+            40.11564514728114
+          ],
+          "domains": 8,
+          "median": 35.39481618132186,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 6.453543536496209,
+          "ci95": [
+            4.758739521640379,
+            7.850347838300645
+          ],
+          "domains": 8,
+          "median": 7.330706325335018,
+          "wins": 8,
+          "losses": 0
+        }
+      },
+      "inverse_hash": {
+        "warm": {
+          "geometric_mean": 33.64889830251263,
+          "ci95": [
+            31.185940709164964,
+            36.451031953284776
+          ],
+          "domains": 8,
+          "median": 33.49894627402641,
+          "wins": 8,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 6.7850679114771095,
+          "ci95": [
+            5.440845539956018,
+            8.104195694744977
+          ],
+          "domains": 8,
+          "median": 7.505931624727522,
+          "wins": 8,
+          "losses": 0
+        }
+      },
+      "bitset_entropy": {
+        "warm": {
+          "geometric_mean": 1.1006865997061432,
+          "ci95": [
+            0.9740275774064863,
+            1.2655380592011176
+          ],
+          "domains": 8,
+          "median": 1.0489703076193346,
+          "wins": 6,
+          "losses": 2
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.0141003847148806,
+          "ci95": [
+            0.9884830229154863,
+            1.0422141102023184
+          ],
+          "domains": 8,
+          "median": 1.0049167835453143,
+          "wins": 6,
+          "losses": 2
+        }
+      },
+      "hybrid": {
+        "warm": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 8,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "domains": 8,
+          "median": 1.0,
+          "wins": 0,
+          "losses": 0
+        }
+      },
+      "hybrid_rank": {
+        "warm": {
+          "geometric_mean": 1.0068219971776322,
+          "ci95": [
+            0.94584873014867,
+            1.0794846770222966
+          ],
+          "domains": 8,
+          "median": 0.978893714701583,
+          "wins": 3,
+          "losses": 5
+        },
+        "cold_estimate": {
+          "geometric_mean": 1.1624868189479103,
+          "ci95": [
+            1.125414045556242,
+            1.1942836063761315
+          ],
+          "domains": 8,
+          "median": 1.1678803079328675,
+          "wins": 8,
+          "losses": 0
+        }
+      }
+    }
+  },
+  "discovery_cpu_seconds": 6.344000783,
+  "mean_saved_cpu_ns_per_query_vs_primary_baseline": 0.0,
+  "discovery_break_even_queries": null,
+  "interpretation": "All three search seeds selected an existing baseline. The learned planner is identical to hybrid; this experiment does not demonstrate an improvement beyond the strongest fixed baseline."
+}

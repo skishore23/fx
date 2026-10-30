@@ -1,0 +1,328 @@
+{
+  "native_length6": {
+    "all": {
+      "geometric_mean": 1.9344511572231233,
+      "ci95": [
+        1.7761110745642894,
+        2.1047497620697406
+      ]
+    },
+    "permutation": {
+      "geometric_mean": 2.0562931719308986,
+      "ci95": [
+        1.9692918525768424,
+        2.1574167168351797
+      ]
+    },
+    "affine": {
+      "geometric_mean": 1.498324433430414,
+      "ci95": [
+        1.3183228202618957,
+        1.689939483279893
+      ]
+    },
+    "bitvector": {
+      "geometric_mean": 1.5412316837242954,
+      "ci95": [
+        1.3009787708916796,
+        1.8002430734290924
+      ]
+    },
+    "automaton": {
+      "geometric_mean": 2.204038425791113,
+      "ci95": [
+        2.114832294446932,
+        2.3008256136424845
+      ]
+    },
+    "local": {
+      "geometric_mean": 2.588277626985782,
+      "ci95": [
+        2.2223355562920735,
+        3.078618475644261
+      ]
+    }
+  },
+  "native_length10": {
+    "all": {
+      "cpp_pairwise": {
+        "warm": {
+          "geometric_mean": 14.974999992567735,
+          "ci95": [
+            10.434098745155207,
+            21.86930586655451
+          ],
+          "domains": 19,
+          "wins": 19,
+          "losses": 0
+        },
+        "conservative_cold": {
+          "geometric_mean": 2.748025447624081,
+          "ci95": [
+            1.7310303800099731,
+            4.113606216850427
+          ],
+          "domains": 19,
+          "wins": 15,
+          "losses": 4
+        }
+      },
+      "cpp_inverse_hash": {
+        "warm": {
+          "geometric_mean": 4.1771615518435485,
+          "ci95": [
+            2.5231455870184396,
+            6.763619556937891
+          ],
+          "domains": 19,
+          "wins": 16,
+          "losses": 3
+        },
+        "conservative_cold": {
+          "geometric_mean": 1.827392807552643,
+          "ci95": [
+            1.137481401302884,
+            2.888589302231348
+          ],
+          "domains": 19,
+          "wins": 11,
+          "losses": 8
+        }
+      }
+    },
+    "permutation": {
+      "cpp_pairwise": {
+        "warm": {
+          "geometric_mean": 59.178529890971944,
+          "ci95": [
+            51.733029883652414,
+            67.585777220338
+          ],
+          "domains": 4,
+          "wins": 4,
+          "losses": 0
+        },
+        "conservative_cold": {
+          "geometric_mean": 3.621502528874061,
+          "ci95": [
+            3.1944631616757513,
+            4.133200962942499
+          ],
+          "domains": 4,
+          "wins": 4,
+          "losses": 0
+        }
+      },
+      "cpp_inverse_hash": {
+        "warm": {
+          "geometric_mean": 1.1432065907369537,
+          "ci95": [
+            0.8491008418542615,
+            1.3924038045867868
+          ],
+          "domains": 4,
+          "wins": 3,
+          "losses": 1
+        },
+        "conservative_cold": {
+          "geometric_mean": 0.7584541950416751,
+          "ci95": [
+            0.7322119467397541,
+            0.7836842413002689
+          ],
+          "domains": 4,
+          "wins": 0,
+          "losses": 4
+        }
+      }
+    },
+    "affine": {
+      "cpp_pairwise": {
+        "warm": {
+          "geometric_mean": 9.011409100086583,
+          "ci95": [
+            3.5150302114803624,
+            17.25149700598803
+          ],
+          "domains": 3,
+          "wins": 3,
+          "losses": 0
+        },
+        "conservative_cold": {
+          "geometric_mean": 0.4948378117086932,
+          "ci95": [
+            0.36388454008314686,
+            0.8673943642120941
+          ],
+          "domains": 3,
+          "wins": 0,
+          "losses": 3
+        }
+      },
+      "cpp_inverse_hash": {
+        "warm": {
+          "geometric_mean": 1.0686263830026328,
+          "ci95": [
+            0.8992015968063872,
+            1.4803625377643506
+          ],
+          "domains": 3,
+          "wins": 1,
+          "losses": 2
+        },
+        "conservative_cold": {
+          "geometric_mean": 0.4916087285168817,
+          "ci95": [
+            0.3620079574389095,
+            0.8669489787816315
+          ],
+          "domains": 3,
+          "wins": 0,
+          "losses": 3
+        }
+      }
+    },
+    "bitvector": {
+      "cpp_pairwise": {
+        "warm": {
+          "geometric_mean": 8.908737431601619,
+          "ci95": [
+            5.019251684421412,
+            14.001694244047929
+          ],
+          "domains": 4,
+          "wins": 4,
+          "losses": 0
+        },
+        "conservative_cold": {
+          "geometric_mean": 1.7874703518715522,
+          "ci95": [
+            0.6644443351905437,
+            3.1608187952188773
+          ],
+          "domains": 4,
+          "wins": 3,
+          "losses": 1
+        }
+      },
+      "cpp_inverse_hash": {
+        "warm": {
+          "geometric_mean": 6.413782130182988,
+          "ci95": [
+            2.8743524624092345,
+            11.345928373925188
+          ],
+          "domains": 4,
+          "wins": 4,
+          "losses": 0
+        },
+        "conservative_cold": {
+          "geometric_mean": 1.486620887085487,
+          "ci95": [
+            0.590333514203847,
+            2.5416123375612205
+          ],
+          "domains": 4,
+          "wins": 3,
+          "losses": 1
+        }
+      }
+    },
+    "automaton": {
+      "cpp_pairwise": {
+        "warm": {
+          "geometric_mean": 12.057300345330662,
+          "ci95": [
+            11.578577265233056,
+            12.775909624683782
+          ],
+          "domains": 4,
+          "wins": 4,
+          "losses": 0
+        },
+        "conservative_cold": {
+          "geometric_mean": 5.380785466904517,
+          "ci95": [
+            4.788182048309725,
+            6.046731713359037
+          ],
+          "domains": 4,
+          "wins": 4,
+          "losses": 0
+        }
+      },
+      "cpp_inverse_hash": {
+        "warm": {
+          "geometric_mean": 12.019706020989009,
+          "ci95": [
+            11.621543792970767,
+            12.567947929089613
+          ],
+          "domains": 4,
+          "wins": 4,
+          "losses": 0
+        },
+        "conservative_cold": {
+          "geometric_mean": 5.363092240090051,
+          "ci95": [
+            4.797362608563739,
+            5.995535614583297
+          ],
+          "domains": 4,
+          "wins": 4,
+          "losses": 0
+        }
+      }
+    },
+    "local": {
+      "cpp_pairwise": {
+        "warm": {
+          "geometric_mean": 11.578905413029858,
+          "ci95": [
+            9.950705495743547,
+            14.524582618853223
+          ],
+          "domains": 4,
+          "wins": 4,
+          "losses": 0
+        },
+        "conservative_cold": {
+          "geometric_mean": 5.922813914043759,
+          "ci95": [
+            5.294075265658177,
+            6.626223259035801
+          ],
+          "domains": 4,
+          "wins": 4,
+          "losses": 0
+        }
+      },
+      "cpp_inverse_hash": {
+        "warm": {
+          "geometric_mean": 9.603595379241918,
+          "ci95": [
+            9.054788860842562,
+            10.25681458290091
+          ],
+          "domains": 4,
+          "wins": 4,
+          "losses": 0
+        },
+        "conservative_cold": {
+          "geometric_mean": 4.93676023080715,
+          "ci95": [
+            4.313431106552486,
+            5.374896678511054
+          ],
+          "domains": 4,
+          "wins": 4,
+          "losses": 0
+        }
+      }
+    }
+  },
+  "verified_fx_tasks": 396,
+  "algorithm_discovery": "No improvement over the strongest fixed baseline in any of three search runs.",
+  "primary_freeze_commit": "34bc147d5874a45acefcba99d583f62228ededef",
+  "scaling_freeze_commit": "7f4a6dc9ccd5dee4e4fdde7480044780a7397816"
+}
