@@ -1,0 +1,8 @@
+{
+  "results/fresh-test.txt": "80194b28bc09983caff2a7a2b165259a9c775131f57d390c908317b83a2fa6cf",
+  "results/fresh-training.txt": "8415df3ee0f656627437ee4716e06c2dd91e926d0d413c35c06bb1e131dd6a7e",
+  "results/fresh-validation.txt": "50ea761e08211ea32047adc7c03aa5bd17926ba9a7f9bfb830bdf6f075df56aa",
+  "results/test.txt": "f6c28eb87864e98fc991b6382bc3b0aeeddd881d32d31a4f9e4afa6e71410ff7",
+  "results/training.txt": "3012a4eb89287707e32b7bddf031c3e6c202601f9ec0a6730ca357a3cd5030d8",
+  "results/validation.txt": "b9484d4df05c8eeb4c8e3171017d473b99f42b301b59f13986f18ef2f5dda71f"
+}

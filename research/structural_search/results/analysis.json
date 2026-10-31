@@ -1,0 +1,1234 @@
+{
+  "primary_seed": 5101,
+  "selected_fixed_baseline": "fixed_0",
+  "primary_success": false,
+  "runs": [
+    {
+      "seed": 5101,
+      "vs_selected_fixed": {
+        "speedup_of_denominator": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "domain_speedups": {
+          "permutation:4001": 1.0,
+          "permutation:4003": 1.0,
+          "permutation:4007": 1.0,
+          "permutation:4013": 1.0,
+          "affine:4001": 1.0,
+          "affine:4003": 1.0,
+          "affine:4007": 1.0,
+          "affine:4013": 1.0,
+          "bitvector:4001": 1.0,
+          "bitvector:4003": 1.0,
+          "bitvector:4007": 1.0,
+          "bitvector:4013": 1.0,
+          "automaton:4001": 1.0,
+          "automaton:4003": 1.0,
+          "automaton:4007": 1.0,
+          "automaton:4013": 1.0,
+          "local:4001": 1.0,
+          "local:4003": 1.0,
+          "local:4007": 1.0,
+          "local:4013": 1.0
+        },
+        "domains": 20,
+        "wins_for_denominator": 0,
+        "losses_for_denominator": 0,
+        "mean_saved_cpu_ns_per_query": 0.0
+      },
+      "vs_equal_evaluation_random": {
+        "speedup_of_denominator": 0.9987104274162231,
+        "ci95": [
+          0.9903410775192024,
+          1.0073311369166202
+        ],
+        "domain_speedups": {
+          "permutation:4001": 0.980620833886583,
+          "permutation:4003": 0.9553581590261313,
+          "permutation:4007": 1.0142709718269058,
+          "permutation:4013": 0.9937228311971735,
+          "affine:4001": 1.0003458373837493,
+          "affine:4003": 0.9992790893018078,
+          "affine:4007": 1.000375487007973,
+          "affine:4013": 1.0002839380405644,
+          "bitvector:4001": 0.9778632785311931,
+          "bitvector:4003": 1.020156437852515,
+          "bitvector:4007": 0.9829827441016166,
+          "bitvector:4013": 0.9812834422192351,
+          "automaton:4001": 1.005841631555823,
+          "automaton:4003": 1.0038148694787001,
+          "automaton:4007": 1.0026917865982483,
+          "automaton:4013": 1.0476770102972368,
+          "local:4001": 1.0267064082366584,
+          "local:4003": 0.9825173306048696,
+          "local:4007": 0.9915122266230385,
+          "local:4013": 1.0107269304235946
+        },
+        "domains": 20,
+        "wins_for_denominator": 11,
+        "losses_for_denominator": 9,
+        "mean_saved_cpu_ns_per_query": -157479.56666666665
+      },
+      "native_only_vs_selected_fixed": {
+        "speedup_of_denominator": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "domain_speedups": {
+          "permutation:4001": 1.0,
+          "permutation:4003": 1.0,
+          "permutation:4007": 1.0,
+          "permutation:4013": 1.0,
+          "affine:4001": 1.0,
+          "affine:4003": 1.0,
+          "affine:4007": 1.0,
+          "affine:4013": 1.0,
+          "bitvector:4001": 1.0,
+          "bitvector:4003": 1.0,
+          "bitvector:4007": 1.0,
+          "bitvector:4013": 1.0,
+          "automaton:4001": 1.0,
+          "automaton:4003": 1.0,
+          "automaton:4007": 1.0,
+          "automaton:4013": 1.0,
+          "local:4001": 1.0,
+          "local:4003": 1.0,
+          "local:4007": 1.0,
+          "local:4013": 1.0
+        },
+        "domains": 20,
+        "wins_for_denominator": 0,
+        "losses_for_denominator": 0,
+        "mean_saved_cpu_ns_per_query": 0.0
+      },
+      "vs_expert_dispatch": {
+        "speedup_of_denominator": 0.27815174684144756,
+        "ci95": [
+          0.14991980169594632,
+          0.5394770870814543
+        ],
+        "domain_speedups": {
+          "permutation:4001": 0.1157715025742866,
+          "permutation:4003": 0.0745821035722577,
+          "permutation:4007": 0.11476465797916538,
+          "permutation:4013": 0.11105685524545109,
+          "affine:4001": 2.499596926832075,
+          "affine:4003": 3.7860924343044764,
+          "affine:4007": 2.92565224873036,
+          "affine:4013": 2.459693610078277,
+          "bitvector:4001": 1.120377663552614,
+          "bitvector:4003": 0.17018902926927534,
+          "bitvector:4007": 1.3807588324622144,
+          "bitvector:4013": 0.7024298100372096,
+          "automaton:4001": 0.11656727229789364,
+          "automaton:4003": 0.08659602134027389,
+          "automaton:4007": 0.07364762477427463,
+          "automaton:4013": 0.09115256757307526,
+          "local:4001": 0.23276563583466015,
+          "local:4003": 0.04431075612263711,
+          "local:4007": 0.11583471562566915,
+          "local:4013": 0.06848498013026888
+        },
+        "domains": 20,
+        "wins_for_denominator": 6,
+        "losses_for_denominator": 14,
+        "mean_saved_cpu_ns_per_query": -49412567.86666666
+      }
+    },
+    {
+      "seed": 5107,
+      "vs_selected_fixed": {
+        "speedup_of_denominator": 1.0009602480707498,
+        "ci95": [
+          0.9929289940255905,
+          1.008514479208643
+        ],
+        "domain_speedups": {
+          "permutation:4001": 1.0280054383551327,
+          "permutation:4003": 1.0160246995288162,
+          "permutation:4007": 0.9903659403652425,
+          "permutation:4013": 0.988346271013729,
+          "affine:4001": 0.9990421432755191,
+          "affine:4003": 1.000648205826037,
+          "affine:4007": 0.9995982006800156,
+          "affine:4013": 0.9995493649576223,
+          "bitvector:4001": 0.9693794164706119,
+          "bitvector:4003": 0.9623163596510208,
+          "bitvector:4007": 1.03416359281688,
+          "bitvector:4013": 1.0138419988204712,
+          "automaton:4001": 0.9758933512345449,
+          "automaton:4003": 1.0051445408142419,
+          "automaton:4007": 1.018209656655711,
+          "automaton:4013": 0.9963776565200665,
+          "local:4001": 0.9981561521055803,
+          "local:4003": 1.0094030117965633,
+          "local:4007": 0.9974661336060852,
+          "local:4013": 1.02049918882525
+        },
+        "domains": 20,
+        "wins_for_denominator": 9,
+        "losses_for_denominator": 11,
+        "mean_saved_cpu_ns_per_query": 292119.425
+      },
+      "vs_equal_evaluation_random": {
+        "speedup_of_denominator": 0.250475114363176,
+        "ci95": [
+          0.14810385814061855,
+          0.4422475441841792
+        ],
+        "domain_speedups": {
+          "permutation:4001": 0.13163565681346884,
+          "permutation:4003": 0.07177258621741334,
+          "permutation:4007": 0.12242467337301915,
+          "permutation:4013": 0.1191311795180295,
+          "affine:4001": 0.9993331913389906,
+          "affine:4003": 3.966784431720404,
+          "affine:4007": 0.9998099061395024,
+          "affine:4013": 0.9994386098012775,
+          "bitvector:4001": 0.9655390619041353,
+          "bitvector:4003": 0.1706628318932165,
+          "bitvector:4007": 1.4918149475510742,
+          "bitvector:4013": 0.7693604979332933,
+          "automaton:4001": 0.12128516596628526,
+          "automaton:4003": 0.09149536030672838,
+          "automaton:4007": 0.08051777911295618,
+          "automaton:4013": 0.09716236476411298,
+          "local:4001": 0.2433130675963879,
+          "local:4003": 0.04690037742176895,
+          "local:4007": 0.12861936057912116,
+          "local:4013": 0.07181981629429808
+        },
+        "domains": 20,
+        "wins_for_denominator": 2,
+        "losses_for_denominator": 18,
+        "mean_saved_cpu_ns_per_query": -48904657.66666667
+      },
+      "native_only_vs_selected_fixed": {
+        "speedup_of_denominator": 0.9999356740611667,
+        "ci95": [
+          0.98974367754876,
+          1.009943034371742
+        ],
+        "domain_speedups": {
+          "permutation:4001": 1.0286267558627635,
+          "permutation:4003": 1.01614462006566,
+          "permutation:4007": 0.990247909819135,
+          "permutation:4013": 0.9882112300492688,
+          "affine:4001": 0.9871220194756066,
+          "affine:4003": 1.0195609197794193,
+          "affine:4007": 0.9786014610198952,
+          "affine:4013": 0.9928927027381108,
+          "bitvector:4001": 0.9507397332308595,
+          "bitvector:4003": 0.9614014519661035,
+          "bitvector:4007": 1.0533093486720757,
+          "bitvector:4013": 1.016594870671924,
+          "automaton:4001": 0.975183588160067,
+          "automaton:4003": 1.0051976868937598,
+          "automaton:4007": 1.018373631625503,
+          "automaton:4013": 0.9963394203113752,
+          "local:4001": 0.998107713282637,
+          "local:4003": 1.0094458866392488,
+          "local:4007": 0.9974340536973574,
+          "local:4013": 1.02064510407696
+        },
+        "domains": 20,
+        "wins_for_denominator": 9,
+        "losses_for_denominator": 11,
+        "mean_saved_cpu_ns_per_query": 292119.425
+      },
+      "vs_expert_dispatch": {
+        "speedup_of_denominator": 0.27841884151972773,
+        "ci95": [
+          0.15013736423120702,
+          0.5409961739925995
+        ],
+        "domain_speedups": {
+          "permutation:4001": 0.11901373425291188,
+          "permutation:4003": 0.07577725937223019,
+          "permutation:4007": 0.11365900842023155,
+          "permutation:4013": 0.10976262875235307,
+          "affine:4001": 2.497202671107217,
+          "affine:4003": 3.788546601478308,
+          "affine:4007": 2.924476723646309,
+          "affine:4013": 2.458585185944063,
+          "bitvector:4001": 1.0860710457213405,
+          "bitvector:4003": 0.16377568709895007,
+          "bitvector:4007": 1.4279305149927641,
+          "bitvector:4013": 0.7121528426392084,
+          "automaton:4001": 0.11375722600706116,
+          "automaton:4003": 0.08704151810640988,
+          "automaton:4007": 0.07498872273492281,
+          "automaton:4013": 0.09082238166424773,
+          "local:4001": 0.23233645140713316,
+          "local:4003": 0.04472741068517291,
+          "local:4007": 0.11554120593249659,
+          "local:4013": 0.06988886666965276
+        },
+        "domains": 20,
+        "wins_for_denominator": 6,
+        "losses_for_denominator": 14,
+        "mean_saved_cpu_ns_per_query": -49120448.44166666
+      }
+    },
+    {
+      "seed": 5113,
+      "vs_selected_fixed": {
+        "speedup_of_denominator": 0.999882222432227,
+        "ci95": [
+          0.9919355588735485,
+          1.006787745540003
+        ],
+        "domain_speedups": {
+          "permutation:4001": 1.009761531080149,
+          "permutation:4003": 1.0084400108373532,
+          "permutation:4007": 0.9819034301679804,
+          "permutation:4013": 0.9872670142294069,
+          "affine:4001": 0.9996542821783977,
+          "affine:4003": 1.000732549648246,
+          "affine:4007": 0.9998363303409579,
+          "affine:4013": 0.9999577573443358,
+          "bitvector:4001": 0.9766466454041027,
+          "bitvector:4003": 0.9507090013211108,
+          "bitvector:4007": 1.0122221268230671,
+          "bitvector:4013": 1.0045653946536288,
+          "automaton:4001": 1.018296212474926,
+          "automaton:4003": 1.0058871590832825,
+          "automaton:4007": 0.9955041161739251,
+          "automaton:4013": 0.9883309604157502,
+          "local:4001": 1.0020859819180041,
+          "local:4003": 1.0267800794073336,
+          "local:4007": 1.0102972041064457,
+          "local:4013": 1.0216136463261192
+        },
+        "domains": 20,
+        "wins_for_denominator": 11,
+        "losses_for_denominator": 9,
+        "mean_saved_cpu_ns_per_query": 363418.1666666667
+      },
+      "vs_equal_evaluation_random": {
+        "speedup_of_denominator": 0.999882222432227,
+        "ci95": [
+          0.9919355588735485,
+          1.006787745540003
+        ],
+        "domain_speedups": {
+          "permutation:4001": 1.009761531080149,
+          "permutation:4003": 1.0084400108373532,
+          "permutation:4007": 0.9819034301679804,
+          "permutation:4013": 0.9872670142294069,
+          "affine:4001": 0.9996542821783977,
+          "affine:4003": 1.000732549648246,
+          "affine:4007": 0.9998363303409579,
+          "affine:4013": 0.9999577573443358,
+          "bitvector:4001": 0.9766466454041027,
+          "bitvector:4003": 0.9507090013211108,
+          "bitvector:4007": 1.0122221268230671,
+          "bitvector:4013": 1.0045653946536288,
+          "automaton:4001": 1.018296212474926,
+          "automaton:4003": 1.0058871590832825,
+          "automaton:4007": 0.9955041161739251,
+          "automaton:4013": 0.9883309604157502,
+          "local:4001": 1.0020859819180041,
+          "local:4003": 1.0267800794073336,
+          "local:4007": 1.0102972041064457,
+          "local:4013": 1.0216136463261192
+        },
+        "domains": 20,
+        "wins_for_denominator": 11,
+        "losses_for_denominator": 9,
+        "mean_saved_cpu_ns_per_query": 363418.1666666667
+      },
+      "native_only_vs_selected_fixed": {
+        "speedup_of_denominator": 0.999864506734102,
+        "ci95": [
+          0.9907990490059859,
+          1.0080273962064195
+        ],
+        "domain_speedups": {
+          "permutation:4001": 1.009974169437152,
+          "permutation:4003": 1.0085026964991,
+          "permutation:4007": 0.9816836396420683,
+          "permutation:4013": 0.987119630047816,
+          "affine:4001": 0.9953162553009983,
+          "affine:4003": 1.0221606648199446,
+          "affine:4007": 0.9911736016939071,
+          "affine:4013": 0.9993297145243171,
+          "bitvector:4001": 0.9622585119978929,
+          "bitvector:4003": 0.9495270635364035,
+          "bitvector:4007": 1.0188474795098503,
+          "bitvector:4013": 1.00546341023022,
+          "automaton:4001": 1.018859027224303,
+          "automaton:4003": 1.005948022236409,
+          "automaton:4007": 0.995464542211922,
+          "automaton:4013": 0.9882087912222057,
+          "local:4001": 1.0021410031675646,
+          "local:4003": 1.0269043002150595,
+          "local:4007": 1.0104292699349944,
+          "local:4013": 1.021767663606701
+        },
+        "domains": 20,
+        "wins_for_denominator": 11,
+        "losses_for_denominator": 9,
+        "mean_saved_cpu_ns_per_query": 363418.1666666667
+      },
+      "vs_expert_dispatch": {
+        "speedup_of_denominator": 0.27811898680523267,
+        "ci95": [
+          0.14998825390370202,
+          0.5397234153868631
+        ],
+        "domain_speedups": {
+          "permutation:4001": 0.11690160969486108,
+          "permutation:4003": 0.07521157733468016,
+          "permutation:4007": 0.11268781133179757,
+          "permutation:4013": 0.10964276988788393,
+          "affine:4001": 2.4987327716276466,
+          "affine:4003": 3.7888659349854525,
+          "affine:4007": 2.9251734082243344,
+          "affine:4013": 2.459589706088067,
+          "bitvector:4001": 1.094213086694347,
+          "bitvector:4003": 0.16180024205240207,
+          "bitvector:4007": 1.3976346420246377,
+          "bitvector:4013": 0.705636679336503,
+          "automaton:4001": 0.11870001187947846,
+          "automaton:4003": 0.08710582589388341,
+          "automaton:4007": 0.07331651360922314,
+          "automaton:4013": 0.09008890465385905,
+          "local:4001": 0.23325118074214396,
+          "local:4003": 0.04549740169020033,
+          "local:4007": 0.11702748933507878,
+          "local:4013": 0.06996519026945582
+        },
+        "domains": 20,
+        "wins_for_denominator": 6,
+        "losses_for_denominator": 14,
+        "mean_saved_cpu_ns_per_query": -49049149.7
+      }
+    },
+    {
+      "seed": 5119,
+      "vs_selected_fixed": {
+        "speedup_of_denominator": 1.0123738269682687,
+        "ci95": [
+          1.003484940406233,
+          1.0215432599624195
+        ],
+        "domain_speedups": {
+          "permutation:4001": 1.041625267338095,
+          "permutation:4003": 1.0526121428004593,
+          "permutation:4007": 1.0291400455429052,
+          "permutation:4013": 1.0309672549388142,
+          "affine:4001": 0.9999515487737297,
+          "affine:4003": 1.0006677569916225,
+          "affine:4007": 1.0000666302186132,
+          "affine:4013": 1.0002216592999584,
+          "bitvector:4001": 1.0094712252020213,
+          "bitvector:4003": 0.9941255910390856,
+          "bitvector:4007": 1.0316724026461694,
+          "bitvector:4013": 1.036044821188183,
+          "automaton:4001": 1.0457156361149451,
+          "automaton:4003": 1.0039084992688567,
+          "automaton:4007": 1.0074015793207565,
+          "automaton:4013": 0.9882850241514741,
+          "local:4001": 0.979070106287107,
+          "local:4003": 1.0032902003917665,
+          "local:4007": 0.9887614002876056,
+          "local:4013": 1.0086602232520696
+        },
+        "domains": 20,
+        "wins_for_denominator": 15,
+        "losses_for_denominator": 5,
+        "mean_saved_cpu_ns_per_query": 837229.0583333332
+      },
+      "vs_equal_evaluation_random": {
+        "speedup_of_denominator": 1.0092155622146366,
+        "ci95": [
+          1.0009126265054276,
+          1.0175297887407733
+        ],
+        "domain_speedups": {
+          "permutation:4001": 1.0236104421417227,
+          "permutation:4003": 1.0316640067022915,
+          "permutation:4007": 1.0352786553702906,
+          "permutation:4013": 1.0230530777357647,
+          "affine:4001": 0.9998243643047703,
+          "affine:4003": 0.999985058793647,
+          "affine:4007": 1.0003009391330746,
+          "affine:4013": 1.000069268531237,
+          "bitvector:4001": 0.982723294727788,
+          "bitvector:4003": 1.028253437348818,
+          "bitvector:4007": 1.0010705710510448,
+          "bitvector:4013": 1.0257512523588588,
+          "automaton:4001": 1.0473803149124539,
+          "automaton:4003": 0.9901330735956112,
+          "automaton:4007": 1.00038159988912,
+          "automaton:4013": 1.0113817776499199,
+          "local:4001": 1.0213357694594767,
+          "local:4003": 0.9983378849371729,
+          "local:4007": 0.9716119963702926,
+          "local:4013": 0.9956723553132292
+        },
+        "domains": 20,
+        "wins_for_denominator": 13,
+        "losses_for_denominator": 7,
+        "mean_saved_cpu_ns_per_query": 567476.0249999999
+      },
+      "native_only_vs_selected_fixed": {
+        "speedup_of_denominator": 1.0153297601877467,
+        "ci95": [
+          1.005764627787915,
+          1.0250345659058318
+        ],
+        "domain_speedups": {
+          "permutation:4001": 1.042561259083069,
+          "permutation:4003": 1.0530201528121823,
+          "permutation:4007": 1.0295112066457854,
+          "permutation:4013": 1.0313417586657299,
+          "affine:4001": 0.999341129962115,
+          "affine:4003": 1.0201624097723487,
+          "affine:4007": 1.0036375900363759,
+          "affine:4013": 1.0035310344827586,
+          "bitvector:4001": 1.0156301538169032,
+          "bitvector:4003": 0.9939781356461829,
+          "bitvector:4007": 1.049355431906248,
+          "bitvector:4013": 1.0434023839112465,
+          "automaton:4001": 1.0471609706889256,
+          "automaton:4003": 1.003948826160352,
+          "automaton:4007": 1.0074675155498445,
+          "automaton:4013": 0.988162379787777,
+          "local:4001": 0.9785310517417579,
+          "local:4003": 1.0033051114302296,
+          "local:4007": 0.9886203717575114,
+          "local:4013": 1.0087211474008004
+        },
+        "domains": 20,
+        "wins_for_denominator": 15,
+        "losses_for_denominator": 5,
+        "mean_saved_cpu_ns_per_query": 837229.0583333332
+      },
+      "vs_expert_dispatch": {
+        "speedup_of_denominator": 0.2815935484277852,
+        "ci95": [
+          0.15198537851735613,
+          0.5455439246962805
+        ],
+        "domain_speedups": {
+          "permutation:4001": 0.12059052231907424,
+          "permutation:4003": 0.07850602785575997,
+          "permutation:4007": 0.11810890533939418,
+          "permutation:4013": 0.11449598119453996,
+          "affine:4001": 2.499475818295789,
+          "affine:4003": 3.7886206239984124,
+          "affine:4007": 2.925847185579279,
+          "affine:4013": 2.460238824041999,
+          "bitvector:4001": 1.1309890127154352,
+          "bitvector:4003": 0.1691892693106866,
+          "bitvector:4007": 1.4244907821612125,
+          "bitvector:4013": 0.7277487669372502,
+          "automaton:4001": 0.12189621930117588,
+          "automaton:4003": 0.08693448182636826,
+          "automaton:4007": 0.07419273351082672,
+          "automaton:4013": 0.09008471744542557,
+          "local:4001": 0.22789387581662676,
+          "local:4003": 0.04445654738979128,
+          "local:4007": 0.11453289562395322,
+          "local:4013": 0.06907807534761055
+        },
+        "domains": 20,
+        "wins_for_denominator": 6,
+        "losses_for_denominator": 14,
+        "mean_saved_cpu_ns_per_query": -48575338.80833334
+      }
+    },
+    {
+      "seed": 5147,
+      "vs_selected_fixed": {
+        "speedup_of_denominator": 4.421950438173952,
+        "ci95": [
+          2.5293483629450657,
+          7.6010433486363675
+        ],
+        "domain_speedups": {
+          "permutation:4001": 10.150763449463327,
+          "permutation:4003": 19.8796479346827,
+          "permutation:4007": 11.743309521890323,
+          "permutation:4013": 13.56163668427054,
+          "affine:4001": 1.0006612225404763,
+          "affine:4003": 1.0007290989402204,
+          "affine:4007": 0.9998279497789816,
+          "affine:4013": 0.9998954386314787,
+          "bitvector:4001": 1.023580445165033,
+          "bitvector:4003": 0.936752442262843,
+          "bitvector:4007": 1.0210544639854395,
+          "bitvector:4013": 0.9998700927952825,
+          "automaton:4001": 8.302245968186819,
+          "automaton:4003": 11.418297786939954,
+          "automaton:4007": 12.63990392323898,
+          "automaton:4013": 10.269908952589233,
+          "local:4001": 4.13235089126363,
+          "local:4003": 21.223594126676865,
+          "local:4007": 15.83081499721628,
+          "local:4013": 15.185109177607368
+        },
+        "domains": 20,
+        "wins_for_denominator": 16,
+        "losses_for_denominator": 4,
+        "mean_saved_cpu_ns_per_query": 49288818.9
+      },
+      "vs_equal_evaluation_random": {
+        "speedup_of_denominator": 4.416654893849678,
+        "ci95": [
+          2.534095777999826,
+          7.577716998456855
+        ],
+        "domain_speedups": {
+          "permutation:4001": 9.978638083965802,
+          "permutation:4003": 19.50561784567961,
+          "permutation:4007": 11.426655928804676,
+          "permutation:4013": 13.781999211946907,
+          "affine:4001": 1.0005581906139127,
+          "affine:4003": 0.9997624585691347,
+          "affine:4007": 0.999850007499625,
+          "affine:4013": 0.999736172970817,
+          "bitvector:4001": 1.0483888310933187,
+          "bitvector:4003": 0.9687887678255243,
+          "bitvector:4007": 1.0032689292721597,
+          "bitvector:4013": 0.9907739923180009,
+          "automaton:4001": 8.197321064291684,
+          "automaton:4003": 11.449775336730431,
+          "automaton:4007": 12.674666425331285,
+          "automaton:4013": 10.725233790195393,
+          "local:4001": 4.217613136072325,
+          "local:4003": 21.168220813871745,
+          "local:4007": 15.52822891810293,
+          "local:4013": 14.575345119720483
+        },
+        "domains": 20,
+        "wins_for_denominator": 15,
+        "losses_for_denominator": 5,
+        "mean_saved_cpu_ns_per_query": 48950832.24166667
+      },
+      "native_only_vs_selected_fixed": {
+        "speedup_of_denominator": 4.834517617948535,
+        "ci95": [
+          2.684592438267754,
+          8.568181467275204
+        ],
+        "domain_speedups": {
+          "permutation:4001": 12.646803141216523,
+          "permutation:4003": 23.090114271008964,
+          "permutation:4007": 13.543460283832326,
+          "permutation:4013": 15.90431102337324,
+          "affine:4001": 1.0090728405225824,
+          "affine:4003": 1.0220540515483034,
+          "affine:4007": 0.9907257680966423,
+          "affine:4013": 0.9983424080091332,
+          "bitvector:4001": 1.0392712174674343,
+          "bitvector:4003": 0.935258633036526,
+          "bitvector:4007": 1.0326219392104854,
+          "bitvector:4013": 0.9998446827726214,
+          "automaton:4001": 10.650302704024327,
+          "automaton:4003": 12.78745747785177,
+          "automaton:4007": 14.090120106983445,
+          "automaton:4013": 11.388353020966226,
+          "local:4001": 4.503652058888349,
+          "local:4003": 23.357294283695026,
+          "local:4007": 19.50203248897862,
+          "local:4013": 16.852282147934062
+        },
+        "domains": 20,
+        "wins_for_denominator": 16,
+        "losses_for_denominator": 4,
+        "mean_saved_cpu_ns_per_query": 49288818.9
+      },
+      "vs_expert_dispatch": {
+        "speedup_of_denominator": 1.2299732388243891,
+        "ci95": [
+          0.910012738988652,
+          1.6003813522646715
+        ],
+        "domain_speedups": {
+          "permutation:4001": 1.175169136820518,
+          "permutation:4003": 1.4826659612445243,
+          "permutation:4007": 1.347716900823219,
+          "permutation:4013": 1.5061127221364328,
+          "affine:4001": 2.501249716662202,
+          "affine:4003": 3.788852870285904,
+          "affine:4007": 2.9251488896143427,
+          "affine:4013": 2.459436421148264,
+          "bitvector:4001": 1.1467966676121442,
+          "bitvector:4003": 0.15942498881433614,
+          "bitvector:4007": 1.4098299695728675,
+          "bitvector:4013": 0.7023385593440774,
+          "automaton:4001": 0.9677701664577226,
+          "automaton:4003": 0.9887791588274545,
+          "automaton:4007": 0.9308989013215863,
+          "automaton:4013": 0.9361285697702207,
+          "local:4001": 0.9618692826969033,
+          "local:4003": 0.9404335033930119,
+          "local:4007": 1.833757953325126,
+          "local:4013": 1.0399519003044042
+        },
+        "domains": 20,
+        "wins_for_denominator": 12,
+        "losses_for_denominator": 8,
+        "mean_saved_cpu_ns_per_query": -123748.96666666675
+      }
+    }
+  ],
+  "fresh_paired_improver_runs": [
+    {
+      "seed": 5101,
+      "original_vs_selected": {
+        "speedup_of_denominator": 1.00360466215093,
+        "ci95": [
+          0.9978744300436376,
+          1.0097598052104282
+        ],
+        "domain_speedups": {
+          "permutation:7001": 1.005045100134248,
+          "permutation:7013": 1.027549065286156,
+          "permutation:7019": 1.0051984278390123,
+          "permutation:7027": 0.999695922011321,
+          "affine:7001": 0.9995001737628785,
+          "affine:7013": 1.0364966469454346,
+          "affine:7019": 1.0000175269900538,
+          "affine:7027": 1.0001722496848275,
+          "bitvector:7001": 0.9775081442171979,
+          "bitvector:7013": 1.0090418497429416,
+          "bitvector:7019": 1.0197773360171676,
+          "bitvector:7027": 1.0032954337593039,
+          "automaton:7001": 1.0207593221805553,
+          "automaton:7013": 0.9969554082133376,
+          "automaton:7019": 1.0011010904951696,
+          "automaton:7027": 0.9948592364127181,
+          "local:7001": 0.9869145526992623,
+          "local:7013": 0.9984211288235054,
+          "local:7019": 0.987911319398783,
+          "local:7027": 1.003687886089639
+        },
+        "domains": 20,
+        "wins_for_denominator": 12,
+        "losses_for_denominator": 8,
+        "mean_saved_cpu_ns_per_query": 118000.56666666668
+      }
+    },
+    {
+      "seed": 5107,
+      "original_vs_selected": {
+        "speedup_of_denominator": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "domain_speedups": {
+          "permutation:7001": 1.0,
+          "permutation:7013": 1.0,
+          "permutation:7019": 1.0,
+          "permutation:7027": 1.0,
+          "affine:7001": 1.0,
+          "affine:7013": 1.0,
+          "affine:7019": 1.0,
+          "affine:7027": 1.0,
+          "bitvector:7001": 1.0,
+          "bitvector:7013": 1.0,
+          "bitvector:7019": 1.0,
+          "bitvector:7027": 1.0,
+          "automaton:7001": 1.0,
+          "automaton:7013": 1.0,
+          "automaton:7019": 1.0,
+          "automaton:7027": 1.0,
+          "local:7001": 1.0,
+          "local:7013": 1.0,
+          "local:7019": 1.0,
+          "local:7027": 1.0
+        },
+        "domains": 20,
+        "wins_for_denominator": 0,
+        "losses_for_denominator": 0,
+        "mean_saved_cpu_ns_per_query": 0.0
+      }
+    },
+    {
+      "seed": 5113,
+      "original_vs_selected": {
+        "speedup_of_denominator": 1.296620960029631,
+        "ci95": [
+          0.8623226861644827,
+          2.0778033490724237
+        ],
+        "domain_speedups": {
+          "permutation:7001": 6.478591482911847,
+          "permutation:7013": 9.942723595755604,
+          "permutation:7019": 10.07461815244386,
+          "permutation:7027": 8.644881574347737,
+          "affine:7001": 0.4168885804118249,
+          "affine:7013": 0.6407687646842579,
+          "affine:7019": 1.1978824637534515,
+          "affine:7027": 0.3615481168966519,
+          "bitvector:7001": 0.9538992837686531,
+          "bitvector:7013": 0.7189651938100798,
+          "bitvector:7019": 0.6117546150747388,
+          "bitvector:7027": 0.6563111287043427,
+          "automaton:7001": 0.9366806278406274,
+          "automaton:7013": 0.9289765583145926,
+          "automaton:7019": 0.9543839883799182,
+          "automaton:7027": 0.9098380788861468,
+          "local:7001": 1.496547154218686,
+          "local:7013": 0.9082418877384312,
+          "local:7019": 0.9537375248074474,
+          "local:7027": 1.0305848285365151
+        },
+        "domains": 20,
+        "wins_for_denominator": 7,
+        "losses_for_denominator": 13,
+        "mean_saved_cpu_ns_per_query": 13783686.433333332
+      }
+    },
+    {
+      "seed": 5119,
+      "original_vs_selected": {
+        "speedup_of_denominator": 0.379460974137222,
+        "ci95": [
+          0.22580811002144419,
+          0.619618538599563
+        ],
+        "domain_speedups": {
+          "permutation:7001": 0.15075519552628033,
+          "permutation:7013": 0.09458904273252887,
+          "permutation:7019": 0.09753074758301258,
+          "permutation:7027": 0.11022358318970057,
+          "affine:7001": 1.0066996169110818,
+          "affine:7013": 0.9629712311948762,
+          "affine:7019": 1.000175871197012,
+          "affine:7027": 0.9997171731568375,
+          "bitvector:7001": 0.7360939729208937,
+          "bitvector:7013": 0.9774278629605209,
+          "bitvector:7019": 1.1526306667231887,
+          "bitvector:7027": 1.0202386076249208,
+          "automaton:7001": 0.11117132999156948,
+          "automaton:7013": 0.07882832324936614,
+          "automaton:7019": 0.06813929544619016,
+          "automaton:7027": 0.06909579347054742,
+          "local:7001": 0.6520476255826221,
+          "local:7013": 1.0719706698919422,
+          "local:7019": 1.0584202399562457,
+          "local:7027": 0.9983706655943244
+        },
+        "domains": 20,
+        "wins_for_denominator": 6,
+        "losses_for_denominator": 14,
+        "mean_saved_cpu_ns_per_query": -32396313.933333337
+      }
+    },
+    {
+      "seed": 5147,
+      "original_vs_selected": {
+        "speedup_of_denominator": 0.7197266128736259,
+        "ci95": [
+          0.6245875623787657,
+          0.8235314019908553
+        ],
+        "domain_speedups": {
+          "permutation:7001": 0.9769944545774732,
+          "permutation:7013": 0.6700759469925432,
+          "permutation:7019": 0.5839648828946189,
+          "permutation:7027": 0.7178007299045484,
+          "affine:7001": 0.9912260457381546,
+          "affine:7013": 0.929711244577246,
+          "affine:7019": 0.9997939578284243,
+          "affine:7027": 1.000082402102961,
+          "bitvector:7001": 0.9818886537719005,
+          "bitvector:7013": 0.9945825405955488,
+          "bitvector:7019": 0.990040798819214,
+          "bitvector:7027": 0.9900001803064277,
+          "automaton:7001": 0.5700413951344054,
+          "automaton:7013": 0.6397321636199862,
+          "automaton:7019": 0.5601678086934613,
+          "automaton:7027": 0.48714693718618085,
+          "local:7001": 0.6823180947745596,
+          "local:7013": 0.3538102557320374,
+          "local:7019": 0.46645926092169687,
+          "local:7027": 0.5128994428797902
+        },
+        "domains": 20,
+        "wins_for_denominator": 1,
+        "losses_for_denominator": 19,
+        "mean_saved_cpu_ns_per_query": -2833958.95
+      }
+    }
+  ],
+  "selected_procedure": 2,
+  "paired_improver_aggregate": {
+    "speedup_of_selected": 0.8130964732632244,
+    "ci95": [
+      0.5126808172186078,
+      1.1713295603736509
+    ],
+    "bootstrap": "two-way resampling of discovery seeds and shared final domains",
+    "reruns": 5,
+    "domains": 20
+  },
+  "fixed_comparisons": {
+    "fixed_0": {
+      "speedup_of_denominator": 1.0,
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "domain_speedups": {
+        "permutation:4001": 1.0,
+        "permutation:4003": 1.0,
+        "permutation:4007": 1.0,
+        "permutation:4013": 1.0,
+        "affine:4001": 1.0,
+        "affine:4003": 1.0,
+        "affine:4007": 1.0,
+        "affine:4013": 1.0,
+        "bitvector:4001": 1.0,
+        "bitvector:4003": 1.0,
+        "bitvector:4007": 1.0,
+        "bitvector:4013": 1.0,
+        "automaton:4001": 1.0,
+        "automaton:4003": 1.0,
+        "automaton:4007": 1.0,
+        "automaton:4013": 1.0,
+        "local:4001": 1.0,
+        "local:4003": 1.0,
+        "local:4007": 1.0,
+        "local:4013": 1.0
+      },
+      "domains": 20,
+      "wins_for_denominator": 0,
+      "losses_for_denominator": 0,
+      "mean_saved_cpu_ns_per_query": 0.0
+    },
+    "fixed_1": {
+      "speedup_of_denominator": 0.7540293640447221,
+      "ci95": [
+        0.43908440100922896,
+        1.225110765383913
+      ],
+      "domain_speedups": {
+        "permutation:4001": 0.1269976111277022,
+        "permutation:4003": 0.07103547170894273,
+        "permutation:4007": 0.11682589029245334,
+        "permutation:4013": 0.11737524116374547,
+        "affine:4001": 2.415920633045943,
+        "affine:4003": 3.6433980583267673,
+        "affine:4007": 2.9425897572791975,
+        "affine:4013": 2.4529525054761954,
+        "bitvector:4001": 1.5868431632780988,
+        "bitvector:4003": 0.8227287610278339,
+        "bitvector:4007": 1.7555182645901606,
+        "bitvector:4013": 1.2040064752325352,
+        "automaton:4001": 1.085202829215797,
+        "automaton:4003": 1.0734498611011272,
+        "automaton:4007": 1.076749077442905,
+        "automaton:4013": 1.1218624997759499,
+        "local:4001": 1.1904750512248852,
+        "local:4003": 0.8812160865744304,
+        "local:4007": 0.12714849974599463,
+        "local:4013": 0.8671315344445845
+      },
+      "domains": 20,
+      "wins_for_denominator": 12,
+      "losses_for_denominator": 8,
+      "mean_saved_cpu_ns_per_query": -18387352.300000004
+    },
+    "fixed_2": {
+      "speedup_of_denominator": 0.3419736184210918,
+      "ci95": [
+        0.19385224487630065,
+        0.6256969699255742
+      ],
+      "domain_speedups": {
+        "permutation:4001": 0.12506100272772194,
+        "permutation:4003": 0.0755035285653379,
+        "permutation:4007": 0.12795587759971924,
+        "permutation:4013": 0.1210783978616186,
+        "affine:4001": 2.6850990118499274,
+        "affine:4003": 3.9701693049011975,
+        "affine:4007": 3.12878807266181,
+        "affine:4013": 2.566613595645914,
+        "bitvector:4001": 1.1375484724425788,
+        "bitvector:4003": 0.19502754409107323,
+        "bitvector:4007": 1.4355360393407728,
+        "bitvector:4013": 0.6886858194005316,
+        "automaton:4001": 0.18267274477229115,
+        "automaton:4003": 0.15290706178419589,
+        "automaton:4007": 0.13935500569163703,
+        "automaton:4013": 0.15549331596371735,
+        "local:4001": 0.3022407383258541,
+        "local:4003": 0.07184215568114549,
+        "local:4007": 0.1274434925063098,
+        "local:4013": 0.1040023905573003
+      },
+      "domains": 20,
+      "wins_for_denominator": 6,
+      "losses_for_denominator": 14,
+      "mean_saved_cpu_ns_per_query": -47573247.61666666
+    },
+    "fixed_3": {
+      "speedup_of_denominator": 0.1924208073059262,
+      "ci95": [
+        0.11802777634537757,
+        0.32407576467825033
+      ],
+      "domain_speedups": {
+        "permutation:4001": 0.11351722814662522,
+        "permutation:4003": 0.06043268312820169,
+        "permutation:4007": 0.09937594334121266,
+        "permutation:4013": 0.08390515226200969,
+        "affine:4001": 1.1676445203550436,
+        "affine:4003": 1.2233245813319735,
+        "affine:4007": 1.1959508292923988,
+        "affine:4013": 1.1822058107573736,
+        "bitvector:4001": 0.7719994639390966,
+        "bitvector:4003": 0.09779387252926865,
+        "bitvector:4007": 0.6181040814616989,
+        "bitvector:4013": 0.41474493535752593,
+        "automaton:4001": 0.10930141905419383,
+        "automaton:4003": 0.07915410399115444,
+        "automaton:4007": 0.09141868348102734,
+        "automaton:4013": 0.10490945029751529,
+        "local:4001": 0.12187036311013924,
+        "local:4003": 0.041975819287226955,
+        "local:4007": 0.07755441411694561,
+        "local:4013": 0.06578916466746113
+      },
+      "domains": 20,
+      "wins_for_denominator": 4,
+      "losses_for_denominator": 16,
+      "mean_saved_cpu_ns_per_query": -50179667.016666666
+    },
+    "fixed_4": {
+      "speedup_of_denominator": 0.11009389914885216,
+      "ci95": [
+        0.056959749117375016,
+        0.22199064096614543
+      ],
+      "domain_speedups": {
+        "permutation:4001": 0.09932789760948363,
+        "permutation:4003": 0.053170793131546795,
+        "permutation:4007": 0.08401316870333037,
+        "permutation:4013": 0.0696394493433228,
+        "affine:4001": 1.1629499747132912,
+        "affine:4003": 1.2254291198916987,
+        "affine:4007": 1.1916819258821296,
+        "affine:4013": 1.168910585140899,
+        "bitvector:4001": 0.5905973188308684,
+        "bitvector:4003": 0.05838138311615881,
+        "bitvector:4007": 0.5277837033979862,
+        "bitvector:4013": 0.2945817363290105,
+        "automaton:4001": 0.03789980901132735,
+        "automaton:4003": 0.017344369434531968,
+        "automaton:4007": 0.016441627300701308,
+        "automaton:4013": 0.019320836249318903,
+        "local:4001": 0.050393817001238475,
+        "local:4003": 0.014885663605338438,
+        "local:4007": 0.06316236712881704,
+        "local:4013": 0.02103436288715488
+      },
+      "domains": 20,
+      "wins_for_denominator": 4,
+      "losses_for_denominator": 16,
+      "mean_saved_cpu_ns_per_query": -52307029.14166666
+    },
+    "fixed_5": {
+      "speedup_of_denominator": 0.29821910164196447,
+      "ci95": [
+        0.16073425792143242,
+        0.5774371690291897
+      ],
+      "domain_speedups": {
+        "permutation:4001": 0.13348380405062646,
+        "permutation:4003": 0.07216114087133793,
+        "permutation:4007": 0.13464286226435562,
+        "permutation:4013": 0.12846636190176614,
+        "affine:4001": 2.6701710713993694,
+        "affine:4003": 4.138652988123159,
+        "affine:4007": 3.060737560614016,
+        "affine:4013": 2.6520810234512044,
+        "bitvector:4001": 1.1507619414050847,
+        "bitvector:4003": 0.1807573351731861,
+        "bitvector:4007": 1.4297185221383633,
+        "bitvector:4013": 0.7329538804458763,
+        "automaton:4001": 0.12639069564094543,
+        "automaton:4003": 0.09660511513428234,
+        "automaton:4007": 0.08663047578915861,
+        "automaton:4013": 0.0954372744488103,
+        "local:4001": 0.23505810292944293,
+        "local:4003": 0.043954621941574935,
+        "local:4007": 0.130551449876129,
+        "local:4013": 0.0697781422278643
+      },
+      "domains": 20,
+      "wins_for_denominator": 6,
+      "losses_for_denominator": 14,
+      "mean_saved_cpu_ns_per_query": -48990159.55
+    },
+    "fixed_6": {
+      "speedup_of_denominator": 0.27815174684144756,
+      "ci95": [
+        0.14991980169594632,
+        0.5394770870814543
+      ],
+      "domain_speedups": {
+        "permutation:4001": 0.1157715025742866,
+        "permutation:4003": 0.0745821035722577,
+        "permutation:4007": 0.11476465797916538,
+        "permutation:4013": 0.11105685524545109,
+        "affine:4001": 2.499596926832075,
+        "affine:4003": 3.7860924343044764,
+        "affine:4007": 2.92565224873036,
+        "affine:4013": 2.459693610078277,
+        "bitvector:4001": 1.120377663552614,
+        "bitvector:4003": 0.17018902926927534,
+        "bitvector:4007": 1.3807588324622144,
+        "bitvector:4013": 0.7024298100372096,
+        "automaton:4001": 0.11656727229789364,
+        "automaton:4003": 0.08659602134027389,
+        "automaton:4007": 0.07364762477427463,
+        "automaton:4013": 0.09115256757307526,
+        "local:4001": 0.23276563583466015,
+        "local:4003": 0.04431075612263711,
+        "local:4007": 0.11583471562566915,
+        "local:4013": 0.06848498013026888
+      },
+      "domains": 20,
+      "wins_for_denominator": 6,
+      "losses_for_denominator": 14,
+      "mean_saved_cpu_ns_per_query": -49412567.86666666
+    },
+    "fixed_7": {
+      "speedup_of_denominator": 0.23687884469077644,
+      "ci95": [
+        0.11450150466212644,
+        0.5011228458780344
+      ],
+      "domain_speedups": {
+        "permutation:4001": 0.09940067897138052,
+        "permutation:4003": 0.04887762351451694,
+        "permutation:4007": 0.08249743800681643,
+        "permutation:4013": 0.0695303843327562,
+        "affine:4001": 2.6487527747241932,
+        "affine:4003": 4.040473986341365,
+        "affine:4007": 3.003627795745657,
+        "affine:4013": 2.5185352675284993,
+        "bitvector:4001": 1.1515980234915721,
+        "bitvector:4003": 0.2055821712973166,
+        "bitvector:4007": 1.437558275925151,
+        "bitvector:4013": 0.6944486165731599,
+        "automaton:4001": 0.17353079542556804,
+        "automaton:4003": 0.1558799632319597,
+        "automaton:4007": 0.1348166418037766,
+        "automaton:4013": 0.15513942074592046,
+        "local:4001": 0.05044013226559272,
+        "local:4003": 0.014913693846198752,
+        "local:4007": 0.06307790103218472,
+        "local:4013": 0.021613245042470093
+      },
+      "domains": 20,
+      "wins_for_denominator": 6,
+      "losses_for_denominator": 14,
+      "mean_saved_cpu_ns_per_query": -49888101.975
+    }
+  },
+  "declared_kernel_comparisons": {
+    "pairwise_vs_forward_deduplicated": {
+      "speedup_of_denominator": 9.08315544940372,
+      "ci95": [
+        4.504694412556358,
+        17.556257102525734
+      ],
+      "domain_speedups": {
+        "permutation:4001": 10.067665017250118,
+        "permutation:4003": 18.80731772283249,
+        "permutation:4007": 11.902895884468158,
+        "permutation:4013": 14.359677013957926,
+        "affine:4001": 0.859882214836056,
+        "affine:4003": 0.81604066997231,
+        "affine:4007": 0.839150093897548,
+        "affine:4013": 0.8554974287271607,
+        "bitvector:4001": 1.6932010493707874,
+        "bitvector:4003": 17.128748012193288,
+        "bitvector:4007": 1.8947155692034114,
+        "bitvector:4013": 3.3946435799506816,
+        "automaton:4001": 26.385357237581957,
+        "automaton:4003": 57.65559847964486,
+        "automaton:4007": 60.82123026577458,
+        "automaton:4013": 51.75759408629386,
+        "local:4001": 19.84370423807,
+        "local:4003": 67.17873159792288,
+        "local:4007": 15.832212208901883,
+        "local:4013": 47.54125453501009
+      },
+      "domains": 20,
+      "wins_for_denominator": 16,
+      "losses_for_denominator": 4,
+      "mean_saved_cpu_ns_per_query": 52307029.14166666
+    },
+    "inverse_fibers_vs_forward_deduplicated": {
+      "speedup_of_denominator": 3.1061995357138468,
+      "ci95": [
+        2.418498503008069,
+        4.034299131500502
+      ],
+      "domain_speedups": {
+        "permutation:4001": 1.2590722821841076,
+        "permutation:4003": 1.4200188509232685,
+        "permutation:4007": 1.5230454888752094,
+        "permutation:4013": 1.7386466866603372,
+        "affine:4001": 2.3088688853636206,
+        "affine:4003": 3.2398196194750732,
+        "affine:4007": 2.625522804959686,
+        "affine:4013": 2.195731331611252,
+        "bitvector:4001": 1.9260982672499107,
+        "bitvector:4003": 3.3405776581729096,
+        "bitvector:4007": 2.7199324838915633,
+        "bitvector:4013": 2.3378428954310895,
+        "automaton:4001": 4.819885628386534,
+        "automaton:4003": 8.815948158931848,
+        "automaton:4007": 8.475742889859383,
+        "automaton:4013": 8.047959930781918,
+        "local:4001": 5.997575820034156,
+        "local:4003": 4.8262648939198645,
+        "local:4007": 2.017712418003493,
+        "local:4013": 4.944404121734144
+      },
+      "domains": 20,
+      "wins_for_denominator": 20,
+      "losses_for_denominator": 0,
+      "mean_saved_cpu_ns_per_query": 4733781.525
+    }
+  },
+  "task_counts": {
+    "test": 120,
+    "fresh-test": 116
+  },
+  "shortfalls": {
+    "test": [],
+    "fresh-test": [
+      {
+        "id": "affine:7019",
+        "observed": 2,
+        "requested": 6
+      }
+    ]
+  },
+  "selection_child_cpu_seconds": 10.877491,
+  "selection_wall_seconds": 11.216261056999883,
+  "budget_limit": "Searches have identical evaluation/native-kernel CPU ceilings, not exactly matched whole-process CPU. Child CPU and wall time for the complete selection phase include compilation, process startup, verification and the outer study. No claim of matched-total-cost superiority is permitted.",
+  "limits": [
+    "authored six-kernel grammar and bounded dispatch-tree synthesis",
+    "synthetic finite functions, no application-derived workload",
+    "single host",
+    "small-to-large transfer deliberately changes bank size",
+    "semantic-pair goal pool is sampled, not exhaustive uniform semantics",
+    "fixed evaluator, no runtime modification of framework source"
+  ]
+}
