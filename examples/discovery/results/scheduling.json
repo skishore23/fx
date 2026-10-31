@@ -1,0 +1,621 @@
+{
+  "experiment": "gpu-scheduling-policy-discovery",
+  "version": 1,
+  "seed": 42,
+  "proposalBudget": 100,
+  "evaluatedCandidates": 70,
+  "trainingSeeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "validationSeeds": [
+    101,
+    102,
+    103,
+    104
+  ],
+  "testScenarios": [
+    {
+      "seed": 201,
+      "regime": "mixed"
+    },
+    {
+      "seed": 202,
+      "regime": "mixed"
+    },
+    {
+      "seed": 203,
+      "regime": "mixed"
+    },
+    {
+      "seed": 211,
+      "regime": "burst"
+    },
+    {
+      "seed": 212,
+      "regime": "burst"
+    },
+    {
+      "seed": 213,
+      "regime": "burst"
+    },
+    {
+      "seed": 221,
+      "regime": "long"
+    },
+    {
+      "seed": 222,
+      "regime": "long"
+    },
+    {
+      "seed": 223,
+      "regime": "long"
+    },
+    {
+      "seed": 231,
+      "regime": "many-models"
+    },
+    {
+      "seed": 232,
+      "regime": "many-models"
+    },
+    {
+      "seed": 233,
+      "regime": "many-models"
+    }
+  ],
+  "selected": {
+    "program": {
+      "version": 1,
+      "body": [
+        {
+          "op": "setup",
+          "args": [
+            -4
+          ]
+        },
+        {
+          "op": "cost",
+          "args": [
+            -1
+          ]
+        }
+      ]
+    },
+    "training": {
+      "valid": true,
+      "score": -54.43705555555556,
+      "metrics": {
+        "meanFlow": 22.36111111111111,
+        "meanTardiness": 9.86111111111111,
+        "cost": 370.1333333333334,
+        "primitiveCalls": 2106,
+        "policyCalls": 1053
+      }
+    },
+    "validation": {
+      "valid": true,
+      "score": -48.44591666666666,
+      "metrics": {
+        "meanFlow": 18.78125,
+        "meanTardiness": 7.666666666666666,
+        "cost": 346.84999999999997,
+        "primitiveCalls": 1212,
+        "policyCalls": 606
+      }
+    }
+  },
+  "randomSearch": {
+    "program": {
+      "version": 1,
+      "body": [
+        {
+          "op": "setup",
+          "args": [
+            -1
+          ]
+        },
+        {
+          "op": "cost",
+          "args": [
+            -1
+          ]
+        }
+      ]
+    },
+    "evaluatedCandidates": 92,
+    "training": {
+      "valid": true,
+      "score": -55.43618055555556,
+      "metrics": {
+        "meanFlow": 22.333333333333332,
+        "meanTardiness": 10.118055555555555,
+        "cost": 382.1666666666667,
+        "primitiveCalls": 2108,
+        "policyCalls": 1054
+      }
+    },
+    "validation": {
+      "valid": true,
+      "score": -48.92158333333334,
+      "metrics": {
+        "meanFlow": 18.5625,
+        "meanTardiness": 7.708333333333334,
+        "cost": 355.3999999999999,
+        "primitiveCalls": 1214,
+        "policyCalls": 607
+      }
+    }
+  },
+  "learningCost": {
+    "trainingPrimitiveCalls": 165074,
+    "validationPrimitiveCalls": 13573,
+    "randomSearchTrainingPrimitiveCalls": 330895,
+    "randomSearchValidationPrimitiveCalls": 12373
+  },
+  "heldOut": {
+    "fifo": {
+      "valid": true,
+      "score": -100.5154027777778,
+      "metrics": {
+        "meanFlow": 46.69097222222223,
+        "meanTardiness": 31.409722222222225,
+        "cost": 574.65,
+        "primitiveCalls": 2458,
+        "policyCalls": 2458
+      }
+    },
+    "shortest": {
+      "valid": true,
+      "score": -76.65659722222222,
+      "metrics": {
+        "meanFlow": 31.85763888888889,
+        "meanTardiness": 19.062500000000004,
+        "cost": 500.4166666666667,
+        "primitiveCalls": 2343,
+        "policyCalls": 2343
+      }
+    },
+    "deadline": {
+      "valid": true,
+      "score": -112.74918750000002,
+      "metrics": {
+        "meanFlow": 53.96527777777778,
+        "meanTardiness": 37.94097222222222,
+        "cost": 616.2333333333332,
+        "primitiveCalls": 2651,
+        "policyCalls": 2651
+      }
+    },
+    "locality": {
+      "valid": true,
+      "score": -82.07571527777777,
+      "metrics": {
+        "meanFlow": 37.21180555555556,
+        "meanTardiness": 23.274305555555557,
+        "cost": 488.06666666666666,
+        "primitiveCalls": 2440,
+        "policyCalls": 2440
+      }
+    },
+    "cheapest": {
+      "valid": true,
+      "score": -78.17877083333335,
+      "metrics": {
+        "meanFlow": 32.81944444444444,
+        "meanTardiness": 19.815972222222225,
+        "cost": 505.06666666666666,
+        "primitiveCalls": 2406,
+        "policyCalls": 2406
+      }
+    },
+    "hybrid": {
+      "valid": true,
+      "score": -77.07279861111111,
+      "metrics": {
+        "meanFlow": 32.52777777777778,
+        "meanTardiness": 19.385416666666668,
+        "cost": 496.2333333333333,
+        "primitiveCalls": 4838,
+        "policyCalls": 2419
+      }
+    },
+    "randomSearch": {
+      "valid": true,
+      "score": -77.07279861111111,
+      "metrics": {
+        "meanFlow": 32.52777777777778,
+        "meanTardiness": 19.385416666666668,
+        "cost": 496.2333333333333,
+        "primitiveCalls": 4838,
+        "policyCalls": 2419
+      }
+    },
+    "discovered": {
+      "valid": true,
+      "score": -76.36913888888888,
+      "metrics": {
+        "meanFlow": 32.520833333333336,
+        "meanTardiness": 19.430555555555557,
+        "cost": 487.3833333333334,
+        "primitiveCalls": 4728,
+        "policyCalls": 2364
+      }
+    }
+  },
+  "byRegime": {
+    "mixed": {
+      "fifo": {
+        "valid": true,
+        "score": -78.45688888888888,
+        "metrics": {
+          "meanFlow": 35.236111111111114,
+          "meanTardiness": 19.944444444444443,
+          "cost": 477.9333333333334,
+          "primitiveCalls": 565,
+          "policyCalls": 565
+        }
+      },
+      "shortest": {
+        "valid": true,
+        "score": -55.41683333333333,
+        "metrics": {
+          "meanFlow": 22.083333333333332,
+          "meanTardiness": 9.75,
+          "cost": 386.2,
+          "primitiveCalls": 505,
+          "policyCalls": 505
+        }
+      },
+      "deadline": {
+        "valid": true,
+        "score": -91.62600000000002,
+        "metrics": {
+          "meanFlow": 41.75,
+          "meanTardiness": 26,
+          "cost": 542.1999999999999,
+          "primitiveCalls": 603,
+          "policyCalls": 603
+        }
+      },
+      "locality": {
+        "valid": true,
+        "score": -62.45591666666667,
+        "metrics": {
+          "meanFlow": 26.694444444444446,
+          "meanTardiness": 13.680555555555557,
+          "cost": 404.2666666666667,
+          "primitiveCalls": 511,
+          "policyCalls": 511
+        }
+      },
+      "cheapest": {
+        "valid": true,
+        "score": -57.193694444444446,
+        "metrics": {
+          "meanFlow": 23.13888888888889,
+          "meanTardiness": 11.013888888888888,
+          "cost": 391.26666666666665,
+          "primitiveCalls": 473,
+          "policyCalls": 473
+        }
+      },
+      "hybrid": {
+        "valid": true,
+        "score": -58.04122222222222,
+        "metrics": {
+          "meanFlow": 23.569444444444443,
+          "meanTardiness": 11.444444444444445,
+          "cost": 395.1333333333334,
+          "primitiveCalls": 960,
+          "policyCalls": 480
+        }
+      },
+      "randomSearch": {
+        "valid": true,
+        "score": -58.04122222222222,
+        "metrics": {
+          "meanFlow": 23.569444444444443,
+          "meanTardiness": 11.444444444444445,
+          "cost": 395.1333333333334,
+          "primitiveCalls": 960,
+          "policyCalls": 480
+        }
+      },
+      "discovered": {
+        "valid": true,
+        "score": -58.04122222222222,
+        "metrics": {
+          "meanFlow": 23.569444444444443,
+          "meanTardiness": 11.444444444444445,
+          "cost": 395.1333333333334,
+          "primitiveCalls": 960,
+          "policyCalls": 480
+        }
+      }
+    },
+    "burst": {
+      "fifo": {
+        "valid": true,
+        "score": -74.21294444444445,
+        "metrics": {
+          "meanFlow": 33.86111111111111,
+          "meanTardiness": 19.583333333333332,
+          "cost": 443.2,
+          "primitiveCalls": 677,
+          "policyCalls": 677
+        }
+      },
+      "shortest": {
+        "valid": true,
+        "score": -53.181305555555554,
+        "metrics": {
+          "meanFlow": 21.930555555555557,
+          "meanTardiness": 10.208333333333334,
+          "cost": 358.7333333333333,
+          "primitiveCalls": 676,
+          "policyCalls": 676
+        }
+      },
+      "deadline": {
+        "valid": true,
+        "score": -84.60377777777778,
+        "metrics": {
+          "meanFlow": 40.02777777777778,
+          "meanTardiness": 24,
+          "cost": 482.2,
+          "primitiveCalls": 792,
+          "policyCalls": 792
+        }
+      },
+      "locality": {
+        "valid": true,
+        "score": -54.97652777777777,
+        "metrics": {
+          "meanFlow": 24.38888888888889,
+          "meanTardiness": 11.097222222222223,
+          "cost": 347.6666666666667,
+          "primitiveCalls": 679,
+          "policyCalls": 679
+        }
+      },
+      "cheapest": {
+        "valid": true,
+        "score": -53.65594444444444,
+        "metrics": {
+          "meanFlow": 22.055555555555557,
+          "meanTardiness": 10.305555555555555,
+          "cost": 362.79999999999995,
+          "primitiveCalls": 675,
+          "policyCalls": 675
+        }
+      },
+      "hybrid": {
+        "valid": true,
+        "score": -53.71422222222222,
+        "metrics": {
+          "meanFlow": 22.166666666666668,
+          "meanTardiness": 10.222222222222221,
+          "cost": 362.40000000000003,
+          "primitiveCalls": 1364,
+          "policyCalls": 682
+        }
+      },
+      "randomSearch": {
+        "valid": true,
+        "score": -53.71422222222222,
+        "metrics": {
+          "meanFlow": 22.166666666666668,
+          "meanTardiness": 10.222222222222221,
+          "cost": 362.40000000000003,
+          "primitiveCalls": 1364,
+          "policyCalls": 682
+        }
+      },
+      "discovered": {
+        "valid": true,
+        "score": -52.32152777777778,
+        "metrics": {
+          "meanFlow": 21.88888888888889,
+          "meanTardiness": 10.26388888888889,
+          "cost": 348.3333333333333,
+          "primitiveCalls": 1326,
+          "policyCalls": 663
+        }
+      }
+    },
+    "long": {
+      "fifo": {
+        "valid": true,
+        "score": -168.1066388888889,
+        "metrics": {
+          "meanFlow": 81.15277777777777,
+          "meanTardiness": 65.31944444444444,
+          "cost": 882.8000000000001,
+          "primitiveCalls": 701,
+          "policyCalls": 701
+        }
+      },
+      "shortest": {
+        "valid": true,
+        "score": -133.86247222222224,
+        "metrics": {
+          "meanFlow": 57.18055555555555,
+          "meanTardiness": 42.791666666666664,
+          "cost": 824.8000000000001,
+          "primitiveCalls": 674,
+          "policyCalls": 674
+        }
+      },
+      "deadline": {
+        "valid": true,
+        "score": -185.44752777777776,
+        "metrics": {
+          "meanFlow": 92.41666666666667,
+          "meanTardiness": 76.4861111111111,
+          "cost": 923.8666666666667,
+          "primitiveCalls": 705,
+          "policyCalls": 705
+        }
+      },
+      "locality": {
+        "valid": true,
+        "score": -144.57163888888888,
+        "metrics": {
+          "meanFlow": 68.79166666666667,
+          "meanTardiness": 53.263888888888886,
+          "cost": 780.7999999999998,
+          "primitiveCalls": 709,
+          "policyCalls": 709
+        }
+      },
+      "cheapest": {
+        "valid": true,
+        "score": -135.92966666666666,
+        "metrics": {
+          "meanFlow": 59.055555555555564,
+          "meanTardiness": 43.94444444444445,
+          "cost": 823.5999999999999,
+          "primitiveCalls": 720,
+          "policyCalls": 720
+        }
+      },
+      "hybrid": {
+        "valid": true,
+        "score": -132.7355,
+        "metrics": {
+          "meanFlow": 57.98611111111111,
+          "meanTardiness": 42.80555555555555,
+          "cost": 800.5999999999999,
+          "primitiveCalls": 1466,
+          "policyCalls": 733
+        }
+      },
+      "randomSearch": {
+        "valid": true,
+        "score": -132.7355,
+        "metrics": {
+          "meanFlow": 57.98611111111111,
+          "meanTardiness": 42.80555555555555,
+          "cost": 800.5999999999999,
+          "primitiveCalls": 1466,
+          "policyCalls": 733
+        }
+      },
+      "discovered": {
+        "valid": true,
+        "score": -132.75233333333333,
+        "metrics": {
+          "meanFlow": 58.68055555555555,
+          "meanTardiness": 43.44444444444445,
+          "cost": 790.1333333333333,
+          "primitiveCalls": 1432,
+          "policyCalls": 716
+        }
+      }
+    },
+    "many-models": {
+      "fifo": {
+        "valid": true,
+        "score": -81.2851388888889,
+        "metrics": {
+          "meanFlow": 36.51388888888889,
+          "meanTardiness": 20.791666666666668,
+          "cost": 494.6666666666667,
+          "primitiveCalls": 515,
+          "policyCalls": 515
+        }
+      },
+      "shortest": {
+        "valid": true,
+        "score": -64.16577777777778,
+        "metrics": {
+          "meanFlow": 26.236111111111114,
+          "meanTardiness": 13.5,
+          "cost": 431.9333333333332,
+          "primitiveCalls": 488,
+          "policyCalls": 488
+        }
+      },
+      "deadline": {
+        "valid": true,
+        "score": -89.31944444444444,
+        "metrics": {
+          "meanFlow": 41.666666666666664,
+          "meanTardiness": 25.277777777777775,
+          "cost": 516.6666666666666,
+          "primitiveCalls": 551,
+          "policyCalls": 551
+        }
+      },
+      "locality": {
+        "valid": true,
+        "score": -66.29877777777777,
+        "metrics": {
+          "meanFlow": 28.972222222222225,
+          "meanTardiness": 15.055555555555555,
+          "cost": 419.5333333333333,
+          "primitiveCalls": 541,
+          "policyCalls": 541
+        }
+      },
+      "cheapest": {
+        "valid": true,
+        "score": -65.93577777777777,
+        "metrics": {
+          "meanFlow": 27.027777777777775,
+          "meanTardiness": 14,
+          "cost": 442.59999999999997,
+          "primitiveCalls": 538,
+          "policyCalls": 538
+        }
+      },
+      "hybrid": {
+        "valid": true,
+        "score": -63.80025,
+        "metrics": {
+          "meanFlow": 26.38888888888889,
+          "meanTardiness": 13.069444444444445,
+          "cost": 426.79999999999995,
+          "primitiveCalls": 1048,
+          "policyCalls": 524
+        }
+      },
+      "randomSearch": {
+        "valid": true,
+        "score": -63.80025,
+        "metrics": {
+          "meanFlow": 26.38888888888889,
+          "meanTardiness": 13.069444444444445,
+          "cost": 426.79999999999995,
+          "primitiveCalls": 1048,
+          "policyCalls": 524
+        }
+      },
+      "discovered": {
+        "valid": true,
+        "score": -62.36147222222221,
+        "metrics": {
+          "meanFlow": 25.944444444444443,
+          "meanTardiness": 12.569444444444445,
+          "cost": 415.9333333333334,
+          "primitiveCalls": 1010,
+          "policyCalls": 505
+        }
+      }
+    }
+  },
+  "limitations": [
+    "Synthetic, single-slot workers with deterministic durations and a four-tick model-load cost.",
+    "No production traces, cancellations, retries, network effects, or simulator/native conformance.",
+    "Objective is meanFlow + 0.25*meanTardiness + 0.08*totalCost; weights are authored.",
+    "This experiment evolves policies using evaluator feedback; abstraction transfer is tested separately.",
+    "The policy language is linear feature scoring, not arbitrary algorithm synthesis.",
+    "Evaluation count is bounded; actual primitive calls and validation cost are reported separately.",
+    "A negative result on a baseline or regime is retained, not hidden."
+  ]
+}

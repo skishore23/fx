@@ -1,0 +1,2157 @@
+{
+  "version": 1,
+  "target": {
+    "id": "fx.memory.getMemory",
+    "contract": "Input is {entries:[{id,type,content,timestamp}],filter:{type,since,search,limit}}. Timestamps/since are finite milliseconds; every filter field is nullable. Return complete matching entries in input array order. Preserve actual FX getMemory semantics: type and since filtering, case-insensitive substring search, and finite numeric limit behavior including negative, fractional, zero or null limits."
+  },
+  "accepted": true,
+  "selected": {
+    "id": "363bd969920073b374862797dfa6b0a70ce2568aa18a211fffb9d6801ce65e34",
+    "name": "reverse-guarded:search,type,since",
+    "algorithm": {
+      "version": 1,
+      "body": [
+        {
+          "kind": "set",
+          "name": "result",
+          "value": {
+            "kind": "call",
+            "op": "array",
+            "args": []
+          }
+        },
+        {
+          "kind": "set",
+          "name": "needle",
+          "value": {
+            "kind": "literal",
+            "value": ""
+          }
+        },
+        {
+          "kind": "if",
+          "condition": {
+            "kind": "call",
+            "op": "not",
+            "args": [
+              {
+                "kind": "call",
+                "op": "eq",
+                "args": [
+                  {
+                    "kind": "get",
+                    "object": {
+                      "kind": "get",
+                      "object": {
+                        "kind": "variable",
+                        "name": "input"
+                      },
+                      "key": {
+                        "kind": "literal",
+                        "value": "filter"
+                      }
+                    },
+                    "key": {
+                      "kind": "literal",
+                      "value": "search"
+                    }
+                  },
+                  {
+                    "kind": "literal",
+                    "value": null
+                  }
+                ]
+              }
+            ]
+          },
+          "then": [
+            {
+              "kind": "set",
+              "name": "needle",
+              "value": {
+                "kind": "call",
+                "op": "lower",
+                "args": [
+                  {
+                    "kind": "get",
+                    "object": {
+                      "kind": "get",
+                      "object": {
+                        "kind": "variable",
+                        "name": "input"
+                      },
+                      "key": {
+                        "kind": "literal",
+                        "value": "filter"
+                      }
+                    },
+                    "key": {
+                      "kind": "literal",
+                      "value": "search"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": []
+        },
+        {
+          "kind": "if",
+          "condition": {
+            "kind": "call",
+            "op": "and",
+            "args": [
+              {
+                "kind": "call",
+                "op": "not",
+                "args": [
+                  {
+                    "kind": "call",
+                    "op": "eq",
+                    "args": [
+                      {
+                        "kind": "get",
+                        "object": {
+                          "kind": "get",
+                          "object": {
+                            "kind": "variable",
+                            "name": "input"
+                          },
+                          "key": {
+                            "kind": "literal",
+                            "value": "filter"
+                          }
+                        },
+                        "key": {
+                          "kind": "literal",
+                          "value": "limit"
+                        }
+                      },
+                      {
+                        "kind": "literal",
+                        "value": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "call",
+                "op": "and",
+                "args": [
+                  {
+                    "kind": "call",
+                    "op": "gt",
+                    "args": [
+                      {
+                        "kind": "get",
+                        "object": {
+                          "kind": "get",
+                          "object": {
+                            "kind": "variable",
+                            "name": "input"
+                          },
+                          "key": {
+                            "kind": "literal",
+                            "value": "filter"
+                          }
+                        },
+                        "key": {
+                          "kind": "literal",
+                          "value": "limit"
+                        }
+                      },
+                      {
+                        "kind": "literal",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "call",
+                    "op": "eq",
+                    "args": [
+                      {
+                        "kind": "get",
+                        "object": {
+                          "kind": "get",
+                          "object": {
+                            "kind": "variable",
+                            "name": "input"
+                          },
+                          "key": {
+                            "kind": "literal",
+                            "value": "filter"
+                          }
+                        },
+                        "key": {
+                          "kind": "literal",
+                          "value": "limit"
+                        }
+                      },
+                      {
+                        "kind": "call",
+                        "op": "floor",
+                        "args": [
+                          {
+                            "kind": "get",
+                            "object": {
+                              "kind": "get",
+                              "object": {
+                                "kind": "variable",
+                                "name": "input"
+                              },
+                              "key": {
+                                "kind": "literal",
+                                "value": "filter"
+                              }
+                            },
+                            "key": {
+                              "kind": "literal",
+                              "value": "limit"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "then": [
+            {
+              "kind": "for",
+              "name": "entry",
+              "values": {
+                "kind": "get",
+                "object": {
+                  "kind": "variable",
+                  "name": "input"
+                },
+                "key": {
+                  "kind": "literal",
+                  "value": "entries"
+                }
+              },
+              "direction": "reverse",
+              "body": [
+                {
+                  "kind": "if",
+                  "condition": {
+                    "kind": "call",
+                    "op": "and",
+                    "args": [
+                      {
+                        "kind": "call",
+                        "op": "and",
+                        "args": [
+                          {
+                            "kind": "call",
+                            "op": "or",
+                            "args": [
+                              {
+                                "kind": "call",
+                                "op": "eq",
+                                "args": [
+                                  {
+                                    "kind": "variable",
+                                    "name": "needle"
+                                  },
+                                  {
+                                    "kind": "literal",
+                                    "value": ""
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "call",
+                                "op": "contains",
+                                "args": [
+                                  {
+                                    "kind": "call",
+                                    "op": "lower",
+                                    "args": [
+                                      {
+                                        "kind": "get",
+                                        "object": {
+                                          "kind": "variable",
+                                          "name": "entry"
+                                        },
+                                        "key": {
+                                          "kind": "literal",
+                                          "value": "content"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "variable",
+                                    "name": "needle"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "call",
+                            "op": "or",
+                            "args": [
+                              {
+                                "kind": "call",
+                                "op": "eq",
+                                "args": [
+                                  {
+                                    "kind": "get",
+                                    "object": {
+                                      "kind": "get",
+                                      "object": {
+                                        "kind": "variable",
+                                        "name": "input"
+                                      },
+                                      "key": {
+                                        "kind": "literal",
+                                        "value": "filter"
+                                      }
+                                    },
+                                    "key": {
+                                      "kind": "literal",
+                                      "value": "type"
+                                    }
+                                  },
+                                  {
+                                    "kind": "literal",
+                                    "value": null
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "call",
+                                "op": "eq",
+                                "args": [
+                                  {
+                                    "kind": "get",
+                                    "object": {
+                                      "kind": "variable",
+                                      "name": "entry"
+                                    },
+                                    "key": {
+                                      "kind": "literal",
+                                      "value": "type"
+                                    }
+                                  },
+                                  {
+                                    "kind": "get",
+                                    "object": {
+                                      "kind": "get",
+                                      "object": {
+                                        "kind": "variable",
+                                        "name": "input"
+                                      },
+                                      "key": {
+                                        "kind": "literal",
+                                        "value": "filter"
+                                      }
+                                    },
+                                    "key": {
+                                      "kind": "literal",
+                                      "value": "type"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "call",
+                        "op": "or",
+                        "args": [
+                          {
+                            "kind": "call",
+                            "op": "eq",
+                            "args": [
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "get",
+                                  "object": {
+                                    "kind": "variable",
+                                    "name": "input"
+                                  },
+                                  "key": {
+                                    "kind": "literal",
+                                    "value": "filter"
+                                  }
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "since"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "value": null
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "call",
+                            "op": "gte",
+                            "args": [
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "variable",
+                                  "name": "entry"
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "timestamp"
+                                }
+                              },
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "get",
+                                  "object": {
+                                    "kind": "variable",
+                                    "name": "input"
+                                  },
+                                  "key": {
+                                    "kind": "literal",
+                                    "value": "filter"
+                                  }
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "since"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "then": [
+                    {
+                      "kind": "append",
+                      "name": "result",
+                      "value": {
+                        "kind": "variable",
+                        "name": "entry"
+                      }
+                    },
+                    {
+                      "kind": "if",
+                      "condition": {
+                        "kind": "call",
+                        "op": "and",
+                        "args": [
+                          {
+                            "kind": "call",
+                            "op": "and",
+                            "args": [
+                              {
+                                "kind": "call",
+                                "op": "not",
+                                "args": [
+                                  {
+                                    "kind": "call",
+                                    "op": "eq",
+                                    "args": [
+                                      {
+                                        "kind": "get",
+                                        "object": {
+                                          "kind": "get",
+                                          "object": {
+                                            "kind": "variable",
+                                            "name": "input"
+                                          },
+                                          "key": {
+                                            "kind": "literal",
+                                            "value": "filter"
+                                          }
+                                        },
+                                        "key": {
+                                          "kind": "literal",
+                                          "value": "limit"
+                                        }
+                                      },
+                                      {
+                                        "kind": "literal",
+                                        "value": null
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "call",
+                                "op": "and",
+                                "args": [
+                                  {
+                                    "kind": "call",
+                                    "op": "gt",
+                                    "args": [
+                                      {
+                                        "kind": "get",
+                                        "object": {
+                                          "kind": "get",
+                                          "object": {
+                                            "kind": "variable",
+                                            "name": "input"
+                                          },
+                                          "key": {
+                                            "kind": "literal",
+                                            "value": "filter"
+                                          }
+                                        },
+                                        "key": {
+                                          "kind": "literal",
+                                          "value": "limit"
+                                        }
+                                      },
+                                      {
+                                        "kind": "literal",
+                                        "value": 0
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "call",
+                                    "op": "eq",
+                                    "args": [
+                                      {
+                                        "kind": "get",
+                                        "object": {
+                                          "kind": "get",
+                                          "object": {
+                                            "kind": "variable",
+                                            "name": "input"
+                                          },
+                                          "key": {
+                                            "kind": "literal",
+                                            "value": "filter"
+                                          }
+                                        },
+                                        "key": {
+                                          "kind": "literal",
+                                          "value": "limit"
+                                        }
+                                      },
+                                      {
+                                        "kind": "call",
+                                        "op": "floor",
+                                        "args": [
+                                          {
+                                            "kind": "get",
+                                            "object": {
+                                              "kind": "get",
+                                              "object": {
+                                                "kind": "variable",
+                                                "name": "input"
+                                              },
+                                              "key": {
+                                                "kind": "literal",
+                                                "value": "filter"
+                                              }
+                                            },
+                                            "key": {
+                                              "kind": "literal",
+                                              "value": "limit"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "call",
+                            "op": "gte",
+                            "args": [
+                              {
+                                "kind": "call",
+                                "op": "length",
+                                "args": [
+                                  {
+                                    "kind": "variable",
+                                    "name": "result"
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "get",
+                                  "object": {
+                                    "kind": "variable",
+                                    "name": "input"
+                                  },
+                                  "key": {
+                                    "kind": "literal",
+                                    "value": "filter"
+                                  }
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "limit"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "then": [
+                        {
+                          "kind": "break"
+                        }
+                      ],
+                      "otherwise": []
+                    }
+                  ],
+                  "otherwise": []
+                }
+              ]
+            },
+            {
+              "kind": "return",
+              "value": {
+                "kind": "call",
+                "op": "reverse",
+                "args": [
+                  {
+                    "kind": "variable",
+                    "name": "result"
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": [
+            {
+              "kind": "for",
+              "name": "entry",
+              "values": {
+                "kind": "get",
+                "object": {
+                  "kind": "variable",
+                  "name": "input"
+                },
+                "key": {
+                  "kind": "literal",
+                  "value": "entries"
+                }
+              },
+              "direction": "forward",
+              "body": [
+                {
+                  "kind": "if",
+                  "condition": {
+                    "kind": "call",
+                    "op": "and",
+                    "args": [
+                      {
+                        "kind": "call",
+                        "op": "and",
+                        "args": [
+                          {
+                            "kind": "call",
+                            "op": "or",
+                            "args": [
+                              {
+                                "kind": "call",
+                                "op": "eq",
+                                "args": [
+                                  {
+                                    "kind": "variable",
+                                    "name": "needle"
+                                  },
+                                  {
+                                    "kind": "literal",
+                                    "value": ""
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "call",
+                                "op": "contains",
+                                "args": [
+                                  {
+                                    "kind": "call",
+                                    "op": "lower",
+                                    "args": [
+                                      {
+                                        "kind": "get",
+                                        "object": {
+                                          "kind": "variable",
+                                          "name": "entry"
+                                        },
+                                        "key": {
+                                          "kind": "literal",
+                                          "value": "content"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "variable",
+                                    "name": "needle"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "call",
+                            "op": "or",
+                            "args": [
+                              {
+                                "kind": "call",
+                                "op": "eq",
+                                "args": [
+                                  {
+                                    "kind": "get",
+                                    "object": {
+                                      "kind": "get",
+                                      "object": {
+                                        "kind": "variable",
+                                        "name": "input"
+                                      },
+                                      "key": {
+                                        "kind": "literal",
+                                        "value": "filter"
+                                      }
+                                    },
+                                    "key": {
+                                      "kind": "literal",
+                                      "value": "type"
+                                    }
+                                  },
+                                  {
+                                    "kind": "literal",
+                                    "value": null
+                                  }
+                                ]
+                              },
+                              {
+                                "kind": "call",
+                                "op": "eq",
+                                "args": [
+                                  {
+                                    "kind": "get",
+                                    "object": {
+                                      "kind": "variable",
+                                      "name": "entry"
+                                    },
+                                    "key": {
+                                      "kind": "literal",
+                                      "value": "type"
+                                    }
+                                  },
+                                  {
+                                    "kind": "get",
+                                    "object": {
+                                      "kind": "get",
+                                      "object": {
+                                        "kind": "variable",
+                                        "name": "input"
+                                      },
+                                      "key": {
+                                        "kind": "literal",
+                                        "value": "filter"
+                                      }
+                                    },
+                                    "key": {
+                                      "kind": "literal",
+                                      "value": "type"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "call",
+                        "op": "or",
+                        "args": [
+                          {
+                            "kind": "call",
+                            "op": "eq",
+                            "args": [
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "get",
+                                  "object": {
+                                    "kind": "variable",
+                                    "name": "input"
+                                  },
+                                  "key": {
+                                    "kind": "literal",
+                                    "value": "filter"
+                                  }
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "since"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "value": null
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "call",
+                            "op": "gte",
+                            "args": [
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "variable",
+                                  "name": "entry"
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "timestamp"
+                                }
+                              },
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "get",
+                                  "object": {
+                                    "kind": "variable",
+                                    "name": "input"
+                                  },
+                                  "key": {
+                                    "kind": "literal",
+                                    "value": "filter"
+                                  }
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "since"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "then": [
+                    {
+                      "kind": "append",
+                      "name": "result",
+                      "value": {
+                        "kind": "variable",
+                        "name": "entry"
+                      }
+                    }
+                  ],
+                  "otherwise": []
+                }
+              ]
+            },
+            {
+              "kind": "if",
+              "condition": {
+                "kind": "call",
+                "op": "and",
+                "args": [
+                  {
+                    "kind": "call",
+                    "op": "not",
+                    "args": [
+                      {
+                        "kind": "call",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "kind": "get",
+                            "object": {
+                              "kind": "get",
+                              "object": {
+                                "kind": "variable",
+                                "name": "input"
+                              },
+                              "key": {
+                                "kind": "literal",
+                                "value": "filter"
+                              }
+                            },
+                            "key": {
+                              "kind": "literal",
+                              "value": "limit"
+                            }
+                          },
+                          {
+                            "kind": "literal",
+                            "value": null
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "call",
+                    "op": "not",
+                    "args": [
+                      {
+                        "kind": "call",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "kind": "get",
+                            "object": {
+                              "kind": "get",
+                              "object": {
+                                "kind": "variable",
+                                "name": "input"
+                              },
+                              "key": {
+                                "kind": "literal",
+                                "value": "filter"
+                              }
+                            },
+                            "key": {
+                              "kind": "literal",
+                              "value": "limit"
+                            }
+                          },
+                          {
+                            "kind": "literal",
+                            "value": 0
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "kind": "set",
+                  "name": "result",
+                  "value": {
+                    "kind": "call",
+                    "op": "slice",
+                    "args": [
+                      {
+                        "kind": "variable",
+                        "name": "result"
+                      },
+                      {
+                        "kind": "call",
+                        "op": "neg",
+                        "args": [
+                          {
+                            "kind": "get",
+                            "object": {
+                              "kind": "get",
+                              "object": {
+                                "kind": "variable",
+                                "name": "input"
+                              },
+                              "key": {
+                                "kind": "literal",
+                                "value": "filter"
+                              }
+                            },
+                            "key": {
+                              "kind": "literal",
+                              "value": "limit"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "otherwise": []
+            },
+            {
+              "kind": "return",
+              "value": {
+                "kind": "variable",
+                "name": "result"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "training": {
+      "passed": 10,
+      "total": 10,
+      "steps": 16379,
+      "loopVisits": 406,
+      "maxCells": 13346,
+      "failures": []
+    },
+    "validation": {
+      "passed": 10,
+      "total": 10,
+      "steps": 19923,
+      "loopVisits": 527,
+      "maxCells": 19182,
+      "failures": []
+    },
+    "heldOut": {
+      "passed": 10,
+      "total": 10,
+      "steps": 33578,
+      "loopVisits": 1138,
+      "maxCells": 55248,
+      "failures": []
+    }
+  },
+  "baseline": {
+    "algorithm": {
+      "version": 1,
+      "body": [
+        {
+          "kind": "set",
+          "name": "result",
+          "value": {
+            "kind": "call",
+            "op": "array",
+            "args": []
+          }
+        },
+        {
+          "kind": "set",
+          "name": "needle",
+          "value": {
+            "kind": "literal",
+            "value": ""
+          }
+        },
+        {
+          "kind": "if",
+          "condition": {
+            "kind": "call",
+            "op": "not",
+            "args": [
+              {
+                "kind": "call",
+                "op": "eq",
+                "args": [
+                  {
+                    "kind": "get",
+                    "object": {
+                      "kind": "get",
+                      "object": {
+                        "kind": "variable",
+                        "name": "input"
+                      },
+                      "key": {
+                        "kind": "literal",
+                        "value": "filter"
+                      }
+                    },
+                    "key": {
+                      "kind": "literal",
+                      "value": "search"
+                    }
+                  },
+                  {
+                    "kind": "literal",
+                    "value": null
+                  }
+                ]
+              }
+            ]
+          },
+          "then": [
+            {
+              "kind": "set",
+              "name": "needle",
+              "value": {
+                "kind": "call",
+                "op": "lower",
+                "args": [
+                  {
+                    "kind": "get",
+                    "object": {
+                      "kind": "get",
+                      "object": {
+                        "kind": "variable",
+                        "name": "input"
+                      },
+                      "key": {
+                        "kind": "literal",
+                        "value": "filter"
+                      }
+                    },
+                    "key": {
+                      "kind": "literal",
+                      "value": "search"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": []
+        },
+        {
+          "kind": "for",
+          "name": "entry",
+          "values": {
+            "kind": "get",
+            "object": {
+              "kind": "variable",
+              "name": "input"
+            },
+            "key": {
+              "kind": "literal",
+              "value": "entries"
+            }
+          },
+          "direction": "forward",
+          "body": [
+            {
+              "kind": "if",
+              "condition": {
+                "kind": "call",
+                "op": "and",
+                "args": [
+                  {
+                    "kind": "call",
+                    "op": "and",
+                    "args": [
+                      {
+                        "kind": "call",
+                        "op": "or",
+                        "args": [
+                          {
+                            "kind": "call",
+                            "op": "eq",
+                            "args": [
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "get",
+                                  "object": {
+                                    "kind": "variable",
+                                    "name": "input"
+                                  },
+                                  "key": {
+                                    "kind": "literal",
+                                    "value": "filter"
+                                  }
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "type"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "value": null
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "call",
+                            "op": "eq",
+                            "args": [
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "variable",
+                                  "name": "entry"
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "type"
+                                }
+                              },
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "get",
+                                  "object": {
+                                    "kind": "variable",
+                                    "name": "input"
+                                  },
+                                  "key": {
+                                    "kind": "literal",
+                                    "value": "filter"
+                                  }
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "type"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "call",
+                        "op": "or",
+                        "args": [
+                          {
+                            "kind": "call",
+                            "op": "eq",
+                            "args": [
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "get",
+                                  "object": {
+                                    "kind": "variable",
+                                    "name": "input"
+                                  },
+                                  "key": {
+                                    "kind": "literal",
+                                    "value": "filter"
+                                  }
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "since"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "value": null
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "call",
+                            "op": "gte",
+                            "args": [
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "variable",
+                                  "name": "entry"
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "timestamp"
+                                }
+                              },
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "get",
+                                  "object": {
+                                    "kind": "variable",
+                                    "name": "input"
+                                  },
+                                  "key": {
+                                    "kind": "literal",
+                                    "value": "filter"
+                                  }
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "since"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "call",
+                    "op": "or",
+                    "args": [
+                      {
+                        "kind": "call",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "kind": "variable",
+                            "name": "needle"
+                          },
+                          {
+                            "kind": "literal",
+                            "value": ""
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "call",
+                        "op": "contains",
+                        "args": [
+                          {
+                            "kind": "call",
+                            "op": "lower",
+                            "args": [
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "variable",
+                                  "name": "entry"
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "content"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "kind": "variable",
+                            "name": "needle"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "kind": "append",
+                  "name": "result",
+                  "value": {
+                    "kind": "variable",
+                    "name": "entry"
+                  }
+                }
+              ],
+              "otherwise": []
+            }
+          ]
+        },
+        {
+          "kind": "if",
+          "condition": {
+            "kind": "call",
+            "op": "and",
+            "args": [
+              {
+                "kind": "call",
+                "op": "not",
+                "args": [
+                  {
+                    "kind": "call",
+                    "op": "eq",
+                    "args": [
+                      {
+                        "kind": "get",
+                        "object": {
+                          "kind": "get",
+                          "object": {
+                            "kind": "variable",
+                            "name": "input"
+                          },
+                          "key": {
+                            "kind": "literal",
+                            "value": "filter"
+                          }
+                        },
+                        "key": {
+                          "kind": "literal",
+                          "value": "limit"
+                        }
+                      },
+                      {
+                        "kind": "literal",
+                        "value": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "call",
+                "op": "not",
+                "args": [
+                  {
+                    "kind": "call",
+                    "op": "eq",
+                    "args": [
+                      {
+                        "kind": "get",
+                        "object": {
+                          "kind": "get",
+                          "object": {
+                            "kind": "variable",
+                            "name": "input"
+                          },
+                          "key": {
+                            "kind": "literal",
+                            "value": "filter"
+                          }
+                        },
+                        "key": {
+                          "kind": "literal",
+                          "value": "limit"
+                        }
+                      },
+                      {
+                        "kind": "literal",
+                        "value": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "then": [
+            {
+              "kind": "set",
+              "name": "result",
+              "value": {
+                "kind": "call",
+                "op": "slice",
+                "args": [
+                  {
+                    "kind": "variable",
+                    "name": "result"
+                  },
+                  {
+                    "kind": "call",
+                    "op": "neg",
+                    "args": [
+                      {
+                        "kind": "get",
+                        "object": {
+                          "kind": "get",
+                          "object": {
+                            "kind": "variable",
+                            "name": "input"
+                          },
+                          "key": {
+                            "kind": "literal",
+                            "value": "filter"
+                          }
+                        },
+                        "key": {
+                          "kind": "literal",
+                          "value": "limit"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": []
+        },
+        {
+          "kind": "return",
+          "value": {
+            "kind": "variable",
+            "name": "result"
+          }
+        }
+      ]
+    },
+    "training": {
+      "passed": 10,
+      "total": 10,
+      "steps": 23972,
+      "loopVisits": 592,
+      "maxCells": 13318,
+      "failures": []
+    },
+    "heldOut": {
+      "passed": 10,
+      "total": 10,
+      "steps": 113056,
+      "loopVisits": 2909,
+      "maxCells": 55220,
+      "failures": []
+    }
+  },
+  "archive": [
+    {
+      "id": "526975f09319eea1074438bec1f2dbaad91a37ba064258fc8dd576c7900c05a2",
+      "name": "forward-early:type,since,search",
+      "training": {
+        "passed": 4,
+        "total": 10,
+        "steps": 22793,
+        "loopVisits": 406,
+        "maxCells": 16874,
+        "failures": [
+          {
+            "name": "train-0",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-4",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-5",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-6",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-7",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "839af090740a9c6eb48887c97cf1306842142d715a5cb6ccb564eec9ded70a6e",
+      "name": "forward-early:type,search,since",
+      "training": {
+        "passed": 4,
+        "total": 10,
+        "steps": 21665,
+        "loopVisits": 406,
+        "maxCells": 16874,
+        "failures": [
+          {
+            "name": "train-0",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-4",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-5",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-6",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-7",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "db2e57362560f60fff2c878b7c5edd922081c5da40392c2da3ea71767405362c",
+      "name": "forward-early:since,type,search",
+      "training": {
+        "passed": 4,
+        "total": 10,
+        "steps": 22913,
+        "loopVisits": 406,
+        "maxCells": 16874,
+        "failures": [
+          {
+            "name": "train-0",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-4",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-5",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-6",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-7",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "465a424cbdb2534b25e6000d7044a30ac4458e7eccd849fa750e7e7caebf9f03",
+      "name": "forward-early:since,search,type",
+      "training": {
+        "passed": 4,
+        "total": 10,
+        "steps": 22067,
+        "loopVisits": 406,
+        "maxCells": 16874,
+        "failures": [
+          {
+            "name": "train-0",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-4",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-5",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-6",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-7",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "22501a5aa4bfc7a8ecda89a21fe93622055ba63d7cae51452e723c671926328f",
+      "name": "forward-early:search,type,since",
+      "training": {
+        "passed": 4,
+        "total": 10,
+        "steps": 20819,
+        "loopVisits": 406,
+        "maxCells": 16874,
+        "failures": [
+          {
+            "name": "train-0",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-4",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-5",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-6",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-7",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "940d0d4e6b4b0bcb5b3058ae2d1b4764874655fa2020a360ed56e94b9f158795",
+      "name": "forward-early:search,since,type",
+      "training": {
+        "passed": 4,
+        "total": 10,
+        "steps": 20867,
+        "loopVisits": 406,
+        "maxCells": 16874,
+        "failures": [
+          {
+            "name": "train-0",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-4",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-5",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-6",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-7",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "5d7c27014ad6f767326a340bf67dbbbe4b176b0f8a8e347b133df14ee955a210",
+      "name": "reverse-unordered:type,since,search",
+      "training": {
+        "passed": 3,
+        "total": 10,
+        "steps": 22675,
+        "loopVisits": 406,
+        "maxCells": 16874,
+        "failures": [
+          {
+            "name": "train-0",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-1",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-2",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-4",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-5",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-6",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "4004e87b0bc1b97f603adccf3f6093c4ee02169238eb0be0f74a6c47bcf04c52",
+      "name": "reverse-unordered:type,search,since",
+      "training": {
+        "passed": 3,
+        "total": 10,
+        "steps": 21571,
+        "loopVisits": 406,
+        "maxCells": 16874,
+        "failures": [
+          {
+            "name": "train-0",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-1",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-2",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-4",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-5",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-6",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "42a702d1f703032ea38112db3919842406f93c77f23c51b36caa58c6693cb0e1",
+      "name": "reverse-unordered:since,type,search",
+      "training": {
+        "passed": 3,
+        "total": 10,
+        "steps": 22819,
+        "loopVisits": 406,
+        "maxCells": 16874,
+        "failures": [
+          {
+            "name": "train-0",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-1",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-2",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-4",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-5",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-6",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "c3e2e6eaefb5de422d245e12cc7b1bf0146c069c7fa750f5583d54bdda700da3",
+      "name": "reverse-unordered:since,search,type",
+      "training": {
+        "passed": 3,
+        "total": 10,
+        "steps": 22009,
+        "loopVisits": 406,
+        "maxCells": 16874,
+        "failures": [
+          {
+            "name": "train-0",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-1",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-2",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-4",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-5",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-6",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8e306413eab6325223c8353f94b7bd8dd50999bf9a4ea2d2a6e34eea951e2505",
+      "name": "reverse-unordered:search,type,since",
+      "training": {
+        "passed": 3,
+        "total": 10,
+        "steps": 20761,
+        "loopVisits": 406,
+        "maxCells": 16874,
+        "failures": [
+          {
+            "name": "train-0",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-1",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-2",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-4",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-5",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-6",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "6cb31665913dc61578b4b79e2d2b12b1e8df36a4a17a6462ada5628e725fa8fd",
+      "name": "reverse-unordered:search,since,type",
+      "training": {
+        "passed": 3,
+        "total": 10,
+        "steps": 20833,
+        "loopVisits": 406,
+        "maxCells": 16874,
+        "failures": [
+          {
+            "name": "train-0",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-1",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-2",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-4",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-5",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-6",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "eda440c8a1776537aa5781e64a8a302e17bc29f7903829766e9745363f151d72",
+      "name": "forward:type,since,search",
+      "training": {
+        "passed": 10,
+        "total": 10,
+        "steps": 23972,
+        "loopVisits": 592,
+        "maxCells": 13318,
+        "failures": []
+      }
+    },
+    {
+      "id": "255fd5de87ab30b652786853c61742f19ce994371e81035b6cbed0e2e9c972bf",
+      "name": "forward:type,search,since",
+      "training": {
+        "passed": 10,
+        "total": 10,
+        "steps": 22828,
+        "loopVisits": 592,
+        "maxCells": 13318,
+        "failures": []
+      }
+    },
+    {
+      "id": "e9d05297a1a8cd6339f41d750ee844e365e1b06fab3448cf0e22db57bd30b0fa",
+      "name": "forward:since,type,search",
+      "training": {
+        "passed": 10,
+        "total": 10,
+        "steps": 24836,
+        "loopVisits": 592,
+        "maxCells": 13318,
+        "failures": []
+      }
+    },
+    {
+      "id": "f6ddf4a8381e413a9df1eb94b6d6771d90e65d6bfe1f001e3e0077da85ba1063",
+      "name": "forward:since,search,type",
+      "training": {
+        "passed": 10,
+        "total": 10,
+        "steps": 24346,
+        "loopVisits": 592,
+        "maxCells": 13318,
+        "failures": []
+      }
+    },
+    {
+      "id": "c7135a7a906b9bedd66daf05fe547f764efc626469c0797675bd7f8a56cfddee",
+      "name": "forward:search,type,since",
+      "training": {
+        "passed": 10,
+        "total": 10,
+        "steps": 22338,
+        "loopVisits": 592,
+        "maxCells": 13318,
+        "failures": []
+      }
+    },
+    {
+      "id": "20a017ef6c858665a499fb1cfc2c6b5d67ab528426a38d9122b2b805656c5eba",
+      "name": "forward:search,since,type",
+      "training": {
+        "passed": 10,
+        "total": 10,
+        "steps": 23130,
+        "loopVisits": 592,
+        "maxCells": 13318,
+        "failures": []
+      }
+    },
+    {
+      "id": "2bcbafd92e9b7593d1e2349a5e17ef084475c299933e96aeb6d1552513971e0e",
+      "name": "reverse-guarded:type,since,search",
+      "training": {
+        "passed": 10,
+        "total": 10,
+        "steps": 18293,
+        "loopVisits": 406,
+        "maxCells": 13346,
+        "failures": []
+      }
+    },
+    {
+      "id": "653c8035482cd803235ea1a4207ba273707ef107806f7441aec922dc2c4f1169",
+      "name": "reverse-guarded:type,search,since",
+      "training": {
+        "passed": 10,
+        "total": 10,
+        "steps": 17189,
+        "loopVisits": 406,
+        "maxCells": 13346,
+        "failures": []
+      }
+    },
+    {
+      "id": "4ba5712f27d3073936147cfa11ca4eaabb22c16f2520e783fa1f0c0d58e1f9c6",
+      "name": "reverse-guarded:since,type,search",
+      "training": {
+        "passed": 10,
+        "total": 10,
+        "steps": 18437,
+        "loopVisits": 406,
+        "maxCells": 13346,
+        "failures": []
+      }
+    },
+    {
+      "id": "5f79e179ab91dbad40e9fe0e37524828323ebbb1597df62dbd779783420a329f",
+      "name": "reverse-guarded:since,search,type",
+      "training": {
+        "passed": 10,
+        "total": 10,
+        "steps": 17627,
+        "loopVisits": 406,
+        "maxCells": 13346,
+        "failures": []
+      }
+    },
+    {
+      "id": "363bd969920073b374862797dfa6b0a70ce2568aa18a211fffb9d6801ce65e34",
+      "name": "reverse-guarded:search,type,since",
+      "training": {
+        "passed": 10,
+        "total": 10,
+        "steps": 16379,
+        "loopVisits": 406,
+        "maxCells": 13346,
+        "failures": []
+      }
+    },
+    {
+      "id": "8e6a0ca555c32f99fc62ae36def78ade731f519a925048c30812614e588d19fa",
+      "name": "reverse-guarded:search,since,type",
+      "training": {
+        "passed": 10,
+        "total": 10,
+        "steps": 16451,
+        "loopVisits": 406,
+        "maxCells": 13346,
+        "failures": []
+      }
+    }
+  ],
+  "splitDigests": {
+    "training": [
+      "dc05fb2f78aab3c8eab1d999dda515bd86c633154aa7d8e317d03ff1ab9e2144",
+      "bb6d80ee1029394d588049aa3acafb5d955c15567bd457c7ea443644cf263ee4",
+      "40ebcc1d4d3db94774c489de9560c28f86900cde0f823b4229f53940c0539df3",
+      "f26ef56b4cb2ca7725cf65f82faa74ceaf8c2d8ac427cbccc5e8fd17193d2ab0",
+      "38846887b15263c8c92263edd4d5911a60e02aad57a6e19fdd2fda688a85ed78",
+      "127714431a74e917b8c013d8cffee3f24bbaf2073692cfb960c13bf673678848",
+      "f774265d5fb2e30ddfa06fc72ebe012147a8327382baa0f612ea6d19b41445fe",
+      "08aa364a9da25d96a0ee70640f54f3008268c0a35d672bf7d299c3f5abad3cc7",
+      "d7e1b171b0b1b7c5353743dd9f3efe691c442f2599a5bf77c946e4e02bf09ab2",
+      "ce20f500d238b8ee933d3ae04d2b2b893dc0a257041ed7be6b18fb885ee2c77f"
+    ],
+    "validation": [
+      "c113c16155e79a552e953ab4545c8c4f47768f9d294baf02626647242a511862",
+      "c76987cc222e9c5c48d612db0aaf0d5778e5660edb758e02d92f8fa1f339fb86",
+      "221cb08a4d68138961c8dbe9e9013e3bdfe7893baeb83d6445b03d8d4a280442",
+      "6ba40a4086dfcc8bf8ece302b53390468f509ffc0fbb15d9cd92f5b598eac86f",
+      "5017aa5cc6f83ac0267ba4832d0a4e43af387fd2ddae05eb137426356c8ebd3d",
+      "305bb835663e0cb55dffebdbbe767bff46fbe1f186e021afe41ff2c3e6a161cd",
+      "66a32b99d1e6828e2f094fa2226eb6ef6e2ec670301423ab32f8596ced950a45",
+      "1b68b52d63ab75d6e11855c0aeac58b685882f02e3df25d75c3b885bf3c1ec79",
+      "3e6737c4c1c52249d3145fbdf97200a117c7680a69857ed9c1412d88a242eb11",
+      "45674e67beb17efe27f371a33de6aa696fd79269d6785e319171868ac5bd8b99"
+    ],
+    "heldOut": [
+      "07eaec1f052c12b9a44ff982b04c605f023ba1131d5eb890f1351a4b5976f420",
+      "2a72b03c7741b4436bd7fa5ead2a121a575bcc7284bbebad4a2f3d31771f6057",
+      "d5408302554d8f2a86561e262a53954f15505319e1300093b2187968a2b8792d",
+      "51cba8e9078e2edd25931234883b467056ea7ff560351fb673345d21cf3839a5",
+      "18fb4fb6d7b312fe5539071c3b0524181a2bb77bffa47ad9932b32b85d0855a9",
+      "317a7134ea856e264806e42bcd2cc571a8e5cbf0bdc7041c8780d6e33cb72b62",
+      "362aa256c5e7fff98caa83c06565ed33968099ad61462e04a6b3b10c23613d6f",
+      "317a4a1ba38849315f0a25012f28c465ba241287e9ddf72be0405c31ad61ab67",
+      "b7dd63ba89eee29f75062d684927268a4a7c3a59ef29f4a616857cbbe12307fa",
+      "c3cf0517eb27e390cdfe6950d8c6cb3ad9715a0a6aef1d8092bb41985061ce38"
+    ]
+  },
+  "cost": {
+    "totalSteps": 814436,
+    "maxTotalSteps": 30000000,
+    "maxProposals": 64,
+    "maxStepsPerCase": 1000000,
+    "maxCellsPerCase": 200000
+  },
+  "note": "Steps are deterministic interpreter work units, not native time. No production activation.",
+  "proposalSource": "authored-structural-grammar",
+  "interpretation": {
+    "rejectedCandidates": 12,
+    "heldOutStepReduction": 0.7029967449759411,
+    "limitations": [
+      "Search is bounded by its proposal grammar; it does not claim globally novel algorithms.",
+      "Cost is interpreter steps, loop visits and allocated cells, not measured native speed.",
+      "Cost baselines are explicit IR implementations, not timings of the original FX or Rust code.",
+      "Memory correctness uses the actual FX getMemory function as its oracle.",
+      "The Beetle target is a synthetic batch reference model; native Rust conformance is still required.",
+      "The winner is exported as data and is never automatically deployed."
+    ]
+  }
+}

@@ -11,7 +11,11 @@
     "test": "npm run test --workspaces",
     "clean": "npm run clean --workspaces && rm -rf dist",
     "lint": "npm run lint --workspaces",
-    "type-check": "npm run type-check --workspaces"
+    "type-check": "npm run type-check --workspaces",
+    "test:experiments": "npm run build && node --test examples/discovery/experiments.test.cjs examples/algorithm-search/algorithm-search.test.cjs",
+    "experiment:transfer": "npm run build --silent && node examples/discovery/transfer.cjs",
+    "experiment:scheduling": "npm run build --silent && node examples/discovery/scheduling-discovery.cjs",
+    "algorithm:search": "npm run build --silent && node examples/algorithm-search/run.cjs"
   },
   "keywords": [
     "functional-programming",

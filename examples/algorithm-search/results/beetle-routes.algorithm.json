@@ -1,0 +1,283 @@
+{
+  "version": 1,
+  "body": [
+    {
+      "kind": "set",
+      "name": "output",
+      "value": {
+        "kind": "call",
+        "op": "array",
+        "args": []
+      }
+    },
+    {
+      "kind": "set",
+      "name": "index",
+      "value": {
+        "kind": "call",
+        "op": "map",
+        "args": []
+      }
+    },
+    {
+      "kind": "for",
+      "name": "route",
+      "values": {
+        "kind": "get",
+        "object": {
+          "kind": "variable",
+          "name": "input"
+        },
+        "key": {
+          "kind": "literal",
+          "value": "routes"
+        }
+      },
+      "direction": "forward",
+      "body": [
+        {
+          "kind": "if",
+          "condition": {
+            "kind": "call",
+            "op": "not",
+            "args": [
+              {
+                "kind": "call",
+                "op": "has",
+                "args": [
+                  {
+                    "kind": "variable",
+                    "name": "index"
+                  },
+                  {
+                    "kind": "get",
+                    "object": {
+                      "kind": "variable",
+                      "name": "route"
+                    },
+                    "key": {
+                      "kind": "literal",
+                      "value": "address"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "then": [
+            {
+              "kind": "put",
+              "name": "index",
+              "key": {
+                "kind": "get",
+                "object": {
+                  "kind": "variable",
+                  "name": "route"
+                },
+                "key": {
+                  "kind": "literal",
+                  "value": "address"
+                }
+              },
+              "value": {
+                "kind": "variable",
+                "name": "route"
+              }
+            }
+          ],
+          "otherwise": [
+            {
+              "kind": "if",
+              "condition": {
+                "kind": "call",
+                "op": "and",
+                "args": [
+                  {
+                    "kind": "call",
+                    "op": "not",
+                    "args": [
+                      {
+                        "kind": "call",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "kind": "get",
+                            "object": {
+                              "kind": "call",
+                              "op": "lookup",
+                              "args": [
+                                {
+                                  "kind": "variable",
+                                  "name": "index"
+                                },
+                                {
+                                  "kind": "get",
+                                  "object": {
+                                    "kind": "variable",
+                                    "name": "route"
+                                  },
+                                  "key": {
+                                    "kind": "literal",
+                                    "value": "address"
+                                  }
+                                }
+                              ]
+                            },
+                            "key": {
+                              "kind": "literal",
+                              "value": "policy"
+                            }
+                          },
+                          {
+                            "kind": "literal",
+                            "value": "converse"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "call",
+                    "op": "eq",
+                    "args": [
+                      {
+                        "kind": "get",
+                        "object": {
+                          "kind": "variable",
+                          "name": "route"
+                        },
+                        "key": {
+                          "kind": "literal",
+                          "value": "policy"
+                        }
+                      },
+                      {
+                        "kind": "literal",
+                        "value": "converse"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "kind": "put",
+                  "name": "index",
+                  "key": {
+                    "kind": "get",
+                    "object": {
+                      "kind": "variable",
+                      "name": "route"
+                    },
+                    "key": {
+                      "kind": "literal",
+                      "value": "address"
+                    }
+                  },
+                  "value": {
+                    "kind": "variable",
+                    "name": "route"
+                  }
+                }
+              ],
+              "otherwise": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "for",
+      "name": "query",
+      "values": {
+        "kind": "get",
+        "object": {
+          "kind": "variable",
+          "name": "input"
+        },
+        "key": {
+          "kind": "literal",
+          "value": "queries"
+        }
+      },
+      "direction": "forward",
+      "body": [
+        {
+          "kind": "set",
+          "name": "chosen",
+          "value": {
+            "kind": "literal",
+            "value": null
+          }
+        },
+        {
+          "kind": "for",
+          "name": "address",
+          "values": {
+            "kind": "variable",
+            "name": "query"
+          },
+          "direction": "forward",
+          "body": [
+            {
+              "kind": "if",
+              "condition": {
+                "kind": "call",
+                "op": "has",
+                "args": [
+                  {
+                    "kind": "variable",
+                    "name": "index"
+                  },
+                  {
+                    "kind": "variable",
+                    "name": "address"
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "kind": "set",
+                  "name": "chosen",
+                  "value": {
+                    "kind": "call",
+                    "op": "lookup",
+                    "args": [
+                      {
+                        "kind": "variable",
+                        "name": "index"
+                      },
+                      {
+                        "kind": "variable",
+                        "name": "address"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "break"
+                }
+              ],
+              "otherwise": []
+            }
+          ]
+        },
+        {
+          "kind": "append",
+          "name": "output",
+          "value": {
+            "kind": "variable",
+            "name": "chosen"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "return",
+      "value": {
+        "kind": "variable",
+        "name": "output"
+      }
+    }
+  ]
+}

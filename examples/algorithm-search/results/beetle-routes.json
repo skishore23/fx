@@ -1,0 +1,838 @@
+{
+  "version": 1,
+  "target": {
+    "id": "beetle.route.batch-most-specific",
+    "contract": "Input is {routes:[{id,address,policy,...otherFields}],queries:[orderedAddressStrings[]]}. For every query return the first converse route at the nearest nonempty address level, otherwise its first route, otherwise null. Return an array preserving full route records and query order. Routes are an immutable snapshot for the batch. This is a selection reference model, not the live Rust authorization router."
+  },
+  "accepted": true,
+  "selected": {
+    "id": "f27588c19750c2b54afc261630314ec550a5e73f082d3dc031c280140e703c5f",
+    "name": "reader-index:converse=true:reverse=false",
+    "algorithm": {
+      "version": 1,
+      "body": [
+        {
+          "kind": "set",
+          "name": "output",
+          "value": {
+            "kind": "call",
+            "op": "array",
+            "args": []
+          }
+        },
+        {
+          "kind": "set",
+          "name": "index",
+          "value": {
+            "kind": "call",
+            "op": "map",
+            "args": []
+          }
+        },
+        {
+          "kind": "for",
+          "name": "route",
+          "values": {
+            "kind": "get",
+            "object": {
+              "kind": "variable",
+              "name": "input"
+            },
+            "key": {
+              "kind": "literal",
+              "value": "routes"
+            }
+          },
+          "direction": "forward",
+          "body": [
+            {
+              "kind": "if",
+              "condition": {
+                "kind": "call",
+                "op": "not",
+                "args": [
+                  {
+                    "kind": "call",
+                    "op": "has",
+                    "args": [
+                      {
+                        "kind": "variable",
+                        "name": "index"
+                      },
+                      {
+                        "kind": "get",
+                        "object": {
+                          "kind": "variable",
+                          "name": "route"
+                        },
+                        "key": {
+                          "kind": "literal",
+                          "value": "address"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "kind": "put",
+                  "name": "index",
+                  "key": {
+                    "kind": "get",
+                    "object": {
+                      "kind": "variable",
+                      "name": "route"
+                    },
+                    "key": {
+                      "kind": "literal",
+                      "value": "address"
+                    }
+                  },
+                  "value": {
+                    "kind": "variable",
+                    "name": "route"
+                  }
+                }
+              ],
+              "otherwise": [
+                {
+                  "kind": "if",
+                  "condition": {
+                    "kind": "call",
+                    "op": "and",
+                    "args": [
+                      {
+                        "kind": "call",
+                        "op": "not",
+                        "args": [
+                          {
+                            "kind": "call",
+                            "op": "eq",
+                            "args": [
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "call",
+                                  "op": "lookup",
+                                  "args": [
+                                    {
+                                      "kind": "variable",
+                                      "name": "index"
+                                    },
+                                    {
+                                      "kind": "get",
+                                      "object": {
+                                        "kind": "variable",
+                                        "name": "route"
+                                      },
+                                      "key": {
+                                        "kind": "literal",
+                                        "value": "address"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "policy"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "value": "converse"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "call",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "kind": "get",
+                            "object": {
+                              "kind": "variable",
+                              "name": "route"
+                            },
+                            "key": {
+                              "kind": "literal",
+                              "value": "policy"
+                            }
+                          },
+                          {
+                            "kind": "literal",
+                            "value": "converse"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "then": [
+                    {
+                      "kind": "put",
+                      "name": "index",
+                      "key": {
+                        "kind": "get",
+                        "object": {
+                          "kind": "variable",
+                          "name": "route"
+                        },
+                        "key": {
+                          "kind": "literal",
+                          "value": "address"
+                        }
+                      },
+                      "value": {
+                        "kind": "variable",
+                        "name": "route"
+                      }
+                    }
+                  ],
+                  "otherwise": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "for",
+          "name": "query",
+          "values": {
+            "kind": "get",
+            "object": {
+              "kind": "variable",
+              "name": "input"
+            },
+            "key": {
+              "kind": "literal",
+              "value": "queries"
+            }
+          },
+          "direction": "forward",
+          "body": [
+            {
+              "kind": "set",
+              "name": "chosen",
+              "value": {
+                "kind": "literal",
+                "value": null
+              }
+            },
+            {
+              "kind": "for",
+              "name": "address",
+              "values": {
+                "kind": "variable",
+                "name": "query"
+              },
+              "direction": "forward",
+              "body": [
+                {
+                  "kind": "if",
+                  "condition": {
+                    "kind": "call",
+                    "op": "has",
+                    "args": [
+                      {
+                        "kind": "variable",
+                        "name": "index"
+                      },
+                      {
+                        "kind": "variable",
+                        "name": "address"
+                      }
+                    ]
+                  },
+                  "then": [
+                    {
+                      "kind": "set",
+                      "name": "chosen",
+                      "value": {
+                        "kind": "call",
+                        "op": "lookup",
+                        "args": [
+                          {
+                            "kind": "variable",
+                            "name": "index"
+                          },
+                          {
+                            "kind": "variable",
+                            "name": "address"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "kind": "break"
+                    }
+                  ],
+                  "otherwise": []
+                }
+              ]
+            },
+            {
+              "kind": "append",
+              "name": "output",
+              "value": {
+                "kind": "variable",
+                "name": "chosen"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "return",
+          "value": {
+            "kind": "variable",
+            "name": "output"
+          }
+        }
+      ]
+    },
+    "training": {
+      "passed": 5,
+      "total": 5,
+      "steps": 14293,
+      "loopVisits": 417,
+      "maxCells": 11694,
+      "failures": []
+    },
+    "validation": {
+      "passed": 3,
+      "total": 3,
+      "steps": 18902,
+      "loopVisits": 417,
+      "maxCells": 16589,
+      "failures": []
+    },
+    "heldOut": {
+      "passed": 3,
+      "total": 3,
+      "steps": 45615,
+      "loopVisits": 904,
+      "maxCells": 43356,
+      "failures": []
+    }
+  },
+  "baseline": {
+    "algorithm": {
+      "version": 1,
+      "body": [
+        {
+          "kind": "set",
+          "name": "output",
+          "value": {
+            "kind": "call",
+            "op": "array",
+            "args": []
+          }
+        },
+        {
+          "kind": "for",
+          "name": "query",
+          "values": {
+            "kind": "get",
+            "object": {
+              "kind": "variable",
+              "name": "input"
+            },
+            "key": {
+              "kind": "literal",
+              "value": "queries"
+            }
+          },
+          "direction": "forward",
+          "body": [
+            {
+              "kind": "set",
+              "name": "chosen",
+              "value": {
+                "kind": "literal",
+                "value": null
+              }
+            },
+            {
+              "kind": "for",
+              "name": "address",
+              "values": {
+                "kind": "variable",
+                "name": "query"
+              },
+              "direction": "forward",
+              "body": [
+                {
+                  "kind": "set",
+                  "name": "first",
+                  "value": {
+                    "kind": "literal",
+                    "value": null
+                  }
+                },
+                {
+                  "kind": "for",
+                  "name": "route",
+                  "values": {
+                    "kind": "get",
+                    "object": {
+                      "kind": "variable",
+                      "name": "input"
+                    },
+                    "key": {
+                      "kind": "literal",
+                      "value": "routes"
+                    }
+                  },
+                  "direction": "forward",
+                  "body": [
+                    {
+                      "kind": "if",
+                      "condition": {
+                        "kind": "call",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "kind": "get",
+                            "object": {
+                              "kind": "variable",
+                              "name": "route"
+                            },
+                            "key": {
+                              "kind": "literal",
+                              "value": "address"
+                            }
+                          },
+                          {
+                            "kind": "variable",
+                            "name": "address"
+                          }
+                        ]
+                      },
+                      "then": [
+                        {
+                          "kind": "if",
+                          "condition": {
+                            "kind": "call",
+                            "op": "eq",
+                            "args": [
+                              {
+                                "kind": "variable",
+                                "name": "first"
+                              },
+                              {
+                                "kind": "literal",
+                                "value": null
+                              }
+                            ]
+                          },
+                          "then": [
+                            {
+                              "kind": "set",
+                              "name": "first",
+                              "value": {
+                                "kind": "variable",
+                                "name": "route"
+                              }
+                            }
+                          ],
+                          "otherwise": []
+                        },
+                        {
+                          "kind": "if",
+                          "condition": {
+                            "kind": "call",
+                            "op": "eq",
+                            "args": [
+                              {
+                                "kind": "get",
+                                "object": {
+                                  "kind": "variable",
+                                  "name": "route"
+                                },
+                                "key": {
+                                  "kind": "literal",
+                                  "value": "policy"
+                                }
+                              },
+                              {
+                                "kind": "literal",
+                                "value": "converse"
+                              }
+                            ]
+                          },
+                          "then": [
+                            {
+                              "kind": "set",
+                              "name": "first",
+                              "value": {
+                                "kind": "variable",
+                                "name": "route"
+                              }
+                            },
+                            {
+                              "kind": "break"
+                            }
+                          ],
+                          "otherwise": []
+                        }
+                      ],
+                      "otherwise": []
+                    }
+                  ]
+                },
+                {
+                  "kind": "if",
+                  "condition": {
+                    "kind": "call",
+                    "op": "not",
+                    "args": [
+                      {
+                        "kind": "call",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "kind": "variable",
+                            "name": "first"
+                          },
+                          {
+                            "kind": "literal",
+                            "value": null
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "then": [
+                    {
+                      "kind": "set",
+                      "name": "chosen",
+                      "value": {
+                        "kind": "variable",
+                        "name": "first"
+                      }
+                    },
+                    {
+                      "kind": "break"
+                    }
+                  ],
+                  "otherwise": []
+                }
+              ]
+            },
+            {
+              "kind": "append",
+              "name": "output",
+              "value": {
+                "kind": "variable",
+                "name": "chosen"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "return",
+          "value": {
+            "kind": "variable",
+            "name": "output"
+          }
+        }
+      ]
+    },
+    "training": {
+      "passed": 5,
+      "total": 5,
+      "steps": 118767,
+      "loopVisits": 6407,
+      "maxCells": 38641,
+      "failures": []
+    },
+    "heldOut": {
+      "passed": 3,
+      "total": 3,
+      "steps": 409613,
+      "loopVisits": 19971,
+      "maxCells": 131743,
+      "failures": []
+    }
+  },
+  "archive": [
+    {
+      "id": "b968fca49df8f9c3656493e8096336e4b6c353f01ff0660417bb1bab10a791a7",
+      "name": "scan:converse=false:reverse=true",
+      "training": {
+        "passed": 2,
+        "total": 5,
+        "steps": 156828,
+        "loopVisits": 8513,
+        "maxCells": 50754,
+        "failures": [
+          {
+            "name": "train-2",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-precedence",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cf5d9ef42ae1852d4e38d8a4b80e7d525cc6093def857ca5631b82c6b7e9d05f",
+      "name": "scan:converse=false:reverse=false",
+      "training": {
+        "passed": 2,
+        "total": 5,
+        "steps": 156828,
+        "loopVisits": 8513,
+        "maxCells": 50754,
+        "failures": [
+          {
+            "name": "train-2",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-precedence",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "427cc1d1b50683d5e39f23dacb2a0de5c1137ffb8164437d40136601ca3bb93e",
+      "name": "scan:converse=true:reverse=true",
+      "training": {
+        "passed": 4,
+        "total": 5,
+        "steps": 118767,
+        "loopVisits": 6407,
+        "maxCells": 38641,
+        "failures": [
+          {
+            "name": "train-precedence",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "9bcba76f1e1338289a3da90c8588e7034b5453abda6789a8d9b6c327de90c7b5",
+      "name": "scan:converse=true:reverse=false",
+      "training": {
+        "passed": 5,
+        "total": 5,
+        "steps": 118767,
+        "loopVisits": 6407,
+        "maxCells": 38641,
+        "failures": []
+      }
+    },
+    {
+      "id": "c75d12d6a4bfe29a58c6c8ed0906a1f42af794e1ca7fe60b862f3c75563f7157",
+      "name": "bucket-index:converse=false:reverse=true",
+      "training": {
+        "passed": 2,
+        "total": 5,
+        "steps": 18571,
+        "loopVisits": 630,
+        "maxCells": 10956,
+        "failures": [
+          {
+            "name": "train-2",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-precedence",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "6a118d708cffadc84078bfe19c2337ea671de73426af84065f01dbf5b2861c94",
+      "name": "bucket-index:converse=false:reverse=false",
+      "training": {
+        "passed": 2,
+        "total": 5,
+        "steps": 18547,
+        "loopVisits": 630,
+        "maxCells": 10956,
+        "failures": [
+          {
+            "name": "train-2",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-precedence",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "10511624fda83257bf768b5aa2b0e99481604eca791163d32fcbc2e60ff9232c",
+      "name": "bucket-index:converse=true:reverse=true",
+      "training": {
+        "passed": 4,
+        "total": 5,
+        "steps": 17705,
+        "loopVisits": 521,
+        "maxCells": 11003,
+        "failures": [
+          {
+            "name": "train-precedence",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "449bbf4ce5b813bc81f9312c143c3704921c75f8e56614e93482167a19038f55",
+      "name": "bucket-index:converse=true:reverse=false",
+      "training": {
+        "passed": 5,
+        "total": 5,
+        "steps": 17681,
+        "loopVisits": 521,
+        "maxCells": 11003,
+        "failures": []
+      }
+    },
+    {
+      "id": "46f2dbee9ac85bf5f0836c728811f84712b083445be20d1293dfe1bb3f12c052",
+      "name": "reader-index:converse=false:reverse=true",
+      "training": {
+        "passed": 2,
+        "total": 5,
+        "steps": 8144,
+        "loopVisits": 417,
+        "maxCells": 8393,
+        "failures": [
+          {
+            "name": "train-2",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-precedence",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "65547bb2e5a67d7739674108eecb76a401e87a1504a20c87414baa89f3977ac4",
+      "name": "reader-index:converse=false:reverse=false",
+      "training": {
+        "passed": 2,
+        "total": 5,
+        "steps": 8120,
+        "loopVisits": 417,
+        "maxCells": 8393,
+        "failures": [
+          {
+            "name": "train-2",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-3",
+            "error": "Output differs from independent reference"
+          },
+          {
+            "name": "train-precedence",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "63320bd73d81a7b1309cbffd5f580583dda177b73304997503c7c78c8946451f",
+      "name": "reader-index:converse=true:reverse=true",
+      "training": {
+        "passed": 4,
+        "total": 5,
+        "steps": 14317,
+        "loopVisits": 417,
+        "maxCells": 11694,
+        "failures": [
+          {
+            "name": "train-precedence",
+            "error": "Output differs from independent reference"
+          }
+        ]
+      }
+    },
+    {
+      "id": "f27588c19750c2b54afc261630314ec550a5e73f082d3dc031c280140e703c5f",
+      "name": "reader-index:converse=true:reverse=false",
+      "training": {
+        "passed": 5,
+        "total": 5,
+        "steps": 14293,
+        "loopVisits": 417,
+        "maxCells": 11694,
+        "failures": []
+      }
+    }
+  ],
+  "splitDigests": {
+    "training": [
+      "9c4212aa05573c75a2f853353a465c15889891dea836ab8360a77cb51ca54382",
+      "dc3ea2af0f9b6100bd729dcc8c78cef0922fed84599aa9dc24bbca10aea05519",
+      "ad936483f949cf710857f66ad0cd3b9ac266f3c30213fa6bb04872c6ab42710a",
+      "58e0b85048ff473e9339cea714f61ad11eb0f22acc9351b614c72d6f41531dfd",
+      "2c305539d89b28052469b5319313e3805b65709c9148efeff1150a222c9e1c29"
+    ],
+    "validation": [
+      "567fa95c77e3c8382269e24bfa79ca48d5db79ed522b22090810357aa99e3596",
+      "d293078e4b93cbded0f144867fd52fd29dc07e8999f140c2b1a1749c7635986f",
+      "5f92fcbe1b3f45ac8802ecee4c7ea5d99cba6102606c6e16269e70e81d5ae5b6"
+    ],
+    "heldOut": [
+      "b68e85dc8fbf24df639733ae52c043e8a453ac10a0284bfef29394dd12c58215",
+      "4b1f41bf7473bfa9882de506fbfbf76c0c14f5b90a362c52c4a05623a4354d01",
+      "c5282e3f717ca835a43573bb7bf8eaa12b9792eac480cfa63ea0d49d69391657"
+    ]
+  },
+  "cost": {
+    "totalSteps": 1450811,
+    "maxTotalSteps": 30000000,
+    "maxProposals": 64,
+    "maxStepsPerCase": 1000000,
+    "maxCellsPerCase": 200000
+  },
+  "note": "Steps are deterministic interpreter work units, not native time. No production activation.",
+  "proposalSource": "authored-structural-grammar",
+  "interpretation": {
+    "rejectedCandidates": 9,
+    "heldOutStepReduction": 0.8886387883197067,
+    "limitations": [
+      "Search is bounded by its proposal grammar; it does not claim globally novel algorithms.",
+      "Cost is interpreter steps, loop visits and allocated cells, not measured native speed.",
+      "Cost baselines are explicit IR implementations, not timings of the original FX or Rust code.",
+      "Memory correctness uses the actual FX getMemory function as its oracle.",
+      "The Beetle target is a synthetic batch reference model; native Rust conformance is still required.",
+      "The winner is exported as data and is never automatically deployed."
+    ]
+  }
+}

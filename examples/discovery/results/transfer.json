@@ -1,0 +1,642 @@
+{
+  "experiment": "bounded-abstraction-transfer",
+  "version": 1,
+  "budgets": {
+    "maxCandidates": 256,
+    "maxPrimitiveCalls": 1024,
+    "maxLength": 4
+  },
+  "searchInputs": [
+    -2,
+    0,
+    3
+  ],
+  "verificationInputs": [
+    -7,
+    -1,
+    0.5,
+    9,
+    20
+  ],
+  "learning": {
+    "tasks": 8,
+    "candidates": 172,
+    "primitiveCalls": 341,
+    "selected": [
+      {
+        "abstraction": {
+          "name": "learned_899753c3410b7be8",
+          "arity": 2,
+          "body": [
+            {
+              "op": "add",
+              "args": [
+                {
+                  "parameter": 0
+                }
+              ]
+            },
+            {
+              "op": "scale",
+              "args": [
+                {
+                  "parameter": 1
+                }
+              ]
+            }
+          ]
+        },
+        "compressionGain": 1,
+        "occurrences": 8,
+        "sources": [
+          "08d2046794aad0acbb7a0bb0e9c909f6915390d6e248c0d62fc6cad76f9a1f4d",
+          "2f28219f8ad3381d4292d290a95ad00a21e78d9b68d03995a538f5f7405c25a4",
+          "4811134d0dddd67be8425217e75ed72388158ecc04beca5983f4f0820c4bda14",
+          "72b7bd73a773b619190e1c5f106fdc146bf03928edaa01a388e1e22aa68a31ea",
+          "7c58bc1afe1dda835d57d1c216e0ddfd7cc38f86a849e0057a0855c2299c4c30",
+          "90fe552dc1aec18a0e9d724e04ce7b1d47eb4926c1a701c23eae60ab4119dc10",
+          "9fdb65cd7d6e75abff553da737efb3dd6cc0cec783f286136a2423dade0be601",
+          "d5bca351c9aa348abf9ad066fb27ed73d628a5c4de81dd7550f778389935c82f"
+        ],
+        "bindings": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    ]
+  },
+  "result": {
+    "tasks": 8,
+    "baselineSolved": 0,
+    "savedProgramsSolved": 8,
+    "learnedSolved": 8
+  },
+  "rows": [
+    {
+      "task": 1,
+      "baseline": {
+        "solved": false,
+        "candidates": 256,
+        "primitiveCalls": 717
+      },
+      "savedPrograms": {
+        "solved": true,
+        "candidates": 182,
+        "primitiveCalls": 542
+      },
+      "learned": {
+        "solved": true,
+        "candidates": 182,
+        "primitiveCalls": 542
+      },
+      "program": {
+        "version": 1,
+        "body": [
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              3,
+              3
+            ]
+          },
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              4,
+              2
+            ]
+          }
+        ]
+      },
+      "expanded": {
+        "version": 1,
+        "body": [
+          {
+            "op": "add",
+            "args": [
+              3
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              3
+            ]
+          },
+          {
+            "op": "add",
+            "args": [
+              4
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              2
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": 2,
+      "baseline": {
+        "solved": false,
+        "candidates": 256,
+        "primitiveCalls": 717
+      },
+      "savedPrograms": {
+        "solved": true,
+        "candidates": 206,
+        "primitiveCalls": 630
+      },
+      "learned": {
+        "solved": true,
+        "candidates": 206,
+        "primitiveCalls": 630
+      },
+      "program": {
+        "version": 1,
+        "body": [
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              4,
+              3
+            ]
+          },
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              2,
+              2
+            ]
+          }
+        ]
+      },
+      "expanded": {
+        "version": 1,
+        "body": [
+          {
+            "op": "add",
+            "args": [
+              4
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              3
+            ]
+          },
+          {
+            "op": "add",
+            "args": [
+              2
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              2
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": 3,
+      "baseline": {
+        "solved": false,
+        "candidates": 256,
+        "primitiveCalls": 723
+      },
+      "savedPrograms": {
+        "solved": true,
+        "candidates": 169,
+        "primitiveCalls": 499
+      },
+      "learned": {
+        "solved": true,
+        "candidates": 169,
+        "primitiveCalls": 499
+      },
+      "program": {
+        "version": 1,
+        "body": [
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              3,
+              2
+            ]
+          },
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              4,
+              3
+            ]
+          }
+        ]
+      },
+      "expanded": {
+        "version": 1,
+        "body": [
+          {
+            "op": "add",
+            "args": [
+              3
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              2
+            ]
+          },
+          {
+            "op": "add",
+            "args": [
+              4
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": 4,
+      "baseline": {
+        "solved": false,
+        "candidates": 256,
+        "primitiveCalls": 717
+      },
+      "savedPrograms": {
+        "solved": true,
+        "candidates": 210,
+        "primitiveCalls": 642
+      },
+      "learned": {
+        "solved": true,
+        "candidates": 210,
+        "primitiveCalls": 642
+      },
+      "program": {
+        "version": 1,
+        "body": [
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              4,
+              3
+            ]
+          },
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              4,
+              2
+            ]
+          }
+        ]
+      },
+      "expanded": {
+        "version": 1,
+        "body": [
+          {
+            "op": "add",
+            "args": [
+              4
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              3
+            ]
+          },
+          {
+            "op": "add",
+            "args": [
+              4
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              2
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": 5,
+      "baseline": {
+        "solved": false,
+        "candidates": 256,
+        "primitiveCalls": 723
+      },
+      "savedPrograms": {
+        "solved": true,
+        "candidates": 167,
+        "primitiveCalls": 494
+      },
+      "learned": {
+        "solved": true,
+        "candidates": 167,
+        "primitiveCalls": 494
+      },
+      "program": {
+        "version": 1,
+        "body": [
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              3,
+              2
+            ]
+          },
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              3,
+              3
+            ]
+          }
+        ]
+      },
+      "expanded": {
+        "version": 1,
+        "body": [
+          {
+            "op": "add",
+            "args": [
+              3
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              2
+            ]
+          },
+          {
+            "op": "add",
+            "args": [
+              3
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": 6,
+      "baseline": {
+        "solved": false,
+        "candidates": 256,
+        "primitiveCalls": 717
+      },
+      "savedPrograms": {
+        "solved": true,
+        "candidates": 207,
+        "primitiveCalls": 634
+      },
+      "learned": {
+        "solved": true,
+        "candidates": 207,
+        "primitiveCalls": 634
+      },
+      "program": {
+        "version": 1,
+        "body": [
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              4,
+              3
+            ]
+          },
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              2,
+              3
+            ]
+          }
+        ]
+      },
+      "expanded": {
+        "version": 1,
+        "body": [
+          {
+            "op": "add",
+            "args": [
+              4
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              3
+            ]
+          },
+          {
+            "op": "add",
+            "args": [
+              2
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": 7,
+      "baseline": {
+        "solved": false,
+        "candidates": 256,
+        "primitiveCalls": 717
+      },
+      "savedPrograms": {
+        "solved": true,
+        "candidates": 195,
+        "primitiveCalls": 592
+      },
+      "learned": {
+        "solved": true,
+        "candidates": 195,
+        "primitiveCalls": 592
+      },
+      "program": {
+        "version": 1,
+        "body": [
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              4,
+              2
+            ]
+          },
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              3,
+              3
+            ]
+          }
+        ]
+      },
+      "expanded": {
+        "version": 1,
+        "body": [
+          {
+            "op": "add",
+            "args": [
+              4
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              2
+            ]
+          },
+          {
+            "op": "add",
+            "args": [
+              3
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": 8,
+      "baseline": {
+        "solved": false,
+        "candidates": 256,
+        "primitiveCalls": 717
+      },
+      "savedPrograms": {
+        "solved": true,
+        "candidates": 197,
+        "primitiveCalls": 596
+      },
+      "learned": {
+        "solved": true,
+        "candidates": 197,
+        "primitiveCalls": 596
+      },
+      "program": {
+        "version": 1,
+        "body": [
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              4,
+              2
+            ]
+          },
+          {
+            "op": "learned_899753c3410b7be8",
+            "args": [
+              4,
+              3
+            ]
+          }
+        ]
+      },
+      "expanded": {
+        "version": 1,
+        "body": [
+          {
+            "op": "add",
+            "args": [
+              4
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              2
+            ]
+          },
+          {
+            "op": "add",
+            "args": [
+              4
+            ]
+          },
+          {
+            "op": "scale",
+            "args": [
+              3
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Designed arithmetic benchmark; not evidence of general intelligence or GPU scheduling improvement.",
+    "Same candidate/primitive-call caps; vocabulary order and description length affect bounded enumeration.",
+    "Learning cost is reported separately and is not amortized away.",
+    "Macros preserve the original primitive language; the measured claim is search efficiency.",
+    "The saved-program baseline tests whether parameterized learning adds anything beyond storing snippets.",
+    "Verification inputs are excluded from search; test task specifications are input/output examples."
+  ]
+}
