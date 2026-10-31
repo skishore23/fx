@@ -1,0 +1,67 @@
+{
+  "status": "post hoc benchmark audit; no selection or timing data changed",
+  "interpretation": "The historical saturated_domains fields mean random-sampler exhaustion, not a closed semantic bank. The sampler missed rare reachable behavior.",
+  "cases": [
+    {
+      "family": "affine",
+      "seed": 2011,
+      "states": 64,
+      "half_depth": 5,
+      "random_sampler_observed_distinct_novel_targets": 0,
+      "reachable_tables_at_exact_goal_length": 1088,
+      "novel_tables_outside_half_bank": 405,
+      "semantically_saturated": false,
+      "witness": {
+        "target": "00162c02182e041a30061c32081e340a20360c22380e243a10263c12283e142a00162c02182e041a30061c32081e340a20360c22380e243a10263c12283e142a",
+        "program": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          3,
+          2,
+          1,
+          1
+        ],
+        "operations": [
+          "2e18022c16002a143e28123c26103a240e38220c36200a341e08321c06301a042e18022c16002a143e28123c26103a240e38220c36200a341e08321c06301a04",
+          "25303b06111c27323d08131e29343f0a15202b36010c17222d38030e19242f3a05101b26313c07121d28333e09141f2a35000b16212c37020d18232e39040f1a",
+          "07023d38332e29241f1a15100b06013c37322d28231e19140f0a05003b36312c27221d18130e09043f3a35302b26211c17120d08033e39342f2a25201b16110c",
+          "1f01230527092b0d2f11331537193b1d3f21032507290b2d0f31133517391b3d1f01230527092b0d2f11331537193b1d3f21032507290b2d0f31133517391b3d",
+          "2527292b2d2f31333537393b3d3f01030507090b0d0f11131517191b1d1f21232527292b2d2f31333537393b3d3f01030507090b0d0f11131517191b1d1f2123",
+          "271b0f03372b1f13073b2f23170b3f33271b0f03372b1f13073b2f23170b3f33271b0f03372b1f13073b2f23170b3f33271b0f03372b1f13073b2f23170b3f33"
+        ]
+      }
+    },
+    {
+      "family": "affine",
+      "seed": 53,
+      "states": 32,
+      "half_depth": 3,
+      "random_sampler_observed_distinct_novel_targets": 2,
+      "reachable_tables_at_exact_goal_length": 39,
+      "novel_tables_outside_half_bank": 10,
+      "semantically_saturated": false,
+      "witness": {
+        "target": "0109111901091119010911190109111901091119010911190109111901091119",
+        "program": [
+          0,
+          3,
+          0,
+          3,
+          0,
+          3
+        ],
+        "operations": [
+          "171513110f0d0b09070503011f1d1b19171513110f0d0b09070503011f1d1b19",
+          "0119110901191109011911090119110901191109011911090119110901191109",
+          "1d150d051d150d051d150d051d150d051d150d051d150d051d150d051d150d05",
+          "1e0d1c0b1a091807160514031201101f0e1d0c1b0a190817061504130211000f",
+          "0d0115091d1105190d0115091d1105190d0115091d1105190d0115091d110519"
+        ]
+      }
+    }
+  ]
+}

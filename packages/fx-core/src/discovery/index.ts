@@ -8,3 +8,5 @@ export * from './algorithm-model';
 export * from './algorithm-runtime';
 export * from './algorithm-search';
 export * from './algorithm-proposer';
+export * from './finite-model';
+export * from './finite-search';

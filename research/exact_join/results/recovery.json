@@ -1,0 +1,215 @@
+{
+  "node": "v24.22.1",
+  "interpretation": "Recovers state 0 from every state in the exact finite model. Known Cerny examples; no new theorem or claim about live bot recovery.",
+  "records": [
+    {
+      "states": 5,
+      "maxLength": 15,
+      "result": {
+        "status": "unsatisfiable",
+        "usage": {
+          "work": 4199,
+          "bankSize": 109,
+          "coordinateProbes": 266,
+          "fullComparisons": 96
+        }
+      },
+      "cpuNote": "wall time; not a benchmark comparison",
+      "wallMilliseconds": 1.765187
+    },
+    {
+      "states": 5,
+      "maxLength": 16,
+      "result": {
+        "status": "solved",
+        "certificate": {
+          "version": 1,
+          "problemId": "eed3da671506168550b6ec28019cee02ab57cdc4874d3ca1c46c1b0c17b8acdc",
+          "program": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "output": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "usage": {
+          "work": 3809,
+          "bankSize": 109,
+          "coordinateProbes": 207,
+          "fullComparisons": 85
+        }
+      },
+      "cpuNote": "wall time; not a benchmark comparison",
+      "wallMilliseconds": 1.296895
+    },
+    {
+      "states": 6,
+      "maxLength": 24,
+      "result": {
+        "status": "unsatisfiable",
+        "usage": {
+          "work": 21425,
+          "bankSize": 491,
+          "coordinateProbes": 1338,
+          "fullComparisons": 164
+        }
+      },
+      "cpuNote": "wall time; not a benchmark comparison",
+      "wallMilliseconds": 3.905026
+    },
+    {
+      "states": 6,
+      "maxLength": 25,
+      "result": {
+        "status": "solved",
+        "certificate": {
+          "version": 1,
+          "problemId": "a173e7f39738934a0aa21329677fbf87b7f6ddf8a6033e6306cef33d5f22e3f7",
+          "program": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "output": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "usage": {
+          "work": 26029,
+          "bankSize": 629,
+          "coordinateProbes": 1622,
+          "fullComparisons": 241
+        }
+      },
+      "cpuNote": "wall time; not a benchmark comparison",
+      "wallMilliseconds": 3.696064
+    },
+    {
+      "states": 7,
+      "maxLength": 35,
+      "result": {
+        "status": "unsatisfiable",
+        "usage": {
+          "work": 145566,
+          "bankSize": 2878,
+          "coordinateProbes": 8814,
+          "fullComparisons": 977
+        }
+      },
+      "cpuNote": "wall time; not a benchmark comparison",
+      "wallMilliseconds": 20.721999
+    },
+    {
+      "states": 7,
+      "maxLength": 36,
+      "result": {
+        "status": "solved",
+        "certificate": {
+          "version": 1,
+          "problemId": "b88cbfcce1c9587ce2a844fdd69a2074ba4d07ae0e361d79924247eccb6b74cf",
+          "program": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "output": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "usage": {
+          "work": 148229,
+          "bankSize": 2878,
+          "coordinateProbes": 8636,
+          "fullComparisons": 1545
+        }
+      },
+      "cpuNote": "wall time; not a benchmark comparison",
+      "wallMilliseconds": 23.1366
+    }
+  ]
+}

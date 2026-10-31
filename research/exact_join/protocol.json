@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "hypothesis": "An automatically selected exact inverse-image join planner improves native program-synthesis query cost beyond strong static join planners and transfers to unseen operation families.",
+  "claim_boundary": "Finite function composition and exact joins are established methods. No claim of globally novel algorithms, unbounded recursive self-improvement, or LLM-generated discovery is authorized by this experiment.",
+  "training": {"families": ["permutation", "affine", "bitvector"], "seeds": [11, 23, 37, 53], "states": 32, "actions": 5, "half_depth": 3, "queries": 6},
+  "validation": {"families": ["permutation", "affine", "bitvector"], "seeds": [101, 113, 127], "states": 32, "actions": 5, "half_depth": 3, "queries": 6},
+  "test": {"families": ["permutation", "affine", "bitvector", "automaton", "local"], "seeds": [1009, 1013, 1019, 1021, 1031, 1033, 1039, 1049], "states": 64, "actions": 6, "half_depth": 3, "queries": 8},
+  "search": {"candidates": 96, "seeds": [42817, 42829, 42841], "primary_seed": 42817, "shortlist": 8, "training_repeats": 3, "validation_repeats": 7, "fitness": "geometric mean native CPU ratio to fixed hybrid_rank reference, equal weight per non-saturated domain"},
+  "goal_filter": "Targets already present in the half-bank are excluded; a saturated domain is reported, never silently replaced.",
+  "pilot_disclosure": "Engineering conformance and preliminary baseline timings were checked at seed 11 in all five families before planner selection. No final test seed was consulted.",
+  "timing": {"repeats": 7, "randomize_method_order": true, "clock": "process_time_ns", "report_cold_and_warm": true},
+  "baselines": ["pairwise", "numpy", "bitset_fixed", "bitset_entropy", "bitset_selectivity", "bitset_dynamic", "inverse_hash", "hybrid", "hybrid_rank"],
+  "acceptance": ["Every returned composition is exhaustively checked on the entire finite state domain", "Exact no-solution answers are checked against the pairwise oracle on bounded conformance cases", "Index construction, learning and validation costs are recorded", "Final test seeds are not consulted during planner selection", "A negative result against the strongest baseline must be retained"],
+  "analysis": "Paired per-domain speed ratios; geometric means, paired bootstrap intervals and per-family results. Discovery break-even is reported rather than hidden. Independent search reruns are required for a recursive-improver claim.",
+  "limitations": ["Synthetic finite-domain task distributions", "No live LLM calls; provider credentials are not configured", "Candidate planner space is authored and disclosed", "No manuscript claim of novelty until primary-source review and independent replication"]
+}

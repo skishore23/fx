@@ -281,6 +281,9 @@ console.log(result.issues.length); // 3
 
 ## Examples
 
+- **[Exact finite synthesis](./docs/advanced/finite-synthesis.md)** — discover finite-state
+  operation sequences with complete replay certificates; includes native benchmarks and a
+  [research manuscript](./research/exact_join/paper.md) retaining negative planner-learning results.
 - **[Algorithm search for FX and Beetle](./docs/advanced/algorithm-search.md)** — search scan,
   early-exit and indexing algorithms against independent correctness checks and withheld cases.
 
