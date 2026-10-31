@@ -1,0 +1,15 @@
+{
+  "node": "v24.22.1",
+  "counts": {
+    "test": {
+      "tasks": 120,
+      "native_answers_checked": 13440,
+      "unique_certificates_verified": 139
+    },
+    "fresh-test": {
+      "tasks": 116,
+      "native_answers_checked": 11368,
+      "unique_certificates_verified": 136
+    }
+  }
+}

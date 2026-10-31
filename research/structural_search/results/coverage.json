@@ -1,0 +1,1941 @@
+{
+  "interpretation": "A novel test-time branch that was never exercised during learning is unvalidated extrapolation, not evidence that feedback taught its behavior.",
+  "records": [
+    {
+      "split": "test",
+      "seed": 5101,
+      "control": "evolved",
+      "policy": 0,
+      "training_leaf_paths": [
+        ""
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:4001": [
+          "",
+          0
+        ],
+        "permutation:4003": [
+          "",
+          0
+        ],
+        "permutation:4007": [
+          "",
+          0
+        ],
+        "permutation:4013": [
+          "",
+          0
+        ],
+        "affine:4001": [
+          "",
+          0
+        ],
+        "affine:4003": [
+          "",
+          0
+        ],
+        "affine:4007": [
+          "",
+          0
+        ],
+        "affine:4013": [
+          "",
+          0
+        ],
+        "bitvector:4001": [
+          "",
+          0
+        ],
+        "bitvector:4003": [
+          "",
+          0
+        ],
+        "bitvector:4007": [
+          "",
+          0
+        ],
+        "bitvector:4013": [
+          "",
+          0
+        ],
+        "automaton:4001": [
+          "",
+          0
+        ],
+        "automaton:4003": [
+          "",
+          0
+        ],
+        "automaton:4007": [
+          "",
+          0
+        ],
+        "automaton:4013": [
+          "",
+          0
+        ],
+        "local:4001": [
+          "",
+          0
+        ],
+        "local:4003": [
+          "",
+          0
+        ],
+        "local:4007": [
+          "",
+          0
+        ],
+        "local:4013": [
+          "",
+          0
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "seed": 5101,
+      "control": "random",
+      "policy": 0,
+      "training_leaf_paths": [
+        "R"
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:4001": [
+          "R",
+          0
+        ],
+        "permutation:4003": [
+          "R",
+          0
+        ],
+        "permutation:4007": [
+          "R",
+          0
+        ],
+        "permutation:4013": [
+          "R",
+          0
+        ],
+        "affine:4001": [
+          "R",
+          0
+        ],
+        "affine:4003": [
+          "R",
+          0
+        ],
+        "affine:4007": [
+          "R",
+          0
+        ],
+        "affine:4013": [
+          "R",
+          0
+        ],
+        "bitvector:4001": [
+          "R",
+          0
+        ],
+        "bitvector:4003": [
+          "R",
+          0
+        ],
+        "bitvector:4007": [
+          "R",
+          0
+        ],
+        "bitvector:4013": [
+          "R",
+          0
+        ],
+        "automaton:4001": [
+          "R",
+          0
+        ],
+        "automaton:4003": [
+          "R",
+          0
+        ],
+        "automaton:4007": [
+          "R",
+          0
+        ],
+        "automaton:4013": [
+          "R",
+          0
+        ],
+        "local:4001": [
+          "R",
+          0
+        ],
+        "local:4003": [
+          "R",
+          0
+        ],
+        "local:4007": [
+          "R",
+          0
+        ],
+        "local:4013": [
+          "R",
+          0
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "seed": 5107,
+      "control": "evolved",
+      "policy": 0,
+      "training_leaf_paths": [
+        "LL",
+        "R"
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:4001": [
+          "R",
+          0
+        ],
+        "permutation:4003": [
+          "R",
+          0
+        ],
+        "permutation:4007": [
+          "R",
+          0
+        ],
+        "permutation:4013": [
+          "R",
+          0
+        ],
+        "affine:4001": [
+          "R",
+          0
+        ],
+        "affine:4003": [
+          "R",
+          0
+        ],
+        "affine:4007": [
+          "R",
+          0
+        ],
+        "affine:4013": [
+          "R",
+          0
+        ],
+        "bitvector:4001": [
+          "LL",
+          0
+        ],
+        "bitvector:4003": [
+          "R",
+          0
+        ],
+        "bitvector:4007": [
+          "LL",
+          0
+        ],
+        "bitvector:4013": [
+          "R",
+          0
+        ],
+        "automaton:4001": [
+          "R",
+          0
+        ],
+        "automaton:4003": [
+          "R",
+          0
+        ],
+        "automaton:4007": [
+          "R",
+          0
+        ],
+        "automaton:4013": [
+          "R",
+          0
+        ],
+        "local:4001": [
+          "R",
+          0
+        ],
+        "local:4003": [
+          "R",
+          0
+        ],
+        "local:4007": [
+          "R",
+          0
+        ],
+        "local:4013": [
+          "R",
+          0
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "seed": 5107,
+      "control": "random",
+      "policy": 0,
+      "training_leaf_paths": [
+        "L"
+      ],
+      "test_domains_with_unexercised_leaf": [
+        "permutation:4001",
+        "permutation:4003",
+        "permutation:4007",
+        "permutation:4013",
+        "affine:4003",
+        "bitvector:4003",
+        "bitvector:4007",
+        "bitvector:4013",
+        "automaton:4001",
+        "automaton:4003",
+        "automaton:4007",
+        "automaton:4013",
+        "local:4001",
+        "local:4003",
+        "local:4007",
+        "local:4013"
+      ],
+      "test_routes": {
+        "permutation:4001": [
+          "R",
+          5
+        ],
+        "permutation:4003": [
+          "R",
+          5
+        ],
+        "permutation:4007": [
+          "R",
+          5
+        ],
+        "permutation:4013": [
+          "R",
+          5
+        ],
+        "affine:4001": [
+          "L",
+          0
+        ],
+        "affine:4003": [
+          "R",
+          5
+        ],
+        "affine:4007": [
+          "L",
+          0
+        ],
+        "affine:4013": [
+          "L",
+          0
+        ],
+        "bitvector:4001": [
+          "L",
+          0
+        ],
+        "bitvector:4003": [
+          "R",
+          5
+        ],
+        "bitvector:4007": [
+          "R",
+          5
+        ],
+        "bitvector:4013": [
+          "R",
+          5
+        ],
+        "automaton:4001": [
+          "R",
+          5
+        ],
+        "automaton:4003": [
+          "R",
+          5
+        ],
+        "automaton:4007": [
+          "R",
+          5
+        ],
+        "automaton:4013": [
+          "R",
+          5
+        ],
+        "local:4001": [
+          "R",
+          5
+        ],
+        "local:4003": [
+          "R",
+          5
+        ],
+        "local:4007": [
+          "R",
+          5
+        ],
+        "local:4013": [
+          "R",
+          5
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "seed": 5113,
+      "control": "evolved",
+      "policy": 0,
+      "training_leaf_paths": [
+        "RL"
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:4001": [
+          "RL",
+          0
+        ],
+        "permutation:4003": [
+          "RL",
+          0
+        ],
+        "permutation:4007": [
+          "RL",
+          0
+        ],
+        "permutation:4013": [
+          "RL",
+          0
+        ],
+        "affine:4001": [
+          "RL",
+          0
+        ],
+        "affine:4003": [
+          "RL",
+          0
+        ],
+        "affine:4007": [
+          "RL",
+          0
+        ],
+        "affine:4013": [
+          "RL",
+          0
+        ],
+        "bitvector:4001": [
+          "RL",
+          0
+        ],
+        "bitvector:4003": [
+          "RL",
+          0
+        ],
+        "bitvector:4007": [
+          "RL",
+          0
+        ],
+        "bitvector:4013": [
+          "RL",
+          0
+        ],
+        "automaton:4001": [
+          "RL",
+          0
+        ],
+        "automaton:4003": [
+          "RL",
+          0
+        ],
+        "automaton:4007": [
+          "RL",
+          0
+        ],
+        "automaton:4013": [
+          "RL",
+          0
+        ],
+        "local:4001": [
+          "RL",
+          0
+        ],
+        "local:4003": [
+          "RL",
+          0
+        ],
+        "local:4007": [
+          "RL",
+          0
+        ],
+        "local:4013": [
+          "RL",
+          0
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "seed": 5113,
+      "control": "random",
+      "policy": 0,
+      "training_leaf_paths": [
+        ""
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:4001": [
+          "",
+          0
+        ],
+        "permutation:4003": [
+          "",
+          0
+        ],
+        "permutation:4007": [
+          "",
+          0
+        ],
+        "permutation:4013": [
+          "",
+          0
+        ],
+        "affine:4001": [
+          "",
+          0
+        ],
+        "affine:4003": [
+          "",
+          0
+        ],
+        "affine:4007": [
+          "",
+          0
+        ],
+        "affine:4013": [
+          "",
+          0
+        ],
+        "bitvector:4001": [
+          "",
+          0
+        ],
+        "bitvector:4003": [
+          "",
+          0
+        ],
+        "bitvector:4007": [
+          "",
+          0
+        ],
+        "bitvector:4013": [
+          "",
+          0
+        ],
+        "automaton:4001": [
+          "",
+          0
+        ],
+        "automaton:4003": [
+          "",
+          0
+        ],
+        "automaton:4007": [
+          "",
+          0
+        ],
+        "automaton:4013": [
+          "",
+          0
+        ],
+        "local:4001": [
+          "",
+          0
+        ],
+        "local:4003": [
+          "",
+          0
+        ],
+        "local:4007": [
+          "",
+          0
+        ],
+        "local:4013": [
+          "",
+          0
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "seed": 5119,
+      "control": "evolved",
+      "policy": 0,
+      "training_leaf_paths": [
+        "R"
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:4001": [
+          "R",
+          0
+        ],
+        "permutation:4003": [
+          "R",
+          0
+        ],
+        "permutation:4007": [
+          "R",
+          0
+        ],
+        "permutation:4013": [
+          "R",
+          0
+        ],
+        "affine:4001": [
+          "R",
+          0
+        ],
+        "affine:4003": [
+          "R",
+          0
+        ],
+        "affine:4007": [
+          "R",
+          0
+        ],
+        "affine:4013": [
+          "R",
+          0
+        ],
+        "bitvector:4001": [
+          "R",
+          0
+        ],
+        "bitvector:4003": [
+          "R",
+          0
+        ],
+        "bitvector:4007": [
+          "R",
+          0
+        ],
+        "bitvector:4013": [
+          "R",
+          0
+        ],
+        "automaton:4001": [
+          "R",
+          0
+        ],
+        "automaton:4003": [
+          "R",
+          0
+        ],
+        "automaton:4007": [
+          "R",
+          0
+        ],
+        "automaton:4013": [
+          "R",
+          0
+        ],
+        "local:4001": [
+          "R",
+          0
+        ],
+        "local:4003": [
+          "R",
+          0
+        ],
+        "local:4007": [
+          "R",
+          0
+        ],
+        "local:4013": [
+          "R",
+          0
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "seed": 5119,
+      "control": "random",
+      "policy": 0,
+      "training_leaf_paths": [
+        "L"
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:4001": [
+          "L",
+          0
+        ],
+        "permutation:4003": [
+          "L",
+          0
+        ],
+        "permutation:4007": [
+          "L",
+          0
+        ],
+        "permutation:4013": [
+          "L",
+          0
+        ],
+        "affine:4001": [
+          "L",
+          0
+        ],
+        "affine:4003": [
+          "L",
+          0
+        ],
+        "affine:4007": [
+          "L",
+          0
+        ],
+        "affine:4013": [
+          "L",
+          0
+        ],
+        "bitvector:4001": [
+          "L",
+          0
+        ],
+        "bitvector:4003": [
+          "L",
+          0
+        ],
+        "bitvector:4007": [
+          "L",
+          0
+        ],
+        "bitvector:4013": [
+          "L",
+          0
+        ],
+        "automaton:4001": [
+          "L",
+          0
+        ],
+        "automaton:4003": [
+          "L",
+          0
+        ],
+        "automaton:4007": [
+          "L",
+          0
+        ],
+        "automaton:4013": [
+          "L",
+          0
+        ],
+        "local:4001": [
+          "L",
+          0
+        ],
+        "local:4003": [
+          "L",
+          0
+        ],
+        "local:4007": [
+          "L",
+          0
+        ],
+        "local:4013": [
+          "L",
+          0
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "seed": 5147,
+      "control": "evolved",
+      "policy": 0,
+      "training_leaf_paths": [
+        "L"
+      ],
+      "test_domains_with_unexercised_leaf": [
+        "permutation:4001",
+        "permutation:4003",
+        "permutation:4007",
+        "permutation:4013",
+        "automaton:4001",
+        "automaton:4003",
+        "automaton:4007",
+        "automaton:4013",
+        "local:4001",
+        "local:4003",
+        "local:4007",
+        "local:4013"
+      ],
+      "test_routes": {
+        "permutation:4001": [
+          "RR",
+          4
+        ],
+        "permutation:4003": [
+          "RR",
+          4
+        ],
+        "permutation:4007": [
+          "RR",
+          4
+        ],
+        "permutation:4013": [
+          "RR",
+          4
+        ],
+        "affine:4001": [
+          "L",
+          0
+        ],
+        "affine:4003": [
+          "L",
+          0
+        ],
+        "affine:4007": [
+          "L",
+          0
+        ],
+        "affine:4013": [
+          "L",
+          0
+        ],
+        "bitvector:4001": [
+          "L",
+          0
+        ],
+        "bitvector:4003": [
+          "L",
+          0
+        ],
+        "bitvector:4007": [
+          "L",
+          0
+        ],
+        "bitvector:4013": [
+          "L",
+          0
+        ],
+        "automaton:4001": [
+          "RL",
+          5
+        ],
+        "automaton:4003": [
+          "RL",
+          5
+        ],
+        "automaton:4007": [
+          "RL",
+          5
+        ],
+        "automaton:4013": [
+          "RL",
+          5
+        ],
+        "local:4001": [
+          "RL",
+          5
+        ],
+        "local:4003": [
+          "RL",
+          5
+        ],
+        "local:4007": [
+          "RR",
+          4
+        ],
+        "local:4013": [
+          "RL",
+          5
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "seed": 5147,
+      "control": "random",
+      "policy": 0,
+      "training_leaf_paths": [
+        "R"
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:4001": [
+          "R",
+          0
+        ],
+        "permutation:4003": [
+          "R",
+          0
+        ],
+        "permutation:4007": [
+          "R",
+          0
+        ],
+        "permutation:4013": [
+          "R",
+          0
+        ],
+        "affine:4001": [
+          "R",
+          0
+        ],
+        "affine:4003": [
+          "R",
+          0
+        ],
+        "affine:4007": [
+          "R",
+          0
+        ],
+        "affine:4013": [
+          "R",
+          0
+        ],
+        "bitvector:4001": [
+          "R",
+          0
+        ],
+        "bitvector:4003": [
+          "R",
+          0
+        ],
+        "bitvector:4007": [
+          "R",
+          0
+        ],
+        "bitvector:4013": [
+          "R",
+          0
+        ],
+        "automaton:4001": [
+          "R",
+          0
+        ],
+        "automaton:4003": [
+          "R",
+          0
+        ],
+        "automaton:4007": [
+          "R",
+          0
+        ],
+        "automaton:4013": [
+          "R",
+          0
+        ],
+        "local:4001": [
+          "R",
+          0
+        ],
+        "local:4003": [
+          "R",
+          0
+        ],
+        "local:4007": [
+          "R",
+          0
+        ],
+        "local:4013": [
+          "R",
+          0
+        ]
+      }
+    },
+    {
+      "split": "fresh-test",
+      "seed": 5101,
+      "control": "evolved",
+      "policy": 0,
+      "training_leaf_paths": [
+        ""
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:7001": [
+          "",
+          0
+        ],
+        "permutation:7013": [
+          "",
+          0
+        ],
+        "permutation:7019": [
+          "",
+          0
+        ],
+        "permutation:7027": [
+          "",
+          0
+        ],
+        "affine:7001": [
+          "",
+          0
+        ],
+        "affine:7013": [
+          "",
+          0
+        ],
+        "affine:7019": [
+          "",
+          0
+        ],
+        "affine:7027": [
+          "",
+          0
+        ],
+        "bitvector:7001": [
+          "",
+          0
+        ],
+        "bitvector:7013": [
+          "",
+          0
+        ],
+        "bitvector:7019": [
+          "",
+          0
+        ],
+        "bitvector:7027": [
+          "",
+          0
+        ],
+        "automaton:7001": [
+          "",
+          0
+        ],
+        "automaton:7013": [
+          "",
+          0
+        ],
+        "automaton:7019": [
+          "",
+          0
+        ],
+        "automaton:7027": [
+          "",
+          0
+        ],
+        "local:7001": [
+          "",
+          0
+        ],
+        "local:7013": [
+          "",
+          0
+        ],
+        "local:7019": [
+          "",
+          0
+        ],
+        "local:7027": [
+          "",
+          0
+        ]
+      }
+    },
+    {
+      "split": "fresh-test",
+      "seed": 5101,
+      "control": "evolved",
+      "policy": 2,
+      "training_leaf_paths": [
+        "R"
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:7001": [
+          "R",
+          0
+        ],
+        "permutation:7013": [
+          "R",
+          0
+        ],
+        "permutation:7019": [
+          "R",
+          0
+        ],
+        "permutation:7027": [
+          "R",
+          0
+        ],
+        "affine:7001": [
+          "R",
+          0
+        ],
+        "affine:7013": [
+          "R",
+          0
+        ],
+        "affine:7019": [
+          "R",
+          0
+        ],
+        "affine:7027": [
+          "R",
+          0
+        ],
+        "bitvector:7001": [
+          "R",
+          0
+        ],
+        "bitvector:7013": [
+          "R",
+          0
+        ],
+        "bitvector:7019": [
+          "R",
+          0
+        ],
+        "bitvector:7027": [
+          "R",
+          0
+        ],
+        "automaton:7001": [
+          "R",
+          0
+        ],
+        "automaton:7013": [
+          "R",
+          0
+        ],
+        "automaton:7019": [
+          "R",
+          0
+        ],
+        "automaton:7027": [
+          "R",
+          0
+        ],
+        "local:7001": [
+          "R",
+          0
+        ],
+        "local:7013": [
+          "R",
+          0
+        ],
+        "local:7019": [
+          "R",
+          0
+        ],
+        "local:7027": [
+          "R",
+          0
+        ]
+      }
+    },
+    {
+      "split": "fresh-test",
+      "seed": 5107,
+      "control": "evolved",
+      "policy": 0,
+      "training_leaf_paths": [
+        ""
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:7001": [
+          "",
+          0
+        ],
+        "permutation:7013": [
+          "",
+          0
+        ],
+        "permutation:7019": [
+          "",
+          0
+        ],
+        "permutation:7027": [
+          "",
+          0
+        ],
+        "affine:7001": [
+          "",
+          0
+        ],
+        "affine:7013": [
+          "",
+          0
+        ],
+        "affine:7019": [
+          "",
+          0
+        ],
+        "affine:7027": [
+          "",
+          0
+        ],
+        "bitvector:7001": [
+          "",
+          0
+        ],
+        "bitvector:7013": [
+          "",
+          0
+        ],
+        "bitvector:7019": [
+          "",
+          0
+        ],
+        "bitvector:7027": [
+          "",
+          0
+        ],
+        "automaton:7001": [
+          "",
+          0
+        ],
+        "automaton:7013": [
+          "",
+          0
+        ],
+        "automaton:7019": [
+          "",
+          0
+        ],
+        "automaton:7027": [
+          "",
+          0
+        ],
+        "local:7001": [
+          "",
+          0
+        ],
+        "local:7013": [
+          "",
+          0
+        ],
+        "local:7019": [
+          "",
+          0
+        ],
+        "local:7027": [
+          "",
+          0
+        ]
+      }
+    },
+    {
+      "split": "fresh-test",
+      "seed": 5107,
+      "control": "evolved",
+      "policy": 2,
+      "training_leaf_paths": [
+        ""
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:7001": [
+          "",
+          0
+        ],
+        "permutation:7013": [
+          "",
+          0
+        ],
+        "permutation:7019": [
+          "",
+          0
+        ],
+        "permutation:7027": [
+          "",
+          0
+        ],
+        "affine:7001": [
+          "",
+          0
+        ],
+        "affine:7013": [
+          "",
+          0
+        ],
+        "affine:7019": [
+          "",
+          0
+        ],
+        "affine:7027": [
+          "",
+          0
+        ],
+        "bitvector:7001": [
+          "",
+          0
+        ],
+        "bitvector:7013": [
+          "",
+          0
+        ],
+        "bitvector:7019": [
+          "",
+          0
+        ],
+        "bitvector:7027": [
+          "",
+          0
+        ],
+        "automaton:7001": [
+          "",
+          0
+        ],
+        "automaton:7013": [
+          "",
+          0
+        ],
+        "automaton:7019": [
+          "",
+          0
+        ],
+        "automaton:7027": [
+          "",
+          0
+        ],
+        "local:7001": [
+          "",
+          0
+        ],
+        "local:7013": [
+          "",
+          0
+        ],
+        "local:7019": [
+          "",
+          0
+        ],
+        "local:7027": [
+          "",
+          0
+        ]
+      }
+    },
+    {
+      "split": "fresh-test",
+      "seed": 5113,
+      "control": "evolved",
+      "policy": 0,
+      "training_leaf_paths": [
+        "RL"
+      ],
+      "test_domains_with_unexercised_leaf": [
+        "affine:7019"
+      ],
+      "test_routes": {
+        "permutation:7001": [
+          "RL",
+          0
+        ],
+        "permutation:7013": [
+          "RL",
+          0
+        ],
+        "permutation:7019": [
+          "RL",
+          0
+        ],
+        "permutation:7027": [
+          "RL",
+          0
+        ],
+        "affine:7001": [
+          "RL",
+          0
+        ],
+        "affine:7013": [
+          "RL",
+          0
+        ],
+        "affine:7019": [
+          "L",
+          5
+        ],
+        "affine:7027": [
+          "RL",
+          0
+        ],
+        "bitvector:7001": [
+          "RL",
+          0
+        ],
+        "bitvector:7013": [
+          "RL",
+          0
+        ],
+        "bitvector:7019": [
+          "RL",
+          0
+        ],
+        "bitvector:7027": [
+          "RL",
+          0
+        ],
+        "automaton:7001": [
+          "RL",
+          0
+        ],
+        "automaton:7013": [
+          "RL",
+          0
+        ],
+        "automaton:7019": [
+          "RL",
+          0
+        ],
+        "automaton:7027": [
+          "RL",
+          0
+        ],
+        "local:7001": [
+          "RL",
+          0
+        ],
+        "local:7013": [
+          "RL",
+          0
+        ],
+        "local:7019": [
+          "RL",
+          0
+        ],
+        "local:7027": [
+          "RL",
+          0
+        ]
+      }
+    },
+    {
+      "split": "fresh-test",
+      "seed": 5113,
+      "control": "evolved",
+      "policy": 2,
+      "training_leaf_paths": [
+        "LL"
+      ],
+      "test_domains_with_unexercised_leaf": [
+        "permutation:7001",
+        "permutation:7013",
+        "permutation:7019",
+        "permutation:7027",
+        "affine:7001",
+        "affine:7013",
+        "affine:7019",
+        "affine:7027",
+        "bitvector:7001",
+        "bitvector:7013",
+        "bitvector:7019",
+        "bitvector:7027",
+        "automaton:7001",
+        "automaton:7013",
+        "automaton:7019",
+        "automaton:7027",
+        "local:7001",
+        "local:7013",
+        "local:7019",
+        "local:7027"
+      ],
+      "test_routes": {
+        "permutation:7001": [
+          "R",
+          1
+        ],
+        "permutation:7013": [
+          "R",
+          1
+        ],
+        "permutation:7019": [
+          "R",
+          1
+        ],
+        "permutation:7027": [
+          "R",
+          1
+        ],
+        "affine:7001": [
+          "R",
+          1
+        ],
+        "affine:7013": [
+          "R",
+          1
+        ],
+        "affine:7019": [
+          "R",
+          1
+        ],
+        "affine:7027": [
+          "R",
+          1
+        ],
+        "bitvector:7001": [
+          "R",
+          1
+        ],
+        "bitvector:7013": [
+          "R",
+          1
+        ],
+        "bitvector:7019": [
+          "R",
+          1
+        ],
+        "bitvector:7027": [
+          "R",
+          1
+        ],
+        "automaton:7001": [
+          "R",
+          1
+        ],
+        "automaton:7013": [
+          "R",
+          1
+        ],
+        "automaton:7019": [
+          "R",
+          1
+        ],
+        "automaton:7027": [
+          "R",
+          1
+        ],
+        "local:7001": [
+          "R",
+          1
+        ],
+        "local:7013": [
+          "R",
+          1
+        ],
+        "local:7019": [
+          "R",
+          1
+        ],
+        "local:7027": [
+          "R",
+          1
+        ]
+      }
+    },
+    {
+      "split": "fresh-test",
+      "seed": 5119,
+      "control": "evolved",
+      "policy": 0,
+      "training_leaf_paths": [
+        "L"
+      ],
+      "test_domains_with_unexercised_leaf": [
+        "permutation:7001",
+        "permutation:7013",
+        "permutation:7019",
+        "permutation:7027",
+        "bitvector:7001",
+        "bitvector:7019",
+        "bitvector:7027",
+        "automaton:7001",
+        "automaton:7013",
+        "automaton:7019",
+        "automaton:7027",
+        "local:7001",
+        "local:7013",
+        "local:7019",
+        "local:7027"
+      ],
+      "test_routes": {
+        "permutation:7001": [
+          "RRR",
+          1
+        ],
+        "permutation:7013": [
+          "RRR",
+          1
+        ],
+        "permutation:7019": [
+          "RRR",
+          1
+        ],
+        "permutation:7027": [
+          "RRR",
+          1
+        ],
+        "affine:7001": [
+          "L",
+          0
+        ],
+        "affine:7013": [
+          "L",
+          0
+        ],
+        "affine:7019": [
+          "L",
+          0
+        ],
+        "affine:7027": [
+          "L",
+          0
+        ],
+        "bitvector:7001": [
+          "RRL",
+          4
+        ],
+        "bitvector:7013": [
+          "L",
+          0
+        ],
+        "bitvector:7019": [
+          "RRL",
+          4
+        ],
+        "bitvector:7027": [
+          "RRL",
+          4
+        ],
+        "automaton:7001": [
+          "RRL",
+          4
+        ],
+        "automaton:7013": [
+          "RRL",
+          4
+        ],
+        "automaton:7019": [
+          "RRL",
+          4
+        ],
+        "automaton:7027": [
+          "RRL",
+          4
+        ],
+        "local:7001": [
+          "RRR",
+          1
+        ],
+        "local:7013": [
+          "RRR",
+          1
+        ],
+        "local:7019": [
+          "RRR",
+          1
+        ],
+        "local:7027": [
+          "RRR",
+          1
+        ]
+      }
+    },
+    {
+      "split": "fresh-test",
+      "seed": 5119,
+      "control": "evolved",
+      "policy": 2,
+      "training_leaf_paths": [
+        ""
+      ],
+      "test_domains_with_unexercised_leaf": [],
+      "test_routes": {
+        "permutation:7001": [
+          "",
+          0
+        ],
+        "permutation:7013": [
+          "",
+          0
+        ],
+        "permutation:7019": [
+          "",
+          0
+        ],
+        "permutation:7027": [
+          "",
+          0
+        ],
+        "affine:7001": [
+          "",
+          0
+        ],
+        "affine:7013": [
+          "",
+          0
+        ],
+        "affine:7019": [
+          "",
+          0
+        ],
+        "affine:7027": [
+          "",
+          0
+        ],
+        "bitvector:7001": [
+          "",
+          0
+        ],
+        "bitvector:7013": [
+          "",
+          0
+        ],
+        "bitvector:7019": [
+          "",
+          0
+        ],
+        "bitvector:7027": [
+          "",
+          0
+        ],
+        "automaton:7001": [
+          "",
+          0
+        ],
+        "automaton:7013": [
+          "",
+          0
+        ],
+        "automaton:7019": [
+          "",
+          0
+        ],
+        "automaton:7027": [
+          "",
+          0
+        ],
+        "local:7001": [
+          "",
+          0
+        ],
+        "local:7013": [
+          "",
+          0
+        ],
+        "local:7019": [
+          "",
+          0
+        ],
+        "local:7027": [
+          "",
+          0
+        ]
+      }
+    },
+    {
+      "split": "fresh-test",
+      "seed": 5147,
+      "control": "evolved",
+      "policy": 0,
+      "training_leaf_paths": [
+        "LL"
+      ],
+      "test_domains_with_unexercised_leaf": [
+        "permutation:7001",
+        "permutation:7013",
+        "permutation:7019",
+        "permutation:7027",
+        "automaton:7001",
+        "automaton:7013",
+        "automaton:7019",
+        "automaton:7027",
+        "local:7001",
+        "local:7013",
+        "local:7019",
+        "local:7027"
+      ],
+      "test_routes": {
+        "permutation:7001": [
+          "R",
+          3
+        ],
+        "permutation:7013": [
+          "R",
+          3
+        ],
+        "permutation:7019": [
+          "R",
+          3
+        ],
+        "permutation:7027": [
+          "R",
+          3
+        ],
+        "affine:7001": [
+          "LL",
+          0
+        ],
+        "affine:7013": [
+          "LL",
+          0
+        ],
+        "affine:7019": [
+          "LL",
+          0
+        ],
+        "affine:7027": [
+          "LL",
+          0
+        ],
+        "bitvector:7001": [
+          "LL",
+          0
+        ],
+        "bitvector:7013": [
+          "LL",
+          0
+        ],
+        "bitvector:7019": [
+          "LL",
+          0
+        ],
+        "bitvector:7027": [
+          "LL",
+          0
+        ],
+        "automaton:7001": [
+          "R",
+          3
+        ],
+        "automaton:7013": [
+          "R",
+          3
+        ],
+        "automaton:7019": [
+          "R",
+          3
+        ],
+        "automaton:7027": [
+          "R",
+          3
+        ],
+        "local:7001": [
+          "R",
+          3
+        ],
+        "local:7013": [
+          "R",
+          3
+        ],
+        "local:7019": [
+          "R",
+          3
+        ],
+        "local:7027": [
+          "R",
+          3
+        ]
+      }
+    },
+    {
+      "split": "fresh-test",
+      "seed": 5147,
+      "control": "evolved",
+      "policy": 2,
+      "training_leaf_paths": [
+        "LL"
+      ],
+      "test_domains_with_unexercised_leaf": [
+        "permutation:7001",
+        "permutation:7013",
+        "permutation:7019",
+        "permutation:7027",
+        "automaton:7001",
+        "automaton:7013",
+        "automaton:7019",
+        "automaton:7027",
+        "local:7001",
+        "local:7013",
+        "local:7019",
+        "local:7027"
+      ],
+      "test_routes": {
+        "permutation:7001": [
+          "R",
+          2
+        ],
+        "permutation:7013": [
+          "R",
+          2
+        ],
+        "permutation:7019": [
+          "R",
+          2
+        ],
+        "permutation:7027": [
+          "R",
+          2
+        ],
+        "affine:7001": [
+          "LL",
+          0
+        ],
+        "affine:7013": [
+          "LL",
+          0
+        ],
+        "affine:7019": [
+          "LL",
+          0
+        ],
+        "affine:7027": [
+          "LL",
+          0
+        ],
+        "bitvector:7001": [
+          "LL",
+          0
+        ],
+        "bitvector:7013": [
+          "LL",
+          0
+        ],
+        "bitvector:7019": [
+          "LL",
+          0
+        ],
+        "bitvector:7027": [
+          "LL",
+          0
+        ],
+        "automaton:7001": [
+          "R",
+          2
+        ],
+        "automaton:7013": [
+          "R",
+          2
+        ],
+        "automaton:7019": [
+          "R",
+          2
+        ],
+        "automaton:7027": [
+          "R",
+          2
+        ],
+        "local:7001": [
+          "R",
+          2
+        ],
+        "local:7013": [
+          "R",
+          2
+        ],
+        "local:7019": [
+          "R",
+          2
+        ],
+        "local:7027": [
+          "R",
+          2
+        ]
+      }
+    }
+  ]
+}
