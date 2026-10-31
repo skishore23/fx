@@ -1,2 +1,7 @@
 __pycache__/
 *.pyc
+results/*.txt
+results/*training.json
+results/*validation.json
+results/selection.json
+results/heldout.json
